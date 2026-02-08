@@ -1,0 +1,35 @@
+/* logo.css */
+body {
+    margin: 0;
+    padding: 0;
+    background: url('../assets/images/bg-logo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    /* Kunci utama centering */
+    display: flex;
+    justify-content: center; /* Tengah horizontal */
+    align-items: center;     /* Tengah vertikal */
+    min-height: 100vh;       /* Pastikan body setinggi layar */
+    width: 100vw;            /* Pastikan body selebar layar */
+    overflow: hidden;        /* Hilangkan scroll */
+}
+
+#logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+}
+
+#main-logo {
+    /* Ukuran logo yang proporsional */
+    width: 60%;              
+    max-width: 700px;        /* Agar tidak terlalu besar di layar ultra-wide */
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+/* Efek sedikit mengecil saat diklik */
+#logo-container:active #main-logo {
+    transform: scale(0.95);
+}
