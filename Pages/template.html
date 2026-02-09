@@ -5,24 +5,27 @@
     <link rel="stylesheet" href="../CSS/template.css">
     <link rel="stylesheet" href="../CSS/credit.css">
 </head>
-<body style="background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;"><div class="credit-overlay">
-    <div class="book-body">
-        <img src="assets/Credit/Bg-credit.png" class="book-bg">
-        <div id="dynamic-content" class="content-layer"></div>
-        <button class="close-btn" onclick="loadPage('home')" style="position:absolute; top:20px; right:70px; z-index:20;">X</button>
-    </div>
-    <div class="side-menu">
-        <img src="assets/Credit/M-Credit.png" class="menu-item active">
-        </div>
-</div>
-        <div class="side-menu">
-            <img src="../assets/Credit/M-Pengaturan.png" class="menu-item">
-            <img src="../assets/Credit/M-Pencapaian.png" class="menu-item">
-            <img src="../assets/Credit/M-Caramain.png" class="menu-item">
-            <img src="../assets/Credit/M-Credit.png" class="menu-item active">
-        </div>
-    </div>
+<body> <div class="credit-overlay">
+    <div class="book-layout">
+        <div class="book-body">
+            <img src="../assets/Credit/Bg-credit.png" class="book-bg">
+            
+            <div id="dynamic-content" class="content-layer"></div> 
 
-    <script src="../JS/main.js"></script>
+            <button class="close-btn" onclick="loadPage('home')">
+                <img src="../assets/Icons/batal.png" alt="Tutup">
+            </button>
+        </div>
+
+        <div class="side-menu">
+            <img src="../assets/Credit/M-Pengaturan.png" class="menu-item" onclick="changeContent('Pengaturan', this)">
+            <img src="../assets/Credit/M-Pencapaian.png" class="menu-item" onclick="changeContent('Pencapaian', this)">
+            <img src="../assets/Credit/M-Caramain.png" class="menu-item" onclick="changeContent('Cara Main', this)">
+            <img src="../assets/Credit/M-Credit.png" class="menu-item active" onclick="changeContent('Credit', this)">
+        </div>
+    </div>
+</div>
+
+<script src="../JS/main.js"></script>
 </body>
 </html>
