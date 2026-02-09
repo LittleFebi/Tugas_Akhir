@@ -1,34 +1,22 @@
 function changeContent(menuName, element) {
-    // Jika menu yang diklik sudah aktif, jangan lakukan apa-apa
-    if (element.classList.contains('active')) return;
-
-    const container = document.getElementById('dynamic-content');
+    const originalContent = document.getElementById('original-credit-content');
+    const placeholderContent = document.getElementById('placeholder-content');
+    const placeholderText = document.getElementById('placeholder-text');
     const menuItems = document.querySelectorAll('.menu-item');
 
-    // Reset status aktif
-    menuItems.forEach(item => {
-        item.classList.remove('active');
-        item.style.pointerEvents = "auto"; // Aktifkan kembali klik untuk menu lain
-    });
-
-    // Set menu ini jadi aktif dan matikan kliknya
+    // Reset status active pada semua tombol menu
+    menuItems.forEach(item => item.classList.remove('active'));
+    // Set tombol yang diklik menjadi active
     element.classList.add('active');
-    element.style.pointerEvents = "none";
 
     if (menuName === 'Credit') {
-        container.innerHTML = `
-            <div class="profile-frame">
-                <img src="../assets/Credit/P-Credit.png" alt="Foto Profil">
-            </div>
-            <div class="text-frame">
-                <img src="../assets/Credit/Credit.jpg" alt="Teks Credit">
-            </div>
-        `;
+        // Tampilkan konten profil asli
+        originalContent.style.display = 'flex';
+        placeholderContent.style.display = 'none';
     } else {
-        container.innerHTML = `
-            <div style="display:flex; justify-content:center; align-items:center; width:100%; color:#004b8d; font-weight:bold; font-size:1.5rem; text-align:center;">
-                Halaman ${menuName} <br> Sedang Dalam Pengembangan
-            </div>
-        `;
+        // Sembunyikan profil, tampilkan pesan pengembangan
+        originalContent.style.display = 'none';
+        placeholderContent.style.display = 'flex';
+        placeholderText.innerText = `Halaman ${menuName} Sedang Dikembangkan`;
     }
 }
