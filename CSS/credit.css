@@ -5,15 +5,14 @@
     width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.7);
     display: flex;
-    justify-content: center; /* Memastikan ke tengah secara Horizontal */
-    align-items: center;     /* Memastikan ke tengah secara Vertikal */
+    justify-content: center;
+    align-items: center;
     z-index: 1000;
 }
 
-/* Container utama - DIHAPUS MARGIN NEGATIFNYA */
+/* Container utama */
 .credit-container {
     position: relative;
-    /* Margin negatif dihapus agar tidak miring ke kiri/atas */
     display: flex; 
     align-items: flex-start;
     animation: popIn 0.3s ease-out;
@@ -24,7 +23,7 @@
     align-items: flex-start;
 }
 
-/* MEMPERBESAR BUKU UTAMA (Bg-credit.png) - Sesuai permintaanmu */
+/* MEMPERBESAR BUKU UTAMA */
 .book-body {
     position: relative;
     width: 950px; 
@@ -53,22 +52,20 @@
     z-index: 1010;
 }
 
-/* Menu samping yang sudah pas ukurannya */
+/* Menu samping */
 .side-menu {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    margin-left: -15px; /* Menempel ke buku */
+    margin-left: -15px;
     margin-top: 20px;
 }
 
 .menu-item {
-    width: 45px; /* Ukuran kecil yang sudah kamu set sebelumnya */
+    width: 45px;
     cursor: pointer;
     transition: transform 0.2s ease;
 }
-
-/* --- Sisa kodingan active, hover, dan konten layer tetap sama seperti milikmu --- */
 
 .menu-item.active {
     transform: scale(1.1) translateX(3px);
@@ -77,17 +74,37 @@
     pointer-events: none;
 }
 
+/* --- UPDATE BAGIAN KONTEN --- */
+
 .content-layer {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
     display: flex;
-    padding: 50px;
+    flex-direction: row; /* Foto di kiri, teks di kanan */
+    gap: 30px;
+    padding: 60px 80px; /* Disesuaikan agar pas di tengah buku */
     box-sizing: border-box;
+    overflow-y: auto; /* Agar teks bisa di-scroll jika panjang */
+}
+
+/* Bagian Foto dan Judul */
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.credit-title {
+    font-size: 40px;
+    color: #004b8d;
+    margin-bottom: 15px;
+    font-weight: bold;
+    text-align: center;
 }
 
 .profile-frame {
-    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -98,15 +115,17 @@
     border-radius: 20px;
 }
 
-.text-frame {
+/* Bagian Teks Deskripsi */
+.text-description {
     flex: 2;
-    display: flex;
-    align-items: center;
-    padding-left: 30px;
+    text-align: left;
+    color: #333;
+    line-height: 1.6;
+    font-size: 18.4px;
 }
 
-.text-frame img {
-    width: 100%;
+.text-description p {
+    margin-bottom: 15px; /* Jarak antar paragraf */
 }
 
 @keyframes popIn {

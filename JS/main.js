@@ -1,44 +1,62 @@
-const app = document.getElementById('app');
+// JS/main.js
+const appContainer = document.getElementById('app-container');
 
-// Fungsi untuk mengambil file HTML dari folder Pages
-async function loadPage(page) {
+async function loadPage(pageName) {
     try {
-        const response = await fetch(`Pages/${page}.html`);
+        // Gunakan jalur folder Pages jika index.html ada di luar folder Pages
+        const response = await fetch(`../Pages/${pageName}.html`); 
         const html = await response.text();
-        app.innerHTML = html;
+
+        // 1. Bersihkan kontainer agar tidak bertumpuk
+        appContainer.innerHTML = ""; 
         
-        // Inisialisasi logika setelah HTML masuk ke DOM
-        if (page === 'logo') {
-            initLogoLogic();
-        } else if (page === 'home') {
-            initHomeLogic();
-        }
+        // 2. Gunakan DOMParser agar kita hanya mengambil isi di dalam <body> saja
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const content = doc.querySelector('body').innerHTML;
+        
+        appContainer.innerHTML = content;
+
+        // 3. Jalankan inisialisasi berdasarkan halaman
+        if (pageName === 'logo') initLogo();
+        else if (pageName === 'home') initHome();
+        else if (pageName === 'credit') initCredit();
+        
     } catch (err) {
         console.error("Gagal memuat halaman:", err);
     }
 }
 
-// Jalankan logo saat pertama kali buka
-loadPage('logo');
+// Inisialisasi awal
+document.addEventListener("DOMContentLoaded", () => {
+    loadPage('logo');
+});
 
-function initLogoLogic() {
-    const wrapper = document.getElementById('logoWrapper');
-    const noEyes = document.getElementById('logoNoEyes');
-    const eyes = document.getElementById('logoEyes');
-
-    wrapper.addEventListener('click', () => {
-        // Efek mata terbuka
-        noEyes.classList.remove('show');
-        eyes.classList.add('show');
-
-        // Tunggu 1 detik lalu pindah ke halaman Home
-        setTimeout(() => {
-            loadPage('home');
-        }, 1000);
-    });
+function initLogo() {
+    const container = document.getElementById('logo-container');
+    const logoImg = document.getElementById('main-logo');
+    if(container && logoImg) {
+        container.onclick = () => {
+            logoImg.src = '../assets/images/logo-eyes.png';
+            setTimeout(() => loadPage('home'), 600);
+        };
+    }
 }
 
-function initHomeLogic() {
-    // Tambahkan efek hover atau klik untuk menu home di sini jika perlu
-    console.log("Halaman Home siap!");
+function initHome() {
+    const greetingText = document.getElementById("greetings");
+    if(greetingText) {
+        const jam = new Date().getHours();
+        let ucapan = "";
+        if (jam >= 0 && jam < 12) ucapan = "Pagi";
+        else if (jam >= 12 && jam < 15) ucapan = "Siang";
+        else if (jam >= 15 && jam < 18) ucapan = "Sore";
+        else ucapan = "Malam";
+        greetingText.innerText = `Halo, Selamat ${ucapan}!`;
+    }
+}
+
+function initCredit() {
+    console.log("Halaman Credit Siap.");
+    // Fungsi ini memastikan tombol-tombol di credit.js tetap bekerja
 }
