@@ -1,0 +1,115 @@
+/* Overlay Gelap - Sudah Benar */
+.credit-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center; /* Memastikan ke tengah secara Horizontal */
+    align-items: center;     /* Memastikan ke tengah secara Vertikal */
+    z-index: 1000;
+}
+
+/* Container utama - DIHAPUS MARGIN NEGATIFNYA */
+.credit-container {
+    position: relative;
+    /* Margin negatif dihapus agar tidak miring ke kiri/atas */
+    display: flex; 
+    align-items: flex-start;
+    animation: popIn 0.3s ease-out;
+}
+
+.book-layout {
+    display: flex;
+    align-items: flex-start;
+}
+
+/* MEMPERBESAR BUKU UTAMA (Bg-credit.png) - Sesuai permintaanmu */
+.book-body {
+    position: relative;
+    width: 950px; 
+    height: auto;
+}
+
+.book-bg {
+    width: 100%;
+    display: block;
+    filter: drop-shadow(0 15px 35px rgba(0,0,0,0.6));
+}
+
+/* Tombol Close tetap di pojok kanan atas buku */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 65px; 
+    background: #ff4757;
+    color: white;
+    border: 3px solid white;
+    border-radius: 50%;
+    width: 38px; height: 38px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1010;
+}
+
+/* Menu samping yang sudah pas ukurannya */
+.side-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-left: -15px; /* Menempel ke buku */
+    margin-top: 20px;
+}
+
+.menu-item {
+    width: 45px; /* Ukuran kecil yang sudah kamu set sebelumnya */
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+/* --- Sisa kodingan active, hover, dan konten layer tetap sama seperti milikmu --- */
+
+.menu-item.active {
+    transform: scale(1.1) translateX(3px);
+    filter: brightness(1.1);
+    cursor: default;
+    pointer-events: none;
+}
+
+.content-layer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    padding: 50px;
+    box-sizing: border-box;
+}
+
+.profile-frame {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-frame img {
+    width: 180px;
+    border-radius: 20px;
+}
+
+.text-frame {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+}
+
+.text-frame img {
+    width: 100%;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
