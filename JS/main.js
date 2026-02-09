@@ -1,62 +1,55 @@
-// JS/main.js
 const appContainer = document.getElementById('app-container');
 
 async function loadPage(pageName) {
     try {
-        // Gunakan jalur folder Pages jika index.html ada di luar folder Pages
-        const response = await fetch(`../Pages/${pageName}.html`); 
+        const response = await fetch(`Pages/${pageName}.html`);
         const html = await response.text();
-
-        // 1. Bersihkan kontainer agar tidak bertumpuk
-        appContainer.innerHTML = ""; 
         
-        // 2. Gunakan DOMParser agar kita hanya mengambil isi di dalam <body> saja
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const content = doc.querySelector('body').innerHTML;
-        
-        appContainer.innerHTML = content;
+        // Bersihkan wadah dan masukkan konten baru
+        appContainer.innerHTML = html;
 
-        // 3. Jalankan inisialisasi berdasarkan halaman
+        // Inisialisasi fungsi khusus tiap halaman
         if (pageName === 'logo') initLogo();
         else if (pageName === 'home') initHome();
-        else if (pageName === 'credit') initCredit();
+        else if (pageName === 'template') initTemplate();
         
     } catch (err) {
-        console.error("Gagal memuat halaman:", err);
+        console.error("Gagal memuat:", err);
     }
 }
 
-// Inisialisasi awal
-document.addEventListener("DOMContentLoaded", () => {
-    loadPage('logo');
-});
+// Mulai dari Logo saat pertama buka
+document.addEventListener("DOMContentLoaded", () => loadPage('logo'));
 
 function initLogo() {
     const container = document.getElementById('logo-container');
     const logoImg = document.getElementById('main-logo');
-    if(container && logoImg) {
+    if (container) {
         container.onclick = () => {
-            logoImg.src = '../assets/images/logo-eyes.png';
-            setTimeout(() => loadPage('home'), 600);
+            // Ganti mata logo
+            logoImg.src = 'assets/images/logo-eyes.png';
+            // Pindah ke Home setelah jeda
+            setTimeout(() => loadPage('home'), 800);
         };
     }
 }
 
 function initHome() {
+    // Logika sapaan jam otomatis
     const greetingText = document.getElementById("greetings");
-    if(greetingText) {
+    if (greetingText) {
         const jam = new Date().getHours();
-        let ucapan = "";
-        if (jam >= 0 && jam < 12) ucapan = "Pagi";
-        else if (jam >= 12 && jam < 15) ucapan = "Siang";
-        else if (jam >= 15 && jam < 18) ucapan = "Sore";
-        else ucapan = "Malam";
+        let ucapan = jam < 12 ? "Pagi" : (jam < 15 ? "Siang" : (jam < 18 ? "Sore" : "Malam"));
         greetingText.innerText = `Halo, Selamat ${ucapan}!`;
     }
 }
 
-function initCredit() {
-    console.log("Halaman Credit Siap.");
-    // Fungsi ini memastikan tombol-tombol di credit.js tetap bekerja
+async function initTemplate() {
+    // Secara otomatis isi bagian buku dengan credit.html
+    const dynamicArea = document.getElementById('dynamic-content');
+    if (dynamicArea) {
+        const resp = await fetch('Pages/credit.html');
+        const content = await resp.text();
+        dynamicArea.innerHTML = content;
+    }
 }

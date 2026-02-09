@@ -123,7 +123,7 @@ body {
 
 .side-icon {
     width: 70px; /* Icon bawah diseragamkan */
-    height: 70px;
+    height: 60px;
     object-fit: contain;
     cursor: pointer;
     transition: transform 0.3s;
