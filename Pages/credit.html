@@ -1,60 +1,11 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Funvo - Menu Credit</title>
-    <link rel="stylesheet" href="../CSS/credit.css">
-</head>
-<body>
-    <div class="credit-overlay" id="menuOverlay">
-        <div class="credit-container">
-            <button class="close-btn" onclick="window.location.href='home.html'">&times;</button>
-            
-            <div class="book-layout">
-                <div class="book-body">
-                    <img src="../assets/Credit/Bg-credit.png" class="book-bg">
-                    
-                    <div id="dynamic-content" class="content-layer">
-                        
-                        <div id="original-credit-content" style="display: flex; flex-direction: row; gap: 30px; width: 100%;">
-                            <div class="profile-section">
-                                <h2 class="credit-title">Credit Person</h2> 
-                                <div class="profile-frame">
-                                    <img src="../assets/Credit/P-Credit.png" alt="Foto Profil">
-                                </div>
-                            </div>
-                            
-                            <div class="text-description"> 
-                                <p>Halo teman-teman! Game seru ini dibuat oleh Febiola Lidya Sianturi, yang punya ide-ide gokil supaya kalian bisa bermain sambil belajar. Semua karakter, gambar, dan cerita di dalam game ini dibuat dengan penuh semangat supaya kalian merasa senang dan penasaran untuk terus menjelajahi dunia game ini.</p>
-                                <p>Setiap tombol, warna, dan animasi di game ini dirancang supaya gampang dipakai dan terlihat lucu. Kalian bisa menekan tombol-tombol dengan mudah, melihat karakter bergerak lucu, dan menemukan kejutan kecil di setiap level.</p>
-                                <p>Musik dan efek suara di game ini dipilih dengan sangat aware supaya setiap momen terasa hidup dan seru. Semua dirancang agar kalian merasa seperti benar-benar berada di dunia game yang penuh warna.</p>
-                                <p>Terima kasih banyak untuk semua teman, guru, dan keluarga yang sudah mendukung. Semoga petualangan seru ini membuat kalian selalu tersenyum!</p>
-                            </div>
-                        </div>
-
-                        <div id="placeholder-content" style="display: none; justify-content: center; align-items: center; width: 100%; color: #004b8d; font-size: 24px; font-weight: bold; text-align: center;">
-                            <p id="placeholder-text"></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="side-menu">
-                    <div class="menu-item" onclick="changeContent('Pengaturan', this)">
-                        <img src="../assets/Credit/M-Pengaturan.png" alt="Pengaturan">
-                    </div>
-                    <div class="menu-item" onclick="changeContent('Pencapaian', this)">
-                        <img src="../assets/Credit/M-Pencapaian.png" alt="Pencapaian">
-                    </div>
-                    <div class="menu-item" onclick="changeContent('Caramain', this)">
-                        <img src="../assets/Credit/M-Caramain.png" alt="Cara Main">
-                    </div>
-                    <div class="menu-item active" onclick="changeContent('Credit', this)">
-                        <img src="../assets/Credit/M-Credit.png" alt="Credit">
-                    </div>
-                </div>
-            </div>
+<div id="original-credit-content" style="display: flex; flex-direction: row; gap: 30px; width: 100%;">
+    <div class="profile-section">
+        <h2 class="credit-title">Credit Person</h2> 
+        <div class="profile-frame">
+            <img src="../assets/Credit/P-Credit.png" alt="Foto Profil">
         </div>
     </div>
-    <script src="../JS/credit.js"></script>
-</body>
-</html>
+    <div class="text-description"> 
+        <p>Halo teman-teman! Game seru ini dibuat oleh Febiola Lidya Sianturi...</p>
+        </div>
+</div>
