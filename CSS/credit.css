@@ -21,60 +21,37 @@
 }
 
 /* --- UPDATE BAGIAN KONTEN --- */
-
+/* CSS/credit.css */
+/* Update di CSS/credit.css */
 .content-layer {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
     display: flex;
-    flex-direction: row; /* Foto di kiri, teks di kanan */
+    flex-direction: row; 
     gap: 30px;
-    padding: 60px 80px; /* Disesuaikan agar pas di tengah buku */
+    padding: 80px 100px;
     box-sizing: border-box;
-    overflow-y: auto; /* Agar teks bisa di-scroll jika panjang */
+    z-index: 10; /* Pastikan ini lebih tinggi dari gambar buku */
 }
 
-/* Bagian Foto dan Judul */
 .profile-section {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    flex: 1;
-}
-
-.credit-title {
-    font-size: 40px;
-    color: #004b8d;
-    margin-bottom: 15px;
-    font-weight: bold;
-    text-align: center;
-}
-
-.profile-frame {
-    display: flex;
-    justify-content: center;
     align-items: center;
 }
 
 .profile-frame img {
     width: 180px;
     border-radius: 20px;
+    border: 5px solid white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* Bagian Teks Deskripsi */
 .text-description {
     flex: 2;
-    text-align: left;
+    font-size: 18px;
     color: #333;
-    line-height: 1.6;
-    font-size: 18.4px;
-}
-
-.text-description p {
-    margin-bottom: 15px; /* Jarak antar paragraf */
-}
-
-@keyframes popIn {
-    from { transform: scale(0.9); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+    line-height: 1.5;
 }
