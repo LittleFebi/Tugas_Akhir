@@ -47,18 +47,37 @@
 .close-btn img {
     width: 50px;
 }
+/* CSS/template.css */
 
-/* Menu Samping agar tetap mengikuti besar buku */
 .side-menu {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: 38px; /* Disesuaikan dengan buku yang lebih besar */
-    margin-left: -10px; /* Membuat tab terlihat 'keluar' dari balik buku */
+    gap: 10px;
+    margin-left: -10px; /* Menempel ke buku */
+    margin-top: 60px;
+    position: relative;
+    z-index: 1005; /* Di atas background buku */
 }
 
 .menu-item {
-    width: 60px; /* Sedikit diperbesar agar proporsional */
+    width: 55px;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all 0.3s ease; /* Transisi halus untuk semua perubahan */
+    position: relative;
+    z-index: 1; /* Posisi standar di belakang */
+    filter: brightness(0.9); /* Sedikit lebih gelap saat tidak aktif */
+}
+
+/* EFEK SAAT MENU AKTIF (DIPILIH) */
+.menu-item.active {
+    width: 65px; /* Membesar */
+    filter: brightness(1.1); /* Lebih terang */
+    z-index: 10; /* Tampil paling depan di antara menu lain */
+    transform: translateX(5px); /* Sedikit bergeser ke kanan agar menonjol */
+    pointer-events: none; /* Agar tidak bisa diklik ulang saat sudah aktif */
+}
+
+.menu-item:hover:not(.active) {
+    transform: scale(1.1);
+    filter: brightness(1.05);
 }
