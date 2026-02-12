@@ -198,15 +198,10 @@ function resetGame() {
     }
 }
 
-// Tambahkan fungsi ini di JS/main.js jika belum ada
 function mulaiTema(namaTema) {
-    // 1. Pindah ke halaman latihan
     loadPage('latihan').then(() => {
-        // 2. Jalankan inisialisasi data soal berdasarkan tema yang dipilih
         if (typeof initLatihan === "function") {
             initLatihan(namaTema);
-        } else {
-            console.error("Fungsi initLatihan tidak ditemukan. Cek apakah latihan.js sudah dipanggil.");
         }
     });
 }
