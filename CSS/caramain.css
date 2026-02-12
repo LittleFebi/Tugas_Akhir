@@ -1,0 +1,52 @@
+.caramain-container {
+    display: flex; /* Kunci membagi dua halaman */
+    width: 100%;
+    height: 100%;
+    padding: 30px 45px;
+    gap: 40px; /* Jarak antara halaman kiri dan kanan */
+    box-sizing: border-box;
+}
+
+.halaman-buku-sisi {
+    flex: 1; /* Memberikan porsi yang sama rata kiri-kanan */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+}
+
+/* Header Avatar */
+.header-halo-teman { display: flex; align-items: center; gap: 15px; margin-bottom: 5px; }
+.avatar-info { width: 75px; }
+.bubble-info {
+    background: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-family: 'ADLaM Display', cursive;
+    border: 3px solid #f8e4bc;
+}
+
+/* PEMBUNGKUS PUTIH COKELAT */
+.bingkai-putih-caramain {
+    background: white;
+    border: 4.5px solid #c9b185; /* Border cokelat sesuai Figma */
+    border-radius: 20px;
+    padding: 20px;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+}
+.bingkai-putih-caramain.besar { height: 100%; }
+
+/* Dekorasi Nempel di Garis */
+.dekorasi-pojok { position: absolute; width: 32px; z-index: 5; }
+.top-left { top: -14px; left: -14px; }
+.top-right { top: -14px; right: -14px; }
+.bottom-right { bottom: -14px; right: -14px; }
+.bottom-left { bottom: -14px; left: -14px; }
+.mid-right { top: 40%; right: -18px; }
+
+/* Hiasan Jamur & Kubik */
+.hiasan-bawah-kiri { position: absolute; bottom: 0; right: 0; width: 40px; }
+.hiasan-bawah-kanan { position: absolute; bottom: -5px; left: -12px; width: 40px; }
