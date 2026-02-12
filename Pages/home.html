@@ -13,10 +13,15 @@
             <div class="speech-bubble" id="greetings">Halo, Selamat Pagi!</div>
         </div>
         <div class="top-icons">
-            <div class="icon-wrapper"><img src="../assets/Icons/Achievement.png"></div>
-            <div class="icon-wrapper"><img src="../assets/Icons/Daily.png"></div>
-            <div class="icon-wrapper" onclick="loadPage('template')">
-    <img src="assets/Icons/Credit.png" style="cursor:pointer">
+    <div class="icon-wrapper" onclick="loadPage('template', 'Pencapaian')">
+        <img src="../assets/Icons/Achievement.png" style="cursor:pointer">
+    </div>
+    
+    <div class="icon-wrapper"><img src="../assets/Icons/Daily.png"></div>
+    
+    <div class="icon-wrapper" onclick="loadPage('template', 'Credit')">
+        <img src="../assets/Icons/Credit.png" style="cursor:pointer">
+    </div>
 </div>
         </div>
     </div>
@@ -33,7 +38,7 @@
     </div>
 
     <div class="footer">
-    <img src="../assets/Icons/info.png" class="side-icon">
+    <img src="../assets/Icons/info.png" class="side-icon" onclick="loadPage('template', 'Cara Main')">
     <div class="footer-text">HASIL PENELITIAN POLITEKNIK NEGERI MALANG</div>
     <img src="../assets/Icons/Pengaturan.png" class="side-icon" onclick="loadPage('template', 'Pengaturan')" style="cursor:pointer">
 </div>

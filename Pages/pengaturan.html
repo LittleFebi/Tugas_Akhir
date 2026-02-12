@@ -1,58 +1,39 @@
 <div class="settings-content">
-    <h2 class="settings-title">Pengaturan</h2>
+    <h2 class="settings-title">PENGATURAN</h2>
 
-    <div class="area-pembungkus-slider">
-        
+    <div class="pembungkus-vol-mus">
         <div class="slider-row">
-            <div class="icon-vol-mus">
-                <img src="../assets/Pengaturan/logo_volume.png" alt="Volume">
-            </div>
-            <input type="range" min="0" max="100" value="80" class="custom-slider" id="vol-slider">
+            <img src="../assets/Pengaturan/logo_volume.png" class="icon-v">
+            <input type="range" min="0" max="100" class="pink-slider" id="vol-slider">
         </div>
-
         <div class="slider-row">
-            <div class="icon-vol-mus">
-                <img src="../assets/Pengaturan/logo_music.png" alt="Music">
-            </div>
-            <input type="range" min="0" max="100" value="60" class="custom-slider" id="music-slider">
-        </div>
-
-    </div>
-
-    <div class="switch-container">
-        <div class="switch-item" onclick="toggleSwitch('notif')">
-            <img src="../assets/Pengaturan/On.png" id="notif-img" class="switch-btn">
-            <div class="label-with-icon">
-                <img src="../assets/Pengaturan/notifikasi.png" class="sub-icon">
-                <span>Notifikasi</span>
-            </div>
-        </div>
-        <div class="switch-item" onclick="toggleSwitch('suara')">
-            <img src="../assets/Pengaturan/On.png" id="suara-img" class="switch-btn">
-            <div class="label-with-icon">
-                <img src="../assets/Pengaturan/suara.png" class="sub-icon">
-                <span>Suara</span>
-            </div>
-        </div>
-        <div class="switch-item" onclick="toggleSwitch('musik')">
-            <img src="../assets/Pengaturan/On.png" id="musik-img" class="switch-btn">
-            <div class="label-with-icon">
-                <img src="../assets/Pengaturan/music.png" class="sub-icon">
-                <span>Musik</span>
-            </div>
-        </div>
-        <div class="switch-item">
-            <div class="support-wrapper">
-                <img src="../assets/Pengaturan/support.png" class="support-bg">
-                <img src="../assets/Pengaturan/support_tul.png" class="support-text-img">
-            </div>
-            <span class="support-label">Support</span>
+            <img src="../assets/Pengaturan/logo_music.png" class="icon-v">
+            <input type="range" min="0" max="100" class="pink-slider" id="music-slider">
         </div>
     </div>
 
-    <div class="settings-footer">
-        <img src="../assets/Pengaturan/save.png" class="action-btn" onclick="saveSettings()">
-        <img src="../assets/Pengaturan/reset.png" class="action-btn" onclick="resetGame()">
-        <img src="../assets/Pengaturan/cancel.png" class="action-btn" onclick="loadPage('home')">
+    <div class="bottom-menu-row">
+        <div class="menu-col" onclick="toggleSwitch('notif')">
+            <div class="pembungkus-onoff"><img id="notif-img" src="../assets/Pengaturan/On.png"></div>
+            <div class="label-under"><img src="../assets/Pengaturan/notifikasi.png"></div>
+        </div>
+        <div class="menu-col" onclick="toggleSwitch('suara')">
+            <div class="pembungkus-onoff"><img id="suara-img" src="../assets/Pengaturan/On.png"></div>
+            <div class="label-under"><img src="../assets/Pengaturan/suara.png"></div>
+        </div>
+        <div class="menu-col" onclick="toggleSwitch('musik')">
+            <div class="pembungkus-onoff"><img id="musik-img" src="../assets/Pengaturan/On.png"></div>
+            <div class="label-under"><img src="../assets/Pengaturan/music.png"></div>
+        </div>
+        <div class="menu-col" onclick="toggleSwitch('support')">
+            <div class="pembungkus-onoff"><img id="support-img" src="../assets/Pengaturan/On.png"></div>
+            <div class="label-under"><img src="../assets/Pengaturan/support.png"></div>
+        </div>
+    </div>
+
+    <div class="footer-btns">
+        <img src="../assets/Pengaturan/save.png" onclick="saveSettings()">
+        <img src="../assets/Pengaturan/reset.png" onclick="resetGame()">
+        <img src="../assets/Pengaturan/cancel.png" onclick="loadPage('home')">
     </div>
 </div>
