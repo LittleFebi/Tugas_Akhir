@@ -1,13 +1,31 @@
+/* CSS/latihan.css */
+
 .latihan-page { width: 100%; height: 100vh; background: #FFF9F0; overflow: hidden; }
 .latihan-wrapper { position: relative; width: 100%; height: 100%; }
 
-/* Navigasi */
-.nav-left-top { position: absolute; top: 30px; left: 40px; display: flex; gap: 15px; }
-.nav-right-top { position: absolute; top: 30px; right: 40px; display: flex; gap: 15px; }
-.icon-nav { width: 55px; cursor: pointer; }
+/* --- NAVIGASI --- */
+.nav-left-top { position: absolute; top: 30px; left: 40px; display: flex; gap: 15px; align-items: center; }
+.nav-right-top { position: absolute; top: 30px; right: 40px; display: flex; gap: 15px; align-items: center; }
 
-/* Progress & Kupu-kupu (PENTING: top minus agar di atas bar) */
-.progress-section { position: absolute; top: 130px; left: 50%; transform: translateX(-50%); width: 80%; }
+/* Kodingan Baru: Ukuran Standar & Transisi */
+.icon-nav { 
+    cursor: pointer; 
+    transition: transform 0.2s; 
+}
+
+/* Kodingan Baru: Membedakan besar tiap ikon */
+.icon-back { width: 65px; }    
+.icon-home { width: 70px; }    
+.icon-achieve { width: 75px; } 
+.icon-daily { width: 60px; }   
+.icon-credit { width: 70px; }
+
+/* Efek Hover */
+.icon-nav:hover { transform: scale(1.1); }
+
+
+/* --- PROGRESS & KUPU-KUPU --- */
+.progress-section { position: absolute; top: 190px; left: 50%; transform: translateX(-50%); width: 80%; }
 .progress-container { width: 100%; height: 15px; background: white; border: 3px solid #8B4513; border-radius: 10px; position: relative; }
 .progress-fill { height: 100%; background: #8B4513; border-radius: 8px; width: 0%; transition: width 0.5s; }
 
@@ -18,24 +36,29 @@
 .butterfly-img { width: 50px; }
 .percent-label { background: #FF69B4; color: white; padding: 2px 8px; border-radius: 10px; font-size: 14px; font-weight: bold; }
 
-/* Grid Jawaban 2x2 */
+
+/* --- GRID JAWABAN --- */
 .answer-grid {
-    position: absolute; top: 220px; left: 50%; transform: translateX(-50%);
-    width: 75%; display: grid; grid-template-columns: 1fr 1fr; gap: 25px;
+    position: absolute; top: 400px; left: 50%; transform: translateX(-50%);
+    width: 75%; display: grid; grid-template-columns: 3fr 3fr; gap: 40px;
 }
 .answer-card {
     background: white; padding: 35px; border-radius: 15px; text-align: center;
     font-size: 26px; font-weight: bold; cursor: pointer; box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 
-/* Footer & Tombol Spell */
-.latihan-footer { position: absolute; bottom: 40px; width: 100%; display: flex; justify-content: center; align-items: center; }
-.spell-btn { background: #FFE599; border: none; padding: 15px 80px; border-radius: 12px; font-size: 22px; color: white; font-weight: bold; cursor: pointer; }
-.footer-icon { width: 60px; position: absolute; cursor: pointer; }
-.left-btn { left: 60px; }
-.right-btn { right: 60px; }
 
-/* Hint */
-.hint-section { position: absolute; top: 160px; right: 60px; text-align: center; cursor: pointer; }
-.hint-icon { width: 45px; }
+/* --- FOOTER --- */
+.latihan-footer { position: absolute; bottom: 40px; width: 100%; display: flex; justify-content: center; align-items: center; }
+.spell-btn { background: #FFE599; border: none; padding: 40px 140px; border-radius: 12px; font-size: 44px; color: rgb(124, 14, 6); font-weight: bold; cursor: pointer; }
+
+/* Kodingan Baru: Ukuran Ikon Footer */
+.footer-icon { position: absolute; cursor: pointer; }
+.footer-icon.left-btn { width: 30px; left: 60px; }  
+.footer-icon.right-btn { width: 70px; right: 60px; } 
+
+
+/* --- HINT --- */
+.hint-section { position: absolute; top: 150px; right: 60px; text-align: center; cursor: pointer; }
+.hint-icon { width: 55px; }
 .hint-label { display: block; font-size: 12px; font-weight: bold; color: #5D3A23; }
