@@ -12,36 +12,52 @@
             <img src="../assets/images/orang-home.png" alt="Karakter">
             <div class="speech-bubble" id="greetings">Halo, Selamat Pagi!</div>
         </div>
+        
         <div class="top-icons">
-    <div class="icon-wrapper" onclick="loadPage('template', 'Pencapaian')">
-        <img src="../assets/Icons/Achievement.png" style="cursor:pointer">
-    </div>
-    
-    <div class="icon-wrapper"><img src="../assets/Icons/Daily.png"></div>
-    
-    <div class="icon-wrapper" onclick="loadPage('template', 'Credit')">
-        <img src="../assets/Icons/Credit.png" style="cursor:pointer">
-    </div>
-</div>
+            <div class="icon-wrapper" onclick="loadPage('template', 'Pencapaian')">
+                <img src="../assets/Icons/Achievement.png" style="cursor:pointer">
+            </div>
+            
+            <div class="icon-wrapper">
+                <img src="../assets/Icons/Daily.png">
+            </div>
+            
+            <div class="icon-wrapper" onclick="loadPage('template', 'Credit')">
+                <img src="../assets/Icons/Credit.png" style="cursor:pointer">
+            </div>
         </div>
     </div>
 
     <div class="main-content">
         <div class="menu-grid">
-            <div class="card"><img src="../assets/images/tentang0kota.png"></div>
-            <div class="card"><img src="../assets/images/Rumah.png"></div>
-            <div class="card"><img src="../assets/images/Kebun.png"></div>
-            <div class="card"><img src="../assets/images/Zoo.png"></div>
-            <div class="card"><img src="../assets/images/Taman.png"></div>
-            <div class="card"><img src="../assets/images/Sea.png"></div>
+            <div class="card" onclick="mulaiTema('kota')">
+                <img src="../assets/images/tentang0kota.png" alt="Tema Kota">
+            </div>
+            <div class="card" onclick="mulaiTema('rumah')">
+                <img src="../assets/images/Rumah.png" alt="Tema Rumah">
+            </div>
+            <div class="card" onclick="mulaiTema('kebun')">
+                <img src="../assets/images/Kebun.png" alt="Tema Kebun">
+            </div>
+            <div class="card" onclick="mulaiTema('zoo')">
+                <img src="../assets/images/Zoo.png" alt="Tema Zoo">
+            </div>
+            <div class="card" onclick="mulaiTema('taman')">
+                <img src="../assets/images/Taman.png" alt="Tema Taman">
+            </div>
+            <div class="card" onclick="mulaiTema('sea')">
+                <img src="../assets/images/Sea.png" alt="Tema Laut">
+            </div>
         </div>
     </div>
 
     <div class="footer">
-    <img src="../assets/Icons/info.png" class="side-icon" onclick="loadPage('template', 'Cara Main')">
-    <div class="footer-text">HASIL PENELITIAN POLITEKNIK NEGERI MALANG</div>
-    <img src="../assets/Icons/Pengaturan.png" class="side-icon" onclick="loadPage('template', 'Pengaturan')" style="cursor:pointer">
-</div>
+        <img src="../assets/Icons/info.png" class="side-icon" onclick="loadPage('template', 'Cara Main')" style="cursor:pointer">
+        
+        <div class="footer-text">HASIL PENELITIAN POLITEKNIK NEGERI MALANG</div>
+        
+        <img src="../assets/Icons/Pengaturan.png" class="side-icon" onclick="loadPage('template', 'Pengaturan')" style="cursor:pointer">
+    </div>
 
     <script src="../JS/home.js"></script>
 </body>

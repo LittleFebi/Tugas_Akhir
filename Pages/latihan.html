@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Latihan</title>
+    <link rel="stylesheet" href="latihan.css">
+</head>
+<body>
+
+<div class="latihan-page">
+    <div class="latihan-wrapper">
+
+        <!-- NAV -->
+        <div class="nav-left-top">
+            <img src="assets/Icons/back.png" class="icon-nav">
+            <img src="assets/Icons/Home.png" class="icon-nav">
+        </div>
+
+        <div class="nav-right-top">
+            <img src="assets/Icons/Achievement.png" class="icon-nav">
+            <img src="assets/Icons/Daily.png" class="icon-nav">
+            <img src="assets/Icons/Credit.png" class="icon-nav">
+        </div>
+
+        <!-- PROGRESS -->
+        <div class="progress-container">
+            <div class="progress-fill" id="latihan-progress"></div>
+        </div>
+
+        <!-- QUESTION -->
+        <div class="question-container">
+
+            <div class="question-box" id="image-area"></div>
+
+            <div class="butterfly-indicator" id="butterfly-box">
+                <img src="assets/Icons/Kupu_Kupu.png" class="butterfly-img">
+                <span class="percent-label" id="percent-val">0%</span>
+            </div>
+
+            <div class="hint-section" onclick="useHint()">
+                <img src="assets/Icons/hint.png" class="hint-icon">
+                <span id="hint-count">Hint : 3</span>
+            </div>
+
+        </div>
+
+        <!-- OPTIONS -->
+        <div class="answer-grid" id="options-area"></div>
+
+        <!-- BOTTOM -->
+        <button class="spell-btn" onclick="playCurrentAudio()">Spell The Word</button>
+
+    </div>
+</div>
+
+<script src="latihan.js"></script>
+</body>
+</html>
