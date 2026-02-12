@@ -1,6 +1,11 @@
+// JS/main.js
+
 const appContainer = document.getElementById('app-container');
 
-// 1. DATA GLOBAL & PENYIMPANAN
+// --- 1. DATA GLOBAL & PENYIMPANAN ---
+let lastPage = 'home'; 
+let currentTheme = ''; // Variabel untuk menyimpan tema aktif agar tidak error saat kembali dari menu
+
 let currentSettings = JSON.parse(localStorage.getItem('funvo_switches')) || {
     notif: true,
     suara: true,
@@ -8,13 +13,12 @@ let currentSettings = JSON.parse(localStorage.getItem('funvo_switches')) || {
     support: true
 };
 
-// Target Achievement sesuai alur (Tutorial, Tema, Vocab, Bintang, Daily, Hint, Run, Session, Return)
 const achTargets = {
     tutorial: 1, themes: 6, vocab: 60, stars: 18, daily: 20, 
     nohint: 6, onerun: 6, noexit: 1, return: 20
 };
 
-// 2. NAVIGASI UTAMA
+// --- 2. NAVIGASI UTAMA (VERSI GABUNGAN TERLENGKAP) ---
 async function loadPage(pageName, targetMenu = 'Credit') {
     try {
         const response = await fetch(`Pages/${pageName}.html`);
@@ -23,19 +27,42 @@ async function loadPage(pageName, targetMenu = 'Credit') {
         
         appContainer.innerHTML = html;
 
-        // Inisialisasi fungsi berdasarkan halaman yang dimuat
+        // Simpan status halaman terakhir (Hanya jika Home atau Latihan)
+        if (pageName === 'home' || pageName === 'latihan') {
+            lastPage = pageName;
+        }
+
+        // Jalankan inisialisasi berdasarkan nama halaman
         if (pageName === 'logo') initLogo();
         else if (pageName === 'home') initHome();
         else if (pageName === 'template') initTemplate(targetMenu);
+        
+        // Perbaikan: Jika kembali ke latihan dari menu (Credit/Settings), muat ulang temanya
+        else if (pageName === 'latihan' && currentTheme !== '') {
+            if (typeof initLatihan === "function") {
+                initLatihan(currentTheme);
+            }
+        }
         
     } catch (err) { 
         console.error("Gagal memuat halaman:", err); 
     }
 }
 
+// Fungsi untuk tombol (X) di template
+function backToLastPage() {
+    loadPage(lastPage);
+}
+
+// Fungsi untuk mulai tema dari Home
+function mulaiTema(namaTema) {
+    currentTheme = namaTema; // Simpan tema yang dipilih user ke memori
+    loadPage('latihan');
+}
+
 document.addEventListener("DOMContentLoaded", () => loadPage('logo'));
 
-// 3. LOGIKA HALAMAN SPESIFIK
+// --- 3. LOGIKA HALAMAN SPESIFIK ---
 function initLogo() {
     const container = document.getElementById('logo-container');
     const logoImg = document.getElementById('main-logo');
@@ -64,7 +91,6 @@ async function loadDynamicContent(fileName) {
             const content = await resp.text();
             dynamicArea.innerHTML = content;
             
-            // Inisialisasi UI dinamis setelah HTML masuk
             if (fileName === 'pengaturan') initPengaturanUI();
             else if (fileName === 'pencapaian') initAchievementUI();
             else if (fileName === 'caramain') console.log("Cara Main Loaded");
@@ -85,7 +111,6 @@ async function initTemplate(targetMenu = 'Credit') {
 
         await loadDynamicContent(fileName);
 
-        // Update status active pada menu samping
         const menuItems = document.querySelectorAll('.menu-item');
         menuItems.forEach(item => {
             const onClickAttr = item.getAttribute('onclick') || "";
@@ -99,7 +124,7 @@ function changeContent(menuName, element) {
     menuItems.forEach(item => item.classList.remove('active'));
     element.classList.add('active');
     
-if (menuName === 'Cara Main') {
+    if (menuName === 'Cara Main') {
         loadDynamicContent('caramain');
     } else if (menuName === 'Pencapaian') {
         loadDynamicContent('pencapaian');
@@ -109,9 +134,8 @@ if (menuName === 'Cara Main') {
     }
 }
 
-// 4. SISTEM ACHIEVEMENT & CLAIM
+// --- 4. SISTEM ACHIEVEMENT & CLAIM ---
 function initAchievementUI() {
-    // Ambil data progres dan data yang sudah diklaim dari memori
     const progres = JSON.parse(localStorage.getItem('funvo_ach_progres')) || {};
     const claimed = JSON.parse(localStorage.getItem('funvo_claimed')) || {};
 
@@ -125,18 +149,16 @@ function initAchievementUI() {
             let target = achTargets[key];
             let percent = (current / target) * 100;
 
-            // Update visual bar dan teks angka
             bar.style.width = `${Math.min(percent, 100)}%`;
             text.innerText = `${current}/${target}`;
 
-            // Logika Tombol Claim
             if (claimed[key]) {
                 btn.innerText = "CLAIMED";
                 btn.classList.add('claimed');
                 btn.style.display = "block";
                 btn.disabled = true;
             } else if (current >= target) {
-                btn.classList.add('ready'); // Munculkan tombol emas
+                btn.classList.add('ready'); 
                 btn.style.display = "block";
             } else {
                 btn.style.display = "none";
@@ -151,11 +173,11 @@ function claimReward(id) {
         claimed[id] = true;
         localStorage.setItem('funvo_claimed', JSON.stringify(claimed));
         alert("Selamat! Pencapaian berhasil diklaim! 🌟");
-        initAchievementUI(); // Segarkan tampilan
+        initAchievementUI();
     }
 }
 
-// 5. LOGIKA PENGATURAN
+// --- 5. LOGIKA PENGATURAN ---
 function initPengaturanUI() {
     const volSlider = document.getElementById('vol-slider');
     const musicSlider = document.getElementById('music-slider');
@@ -187,7 +209,8 @@ function saveSettings() {
     
     localStorage.setItem('funvo_switches', JSON.stringify(currentSettings));
     alert("Pengaturan Berhasil Disimpan!");
-    loadPage('home'); 
+    
+    loadPage(lastPage); 
 }
 
 function resetGame() {
@@ -196,12 +219,4 @@ function resetGame() {
         alert("Data telah di-reset!");
         loadPage('logo'); 
     }
-}
-
-function mulaiTema(namaTema) {
-    loadPage('latihan').then(() => {
-        if (typeof initLatihan === "function") {
-            initLatihan(namaTema);
-        }
-    });
 }

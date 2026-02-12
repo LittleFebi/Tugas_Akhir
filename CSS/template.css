@@ -1,83 +1,68 @@
-/* Pastikan overlay membungkus seluruh layar dan memusatkan isinya */
+/* CSS/template.css */
+
+/* Overlay untuk menutup layar belakang saat menu dibuka */
 .credit-overlay {
     position: fixed;
     top: 0; left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.7); /* Memberikan efek gelap di belakang buku */
     display: flex;
-    justify-content: center; /* Center Horizontal */
-    align-items: center;     /* Center Vertikal */
-    z-index: 1000;
+    justify-content: center; 
+    align-items: center;    
+    z-index: 2000; /* Pastikan ini angka paling tinggi */
 }
 
-/* Container layout agar buku dan menu tetap satu kesatuan di tengah */
 .book-layout {
     display: flex;
     align-items: flex-start;
     position: relative;
-    /* Memberikan sedikit ruang agar menu samping tidak menempel ke pinggir layar */
     padding-right: 60px; 
 }
 
-/* MEMPERBESAR BUKU */
+/* Container buku harus relative */
 .book-body {
-    position: relative;
-    width: 1100px; /* Ukuran buku diperbesar dari sebelumnya */
-    height: auto;
-    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+    position: relative; 
+    width: 1100px;
+    margin: 0 auto;
 }
 
-.book-bg {
-    width: 100%;
-    display: block;
-}
-
-/* Tombol Tutup di pojok buku */
+/* Tombol Tutup di pojok kanan atas buku */
 .close-btn {
     position: absolute;
-    top: 20px;
-    right: 45px; /* Dipepetkan ke pojok buku */
+    top: 25px;    /* Jarak dari atas buku */
+    right: 35px;  /* Jarak dari kanan buku */
     background: none;
     border: none;
     cursor: pointer;
-    z-index: 1010;
+    z-index: 2010;
 }
 
 .close-btn img {
     width: 50px;
 }
-/* CSS/template.css */
 
+/* Menu Samping */
 .side-menu {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-left: -10px; /* Menempel ke buku */
+    margin-left: 30px; 
     margin-top: 60px;
     position: relative;
-    z-index: 1005; /* Di atas background buku */
+    z-index: 2005;
 }
 
 .menu-item {
     width: 55px;
     cursor: pointer;
-    transition: all 0.3s ease; /* Transisi halus untuk semua perubahan */
-    position: relative;
-    z-index: 1; /* Posisi standar di belakang */
-    filter: brightness(0.9); /* Sedikit lebih gelap saat tidak aktif */
+    transition: all 0.3s ease;
+    filter: brightness(0.9);
 }
 
-/* EFEK SAAT MENU AKTIF (DIPILIH) */
 .menu-item.active {
-    width: 65px; /* Membesar */
-    filter: brightness(1.1); /* Lebih terang */
-    z-index: 10; /* Tampil paling depan di antara menu lain */
-    transform: translateX(5px); /* Sedikit bergeser ke kanan agar menonjol */
-    pointer-events: none; /* Agar tidak bisa diklik ulang saat sudah aktif */
-}
-
-.menu-item:hover:not(.active) {
-    transform: scale(1.1);
-    filter: brightness(1.05);
+    width: 65px;
+    filter: brightness(1.1);
+    z-index: 10;
+    transform: translateX(5px);
 }
