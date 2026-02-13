@@ -220,3 +220,36 @@ function resetGame() {
         loadPage('logo'); 
     }
 }
+
+// JS/main.js
+
+function updateAchievementProgress(key, amount = 1) {
+    let progres = JSON.parse(localStorage.getItem('funvo_ach_progres')) || {};
+    progres[key] = (progres[key] || 0) + amount;
+    localStorage.setItem('funvo_ach_progres', JSON.stringify(progres));
+
+    // Cek apakah baru saja mencapai target untuk memunculkan pop-up
+    // achTargets harus sudah didefinisikan di atas
+    if (progres[key] === achTargets[key]) {
+        showPopup("Pencapaian Baru!", "Hore! Kamu baru saja membuka medali baru! 🌟", 3000);
+    }
+}
+
+// JS/main.js
+
+function showPopup(title, message, duration = 3000) {
+    const popup = document.getElementById('popup-notif');
+    const titleEl = document.getElementById('popup-title');
+    const messageEl = document.getElementById('popup-message');
+
+    if (popup && titleEl && messageEl) {
+        titleEl.innerText = title;
+        messageEl.innerText = message;
+        popup.style.display = 'flex'; // Tampilkan
+
+        // Otomatis hilang
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, duration);
+    }
+}
