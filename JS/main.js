@@ -206,16 +206,41 @@ function toggleSwitch(type) {
     }
 }
 
+// JS/main.js
+
 function saveSettings() {
+    // 1. Simpan data ke localStorage (Kodingan lama kamu)
     const vol = document.getElementById('vol-slider');
     const music = document.getElementById('music-slider');
+    
     if (vol) localStorage.setItem('funvo_vol', vol.value);
     if (music) localStorage.setItem('funvo_music', music.value);
     
     localStorage.setItem('funvo_switches', JSON.stringify(currentSettings));
-    alert("Pengaturan Berhasil Disimpan!");
-    
-    loadPage(lastPage); 
+
+    // 2. TAMPILKAN POP-UP LOKAL (Yang ada di pengaturan.html)
+    const popup = document.getElementById('popup-settings');
+    const title = document.getElementById('settings-title');
+    const desc = document.getElementById('settings-desc');
+
+    if (popup) {
+        // Bisa custom pesan juga kalau mau
+        if(title) title.innerText = "Berhasil!";
+        if(desc) desc.innerText = "Pengaturan telah disimpan.";
+
+        popup.style.display = 'flex'; // Munculkan!
+
+        // 3. Tunggu 1.5 detik, baru pindah halaman
+        setTimeout(() => {
+            popup.style.display = 'none';
+            backToLastPage(); // Atau loadPage(lastPage);
+        }, 1500);
+        
+    } else {
+        // Fallback kalau pop-up tidak ketemu (Jaga-jaga)
+        alert("Pengaturan Berhasil Disimpan!");
+        loadPage(lastPage);
+    }
 }
 
 function resetGame() {
@@ -257,4 +282,34 @@ function showPopup(title, message, duration = 3000) {
             popup.style.display = 'none';
         }, duration);
     }
+}
+
+// JS/main.js
+
+// Fungsi ini dipanggil saat slider digeser (Real-time)
+function aturVolume(tipe, nilai) {
+    if (tipe === 'suara') {
+        localStorage.setItem('funvo_vol', nilai); // Simpan nilai 0-100
+    } else if (tipe === 'musik') {
+        localStorage.setItem('funvo_music', nilai);
+        // Jika kamu punya background music, update volumenya di sini juga
+        // contoh: bgmAudio.volume = nilai / 100;
+    }
+}
+
+// Update fungsi initPengaturanUI agar slider membaca nilai terakhir
+function initPengaturanUI() {
+    const volSlider = document.getElementById('vol-slider');
+    const musicSlider = document.getElementById('music-slider');
+
+    // Ambil nilai yang tersimpan, kalau tidak ada default-nya 50
+    if (volSlider) {
+        volSlider.value = localStorage.getItem('funvo_vol') || 50;
+    }
+    
+    if (musicSlider) {
+        musicSlider.value = localStorage.getItem('funvo_music') || 50;
+    }
+    
+    // ... kode switch on/off lainnya ...
 }

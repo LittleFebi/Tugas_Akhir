@@ -138,23 +138,22 @@
 
 /* Judul HEBAT! */
 .result-title {
-    margin-top: 15%; /* Jarak dari atas box */
-    color: #8B4513;
-    font-size: 42px;
+    margin-top: 0%; /* Jarak dari atas box */
+    color: #fff;
+    font-size: 60px;
     font-weight: 900;
-    text-shadow: 2px 2px 0px #FFF; /* Outline putih agar teks jelas */
 }
 
 /* Baris Bintang */
 .star-row {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
+    display: 400px;
+    gap: 200px;
+    margin-top: 50px;
 }
 
 .star-img {
-    width: 70px;
-    height: 70px;
+    width: 120px;
+    height: 120px;
     filter: drop-shadow(0 4px 2px rgba(0,0,0,0.2)); /* Bayangan bintang */
 }
 
