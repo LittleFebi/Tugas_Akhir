@@ -101,3 +101,78 @@
 .footer-icon { position: absolute; cursor: pointer; }
 .footer-icon.left-btn { width: 28px; left: 60px; } 
 .footer-icon.right-btn { width: 70px; right: 60px; }
+
+/* Pastikan overlay menutupi SELURUH layar dan di atas segalanya */
+.result-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* Pakai viewport width */
+    height: 100vh; /* Pakai viewport height */
+    background: rgba(0, 0, 0, 0.8); /* Gelapkan background lebih pekat */
+    display: none; /* Default sembunyi */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Angka z-index harus sangat tinggi! */
+    backdrop-filter: blur(5px); /* Efek blur keren di belakang pop-up */
+}
+
+.result-box {
+    width: 600px;
+    height: 450px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: popUpAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Animasi muncul */
+}
+
+/* Animasi agar pop-up muncul membal */
+@keyframes popUpAnim {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Judul HEBAT! */
+.result-title {
+    margin-top: 15%; /* Jarak dari atas box */
+    color: #8B4513;
+    font-size: 42px;
+    font-weight: 900;
+    text-shadow: 2px 2px 0px #FFF; /* Outline putih agar teks jelas */
+}
+
+/* Baris Bintang */
+.star-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.star-img {
+    width: 70px;
+    height: 70px;
+    filter: drop-shadow(0 4px 2px rgba(0,0,0,0.2)); /* Bayangan bintang */
+}
+
+/* Tombol Navigasi Bawah */
+.result-nav {
+    position: absolute;
+    bottom: 15%; /* Jarak dari bawah box */
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.btn-res {
+    width: 85px; /* Ukuran tombol */
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-res:hover {
+    transform: scale(1.1) rotate(5deg); /* Efek goyang dikit pas di-hover */
+}
