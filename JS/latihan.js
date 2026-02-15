@@ -42,13 +42,7 @@ function renderSoal() {
     const data = soalAktif[indexSekarang];
     const temaAktif = currentTheme;
 
-    // Tampilkan Foto Target di area kuning (Hanya satu gambar saja)
-    const targetPhoto = document.getElementById("target-photo");
-    if (targetPhoto) {
-        targetPhoto.src = data.image; // Mengambil path dari assets/data/
-    }
-
-    // Siapkan 4 Pilihan (1 Benar + 3 Salah)
+    // Ambil 3 pilihan salah
     let pilihanSalah = databaseSoal[temaAktif]
         .filter(s => s.answer !== data.answer)
         .sort(() => Math.random() - 0.5)
@@ -56,10 +50,10 @@ function renderSoal() {
 
     let semuaPilihan = [data, ...pilihanSalah].sort(() => Math.random() - 0.5);
     
-    // Isi area grid jawaban (Hanya yang di bawah)
+    // ISI HANYA AREA JAWABAN DI BAWAH
     const area = document.getElementById("options-area");
     if (area) {
-        area.innerHTML = "";
+        area.innerHTML = ""; // Bersihkan isi lama
         semuaPilihan.forEach(item => {
             area.innerHTML += `
                 <div class="answer-card" onclick="cekJawaban('${item.answer}')">
@@ -70,8 +64,6 @@ function renderSoal() {
                 </div>`;
         });
     }
-
-    updateProgressLatihan();
 }
 
 function updateProgressLatihan() {

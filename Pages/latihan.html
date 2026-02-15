@@ -1,7 +1,7 @@
 <div class="latihan-page">
     <div class="latihan-wrapper">
         <div class="nav-left-top">
-            <img src="assets/Icons/back.png" class="icon-nav icon-back" onclick="backToLastPage()">
+            <img src="assets/Icons/back.png" class="icon-nav icon-back" onclick="loadPage('home')">
             <img src="assets/Icons/Home.png" class="icon-nav icon-home" onclick="loadPage('home')">
         </div>
 
@@ -41,21 +41,19 @@
         </div>
 
         <div id="result-popup" class="result-overlay" style="display: none;">
-    <div class="result-box" style="background-image: url('assets/Icons/pop_up.png');">
-        <h2 class="result-title">HEBAT!</h2>
-
-        <div class="star-row">
-            <img src="assets/Icons/bintang.png" class="star-img">
-            <img src="assets/Icons/bintang.png" class="star-img">
-            <img src="assets/Icons/bintang.png" class="star-img">
+            <div class="result-box" style="background-image: url('assets/Icons/pop_up.png');">
+                <h2 class="result-title">HEBAT!</h2>
+                <div class="star-row">
+                    <img src="assets/Icons/bintang.png" class="star-img">
+                    <img src="assets/Icons/bintang.png" class="star-img">
+                    <img src="assets/Icons/bintang.png" class="star-img">
+                </div>
+                <div class="result-nav">
+                    <img src="assets/Icons/homee.png" class="btn-res" onclick="loadPage('home')">
+                    <img src="assets/Icons/ulang.png" class="btn-res" onclick="restartTema()">
+                    <img src="assets/Icons/nexttema.png" id="btn-next-res" class="btn-res" onclick="nextTema()">
+                </div>
+            </div>
         </div>
-
-        <div class="result-nav">
-            <img src="assets/Icons/homee.png" class="btn-res" onclick="loadPage('home')">
-            <img src="assets/Icons/ulang.png" class="btn-res" onclick="restartTema()">
-            <img src="assets/Icons/nexttema.png" id="btn-next-res" class="btn-res" onclick="nextTema()">
-        </div>
-    </div>
-</div>
     </div>
 </div>
