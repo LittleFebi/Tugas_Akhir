@@ -1,16 +1,21 @@
 <div class="settings-content">
     <h2 class="settings-title">PENGATURAN</h2>
 
-    <div class="pembungkus-vol-mus">
-        <div class="slider-row">
-            <img src="../assets/Pengaturan/logo_volume.png" class="icon-v">
-            <input type="range" min="0" max="100" class="pink-slider" id="vol-slider">
-        </div>
-        <div class="slider-row">
-            <img src="../assets/Pengaturan/logo_music.png" class="icon-v">
-            <input type="range" min="0" max="100" class="pink-slider" id="music-slider">
-        </div>
+<div class="pembungkus-vol-mus">
+    <div class="slider-row">
+        <img src="assets/Pengaturan/logo_volume.png" class="icon-v"> 
+        
+        <input type="range" min="0" max="100" class="pink-slider" id="vol-slider"
+               oninput="aturVolume('suara', this.value)">
     </div>
+
+    <div class="slider-row">
+        <img src="assets/Pengaturan/logo_music.png" class="icon-v">
+        
+        <input type="range" min="0" max="100" class="pink-slider" id="music-slider"
+               oninput="aturVolume('musik', this.value)">
+    </div>
+</div>
 
     <div class="bottom-menu-row">
         <div class="menu-col" onclick="toggleSwitch('notif')">
@@ -30,6 +35,13 @@
             <div class="label-under"><img src="../assets/Pengaturan/support.png"></div>
         </div>
     </div>
+
+    <div id="popup-settings" class="settings-overlay" style="display: none;">
+    <div class="settings-box">
+        <h2 id="settings-title">Disimpan!</h2>
+        <p id="settings-desc">Pengaturan kamu sudah aman.</p>
+    </div>
+</div>
 
     <div class="footer-btns">
         <img src="../assets/Pengaturan/save.png" onclick="saveSettings()">

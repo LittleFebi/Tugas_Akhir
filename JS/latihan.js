@@ -7,6 +7,7 @@ const DAFTAR_TEMA = ['kota', 'rumah', 'kebun', 'zoo', 'taman', 'sea'];
 let soalAktif = [];
 let indexSekarang = 0;
 let hintsUser = 3;
+let currentAudioObj = null;
 
 function initLatihan(tema) {
     // Cek apakah tema ada di database untuk mencegah error
@@ -45,7 +46,7 @@ function renderSoal() {
     playCurrentAudio();
     const data = soalAktif[indexSekarang];
     const temaAktif = currentTheme;
-    
+
     // Ambil pilihan jawaban
     let pilihanSalah = databaseSoal[temaAktif]
         .filter(s => s.answer !== data.answer)
@@ -134,5 +135,31 @@ function nextTema() {
         // Pindah ke tema berikutnya
         let nextThemeName = DAFTAR_TEMA[currentIndex + 1];
         mulaiTema(nextThemeName); 
+    }
+}
+
+function playCurrentAudio() {
+    // 1. Hentikan audio sebelumnya jika masih bunyi (biar tidak tabrakan)
+    if (currentAudioObj) {
+        currentAudioObj.pause();
+        currentAudioObj.currentTime = 0;
+    }
+
+    if (soalAktif[indexSekarang]) {
+        // 2. Buat objek audio baru
+        currentAudioObj = new Audio(soalAktif[indexSekarang].audio);
+        
+        // 3. AMBIL SETTINGAN VOLUME DARI LOCALSTORAGE
+        let savedVol = localStorage.getItem('funvo_vol');
+        
+        // Jika belum ada settingan, default 50
+        if (savedVol === null) savedVol = 50; 
+
+        // 4. KONVERSI (0-100 menjadi 0.0-1.0)
+        // Contoh: Slider 80 -> Audio 0.8
+        currentAudioObj.volume = savedVol / 100;
+
+        // 5. Mainkan
+        currentAudioObj.play().catch(e => console.log("Gagal memutar audio:", e));
     }
 }
