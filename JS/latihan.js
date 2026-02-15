@@ -1,17 +1,25 @@
 // JS/latihan.js
+
+// 1. Definisikan daftar tema di SATU TEMPAT agar konsisten
+// Pastikan tulisan ini SAMA PERSIS dengan kunci di data_soal.js
+const DAFTAR_TEMA = ['kota', 'rumah', 'kebun', 'zoo', 'taman', 'sea'];
+
 let soalAktif = [];
 let indexSekarang = 0;
 let hintsUser = 3;
 
 function initLatihan(tema) {
-    // Ambil data dari database, acak, dan ambil 10 soal
+    // Cek apakah tema ada di database untuk mencegah error
+    if (!databaseSoal[tema]) {
+        console.error("Tema tidak ditemukan:", tema);
+        return;
+    }
+
     soalAktif = [...databaseSoal[tema]].sort(() => Math.random() - 0.5).slice(0, 10);
     indexSekarang = 0;
     hintsUser = 3;
     renderSoal();
 }
-
-// JS/latihan.js
 
 function cekJawaban(jawabanUser) {
     if (jawabanUser === soalAktif[indexSekarang].answer) {
@@ -20,14 +28,10 @@ function cekJawaban(jawabanUser) {
         updateProgressLatihan();
 
         if (indexSekarang < 10) {
-            // Jika belum 10 soal, lanjut ke soal berikutnya
             renderSoal();
         } else {
-            // JIKA SUDAH 10 SOAL:
             updateAchievementProgress('themes', 1);
             
-            // PANGGIL POP-UP HASIL (Bintang & 3 Tombol)
-            // Kita beri sedikit delay agar user bisa melihat progres 100% dulu
             setTimeout(() => {
                 showResultPopup(); 
             }, 500);
@@ -41,8 +45,8 @@ function renderSoal() {
     playCurrentAudio();
     const data = soalAktif[indexSekarang];
     const temaAktif = currentTheme;
-
-    // Ambil 3 pilihan salah
+    
+    // Ambil pilihan jawaban
     let pilihanSalah = databaseSoal[temaAktif]
         .filter(s => s.answer !== data.answer)
         .sort(() => Math.random() - 0.5)
@@ -50,10 +54,10 @@ function renderSoal() {
 
     let semuaPilihan = [data, ...pilihanSalah].sort(() => Math.random() - 0.5);
     
-    // ISI HANYA AREA JAWABAN DI BAWAH
+    // Render Grid Jawaban
     const area = document.getElementById("options-area");
     if (area) {
-        area.innerHTML = ""; // Bersihkan isi lama
+        area.innerHTML = "";
         semuaPilihan.forEach(item => {
             area.innerHTML += `
                 <div class="answer-card" onclick="cekJawaban('${item.answer}')">
@@ -64,6 +68,8 @@ function renderSoal() {
                 </div>`;
         });
     }
+
+    updateProgressLatihan();
 }
 
 function updateProgressLatihan() {
@@ -79,63 +85,54 @@ function playCurrentAudio() {
     }
 }
 
-// JS/latihan.js
-
 function useHint() {
-    // 1. Cek apakah jumlah hint masih ada
     if (hintsUser > 0) {
-        hintsUser--; // Kurangi jumlah hint
-        
-        // 2. Update angka hint di layar
+        hintsUser--;
         const hintLabel = document.getElementById("hint-count");
-        if (hintLabel) {
-            hintLabel.innerText = "Hint : " + hintsUser;
-        }
+        if (hintLabel) hintLabel.innerText = "Hint : " + hintsUser;
         
-        // 3. Ambil jawaban benar dari properti 'answer'
         const jawabanBenar = soalAktif[indexSekarang].answer; 
         const hurufPertama = jawabanBenar.charAt(0).toUpperCase();
         
-        // 4. Munculkan pesan otomatis menggunakan pop-up
         showPopup("Petunjuk!", `Kata ini dimulai dengan huruf: "${hurufPertama}"`, 3000);
-
     } else {
-        // 5. Jika hint sudah habis
         showPopup("Habis!", "Maaf, petunjuk kamu sudah habis. Ayo coba sendiri! 💪", 3000);
     }
 }
+
+// --- FUNGSI POPUP & NAVIGASI YANG DIPERBAIKI ---
 
 function showResultPopup() {
     const popup = document.getElementById('result-popup');
     const btnNext = document.getElementById('btn-next-res');
     
-    // Ambil progres dari localStorage
-    let progres = JSON.parse(localStorage.getItem('funvo_ach_progres')) || {};
-    let totalTema = progres['themes'] || 0;
+    // Gunakan DAFTAR_TEMA yang konsisten
+    let currentIndex = DAFTAR_TEMA.indexOf(currentTheme);
 
-    // ATURAN: Di tema ke-6 (setelah selesai 5 tema), tombol Next Hilang
-    if (totalTema >= 5) {
+    // Jika tema terakhir, hilangkan tombol Next
+    if (currentIndex === DAFTAR_TEMA.length - 1) {
         btnNext.style.display = 'none'; 
     } else {
-        btnNext.style.display = 'block';
+        btnNext.style.display = 'block'; 
     }
 
     popup.style.display = 'flex';
 }
 
-// Fungsi untuk mengulang tema yang sama
 function restartTema() {
     document.getElementById('result-popup').style.display = 'none';
     initLatihan(currentTheme); 
 }
 
-// Fungsi untuk lanjut ke tema berikutnya
 function nextTema() {
-    const daftarTema = ['kota', 'home', 'garden', 'zoo', 'park', 'undersea'];
-    let currentIndex = daftarTema.indexOf(currentTheme);
+    let currentIndex = DAFTAR_TEMA.indexOf(currentTheme);
     
-    if (currentIndex < daftarTema.length - 1) {
+    // Cek apakah masih ada tema selanjutnya
+    if (currentIndex >= 0 && currentIndex < DAFTAR_TEMA.length - 1) {
         document.getElementById('result-popup').style.display = 'none';
-        mulaiTema(daftarTema[currentIndex + 1]);
+        
+        // Pindah ke tema berikutnya
+        let nextThemeName = DAFTAR_TEMA[currentIndex + 1];
+        mulaiTema(nextThemeName); 
     }
 }
