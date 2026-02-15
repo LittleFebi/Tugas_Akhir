@@ -49,9 +49,14 @@ async function loadPage(pageName, targetMenu = 'Credit') {
     }
 }
 
-// Fungsi untuk tombol (X) di template
 function backToLastPage() {
-    loadPage(lastPage);
+    // Jika halaman saat ini adalah latihan, paksa kembali ke home
+    if (lastPage === 'latihan') {
+        loadPage('home');
+    } else {
+        // Jika dari menu (Settings/Credit), kembali ke halaman sebelumnya
+        loadPage(lastPage);
+    }
 }
 
 // Fungsi untuk mulai tema dari Home

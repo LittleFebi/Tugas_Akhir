@@ -1,15 +1,15 @@
 <div class="latihan-page">
     <div class="latihan-wrapper">
         <div class="nav-left-top">
-    <img src="assets/Icons/back.png" class="icon-nav icon-back" onclick="loadPage('home')">
-    <img src="assets/Icons/Home.png" class="icon-nav icon-home" onclick="loadPage('home')">
-</div>
+            <img src="assets/Icons/back.png" class="icon-nav icon-back" onclick="backToLastPage()">
+            <img src="assets/Icons/Home.png" class="icon-nav icon-home" onclick="loadPage('home')">
+        </div>
 
-<div class="nav-right-top">
-    <img src="assets/Icons/Achievement.png" class="icon-nav icon-achieve" onclick="loadPage('template', 'Pencapaian')">
-    <img src="assets/Icons/Daily.png" class="icon-nav icon-daily">
-    <img src="assets/Icons/Credit.png" class="icon-nav icon-credit" onclick="loadPage('template', 'Credit')">
-</div>
+        <div class="nav-right-top">
+            <img src="assets/Icons/Achievement.png" class="icon-nav icon-achieve" onclick="loadPage('template', 'Pencapaian')">
+            <img src="assets/Icons/Daily.png" class="icon-nav icon-daily">
+            <img src="assets/Icons/Credit.png" class="icon-nav icon-credit" onclick="loadPage('template', 'Credit')">
+        </div>
 
         <div class="progress-section">
             <div class="progress-container">
@@ -26,12 +26,36 @@
             <span id="hint-count" class="hint-label">Hint : 3</span>
         </div>
 
-        <div class="answer-grid" id="options-area"></div>
+        <div class="target-display-area" style="text-align: center; margin-top: 20px;">
+            <div class="yellow-bar-target">
+                <img id="target-photo" src="" style="width: 150px; border: 5px solid white; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+            </div>
+        </div>
+
+        <div id="options-area" class="answer-grid"></div>
 
         <div class="latihan-footer">
             <img src="assets/Icons/info.png" class="footer-icon left-btn" onclick="loadPage('template', 'Cara Main')">
             <button class="spell-btn" onclick="playCurrentAudio()">Spell The Word</button>
             <img src="assets/Icons/Pengaturan.png" class="footer-icon right-btn" onclick="loadPage('template', 'Pengaturan')">
         </div>
+
+        <div id="result-popup" class="result-overlay" style="display: none;">
+    <div class="result-box" style="background-image: url('assets/Icons/pop_up.png');">
+        <h2 class="result-title">HEBAT!</h2>
+
+        <div class="star-row">
+            <img src="assets/Icons/bintang.png" class="star-img">
+            <img src="assets/Icons/bintang.png" class="star-img">
+            <img src="assets/Icons/bintang.png" class="star-img">
+        </div>
+
+        <div class="result-nav">
+            <img src="assets/Icons/homee.png" class="btn-res" onclick="loadPage('home')">
+            <img src="assets/Icons/ulang.png" class="btn-res" onclick="restartTema()">
+            <img src="assets/Icons/nexttema.png" id="btn-next-res" class="btn-res" onclick="nextTema()">
+        </div>
+    </div>
+</div>
     </div>
 </div>
