@@ -1,162 +1,193 @@
-// ===============================
-// GLOBAL STATE
-// ===============================
-const appContainer = document.getElementById('app-container');
+// ================= GLOBAL =================
 
-let lastPage = 'home';
-let currentTheme = '';
+const appContainer = document.getElementById("app-container");
+
+let lastPage = "home";
+let currentTheme = "";
 let sessionThemesCompleted = 0;
 
-let currentSettings = JSON.parse(localStorage.getItem('funvo_switches')) || {
-    notif: true,
-    suara: true,
-    musik: true,
-    support: true
+const MAX_TARGET = {
+    tutorial: 1,
+    themes: 6,
+    vocab: 60,
+    stars: 18,
+    daily: 20,
+    nohint: 6,
+    onerun: 6,
+    noexit: 1,
+    return: 20
 };
 
-// ===============================
-// USER PROGRESS SYSTEM
-// ===============================
-function getUserProgress() {
-    return JSON.parse(localStorage.getItem('funvo_progress')) || {
-        tutorial: 0,
-        themes: [],
-        vocab: 0,
-        stars: {},
-        daily: 0,
-        lastLoginDate: null,
-        nohint: [],
-        noexit: 0,
-        return: 0
+const MILESTONE = {
+    vocab: [10,20,40,60],
+    daily: [1,3,5,7,10,20],
+    return: [2,3,5,7,10,20],
+    onerun: [1,3,5,6]
+};
+
+// ================= LOCAL STORAGE =================
+
+function getProgress(){
+    return JSON.parse(localStorage.getItem("funvo_progress")) || {
+        tutorial:0,
+        themes:[],
+        vocab:0,
+        stars:{},
+        daily:0,
+        lastLogin:null,
+        nohint:[],
+        noexit:0,
+        return:0
     };
 }
 
-function saveUserProgress(data) {
-    localStorage.setItem('funvo_progress', JSON.stringify(data));
+function saveProgress(data){
+    localStorage.setItem("funvo_progress", JSON.stringify(data));
 }
 
-function updateAchievement(type, value, extraData = null) {
-    let data = getUserProgress();
+// ================= NAVIGASI =================
 
-    if (type === 'vocab') {
+async function loadPage(page){
+    const res = await fetch(`Pages/${page}.html`);
+    appContainer.innerHTML = await res.text();
+
+    if(page === "home" || page === "latihan") lastPage = page;
+
+    if(page === "logo") initLogo();
+    if(page === "home") initHome();
+    if(page === "latihan" && currentTheme !== "") initLatihan(currentTheme);
+}
+
+function mulaiTema(tema){
+    currentTheme = tema;
+    loadPage("latihan");
+}
+
+function backToLastPage(){
+    loadPage(lastPage);
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+    loadPage("logo");
+    checkDailyLogin();
+});
+
+// ================= DAILY CHECK =================
+
+function checkDailyLogin(){
+    let data = getProgress();
+    const today = new Date().toDateString();
+
+    if(data.lastLogin !== today){
+        data.daily += 1;
+        if(data.daily > 1) data.return += 1;
+        data.lastLogin = today;
+        saveProgress(data);
+    }
+}
+
+// ================= ACHIEVEMENT UPDATE =================
+
+function updateAchievement(type, value=1, extra=null){
+
+    let data = getProgress();
+
+    if(type === "vocab"){
         data.vocab += value;
+        checkMilestone("vocab", data.vocab);
     }
 
-    else if (type === 'themes') {
-        if (!data.themes.includes(extraData)) {
-            data.themes.push(extraData);
+    if(type === "themes"){
+        if(!data.themes.includes(extra)){
+            data.themes.push(extra);
         }
     }
 
-    else if (type === 'stars') {
-        const currentStar = data.stars[extraData.theme] || 0;
-        if (value > currentStar) {
-            data.stars[extraData.theme] = value;
+    if(type === "stars"){
+        const current = data.stars[extra] || 0;
+        if(value > current){
+            data.stars[extra] = value;
         }
     }
 
-    else if (type === 'nohint') {
-        if (!data.nohint.includes(extraData)) {
-            data.nohint.push(extraData);
+    if(type === "nohint"){
+        if(!data.nohint.includes(extra)){
+            data.nohint.push(extra);
         }
     }
 
-    else if (type === 'noexit') {
-        if (data.noexit === 0) {
+    if(type === "noexit"){
+        if(data.noexit === 0){
             data.noexit = 1;
         }
     }
 
-    saveUserProgress(data);
+    saveProgress(data);
 }
 
-// ===============================
-// DAILY LOGIN
-// ===============================
-function checkDailyLogin() {
-    let data = getUserProgress();
-    const today = new Date().toDateString();
+// ================= MILESTONE CHECK =================
 
-    if (data.lastLoginDate !== today) {
-        data.daily += 1;
-
-        if (data.daily > 1) {
-            data.return += 1;
-        }
-
-        data.lastLoginDate = today;
-        saveUserProgress(data);
+function checkMilestone(type, currentValue){
+    if(MILESTONE[type] && MILESTONE[type].includes(currentValue)){
+        showGlobalPopup("Achievement!", 
+            `Kamu mencapai ${type} level ${currentValue}! 🎉`);
     }
 }
 
-// ===============================
-// NAVIGATION SYSTEM
-// ===============================
-async function loadPage(pageName, targetMenu = 'Credit') {
-    try {
-        const response = await fetch(`Pages/${pageName}.html`);
-        if (!response.ok) throw new Error('Halaman tidak ditemukan');
+// ================= ACHIEVEMENT UI =================
 
-        const html = await response.text();
-        appContainer.innerHTML = html;
+function initAchievementUI(){
+    let data = getProgress();
+    const totalStars = Object.values(data.stars)
+        .reduce((a,b)=>a+b,0);
 
-        if (pageName === 'home' || pageName === 'latihan') {
-            lastPage = pageName;
+    const currentValue = {
+        tutorial:data.tutorial,
+        themes:data.themes.length,
+        vocab:data.vocab,
+        stars:totalStars,
+        daily:data.daily,
+        nohint:data.nohint.length,
+        onerun:sessionThemesCompleted,
+        noexit:data.noexit,
+        return:data.return
+    };
+
+    Object.keys(MAX_TARGET).forEach(key=>{
+        const bar = document.getElementById(`bar-${key}`);
+        const text = document.getElementById(`txt-${key}`);
+
+        if(bar && text){
+            let percent = (currentValue[key]/MAX_TARGET[key])*100;
+            bar.style.width = `${Math.min(percent,100)}%`;
+            text.innerText = `${currentValue[key]}/${MAX_TARGET[key]}`;
         }
+    });
+}
 
-        if (pageName === 'logo') initLogo();
-        else if (pageName === 'home') initHome();
-        else if (pageName === 'template') initTemplate(targetMenu);
-        else if (pageName === 'latihan' && currentTheme !== '') {
-            if (typeof initLatihan === "function") {
-                initLatihan(currentTheme);
-            }
-        }
+// ================= POPUP =================
 
-    } catch (err) {
-        console.error("Gagal memuat halaman:", err);
+function showGlobalPopup(title,msg){
+    alert(title+"\n"+msg);
+}
+
+// ================= INIT =================
+
+function initLogo(){
+    const logo = document.getElementById("logo-container");
+    if(logo){
+        logo.onclick = ()=>loadPage("home");
     }
 }
 
-function mulaiTema(namaTema) {
-    currentTheme = namaTema;
-    loadPage('latihan');
-}
-
-function backToLastPage() {
-    if (lastPage === 'latihan') loadPage('home');
-    else loadPage(lastPage);
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    loadPage('logo');
-    checkDailyLogin();
-});
-
-// ===============================
-// PAGE INIT
-// ===============================
-function initLogo() {
-    const container = document.getElementById('logo-container');
-    const logoImg = document.getElementById('main-logo');
-
-    if (container && logoImg) {
-        container.onclick = () => {
-            logoImg.src = 'assets/images/logo-eyes.png';
-            setTimeout(() => loadPage('home'), 800);
-        };
-    }
-}
-
-function initHome() {
-    const greetingText = document.getElementById("greetings");
-    if (greetingText) {
+function initHome(){
+    const greet = document.getElementById("greetings");
+    if(greet){
         const jam = new Date().getHours();
-        let ucapan =
-            jam < 12 ? "Pagi" :
-            jam < 15 ? "Siang" :
-            jam < 18 ? "Sore" : "Malam";
-
-        greetingText.innerText = `Halo, Selamat ${ucapan}!`;
+        greet.innerText =
+            jam<12?"Halo, Selamat Pagi!":
+            jam<15?"Halo, Selamat Siang!":
+            jam<18?"Halo, Selamat Sore!":
+            "Halo, Selamat Malam!";
     }
 }

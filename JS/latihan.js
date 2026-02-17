@@ -1,141 +1,102 @@
-const DAFTAR_TEMA = ['kota', 'rumah', 'kebun', 'zoo', 'taman', 'sea'];
+const DAFTAR_TEMA = ['kota','rumah','kebun','zoo','taman','sea'];
 
-let soalAktif = [];
-let indexSekarang = 0;
-let hintsUser = 3;
-let correctAnswers = 0;
-let currentAudioObj = null;
+let soalAktif=[];
+let indexSekarang=0;
+let hintsUser=3;
+let correctAnswers=0;
 
-function initLatihan(tema) {
+function initLatihan(tema){
+    soalAktif=[...databaseSoal[tema]]
+        .sort(()=>Math.random()-0.5)
+        .slice(0,10);
 
-    if (!databaseSoal[tema]) {
-        console.error("Tema tidak ditemukan:", tema);
-        return;
-    }
-
-    soalAktif = [...databaseSoal[tema]]
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 10);
-
-    indexSekarang = 0;
-    hintsUser = 3;
-    correctAnswers = 0;
+    indexSekarang=0;
+    hintsUser=3;
+    correctAnswers=0;
 
     renderSoal();
 }
 
-function cekJawaban(jawabanUser) {
-
-    if (!soalAktif[indexSekarang]) return;
-
-    if (jawabanUser === soalAktif[indexSekarang].answer) {
+function cekJawaban(jawabanUser){
+    if(jawabanUser===soalAktif[indexSekarang].answer){
 
         correctAnswers++;
-
-        updateAchievement('vocab', 1);
+        updateAchievement("vocab",1);
 
         indexSekarang++;
 
-        if (indexSekarang < soalAktif.length) {
+        if(indexSekarang<10){
             renderSoal();
-        } else {
+        }else{
             finishGame();
         }
 
-    } else {
-        showPopup("Ups!", "Coba dengarkan lagi ya 😊", 1500);
+    }else{
+        alert("Jawaban salah, coba lagi!");
     }
 }
 
-function finishGame() {
+function finishGame(){
 
-    let starsEarned = 0;
+    let starsEarned =
+        hintsUser===3?3:
+        hintsUser===2?2:1;
 
-    if (hintsUser === 3) starsEarned = 3;
-    else if (hintsUser === 2) starsEarned = 2;
-    else starsEarned = 1;
+    updateAchievement("stars",starsEarned,currentTheme);
+    updateAchievement("themes",1,currentTheme);
 
-    updateAchievement('stars', starsEarned, { theme: currentTheme });
-    updateAchievement('themes', 1, currentTheme);
-
-    if (hintsUser === 3) {
-        updateAchievement('nohint', 1, currentTheme);
+    if(hintsUser===3){
+        updateAchievement("nohint",1,currentTheme);
     }
 
-    updateAchievement('noexit', 1);
+    updateAchievement("noexit",1);
 
     sessionThemesCompleted++;
 
-    setTimeout(() => {
-        showResultPopup(starsEarned);
-    }, 500);
+    showResultPopup();
 }
 
-function renderSoal() {
+function renderSoal(){
+    const data=soalAktif[indexSekarang];
 
-    const data = soalAktif[indexSekarang];
-    if (!data) return;
+    let salah=databaseSoal[currentTheme]
+        .filter(s=>s.answer!==data.answer)
+        .sort(()=>Math.random()-0.5)
+        .slice(0,3);
 
-    playCurrentAudio();
+    let pilihan=[data,...salah]
+        .sort(()=>Math.random()-0.5);
 
-    let pilihanSalah = databaseSoal[currentTheme]
-        .filter(s => s.answer !== data.answer)
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 3);
+    const area=document.getElementById("options-area");
+    area.innerHTML="";
 
-    let semuaPilihan = [data, ...pilihanSalah]
-        .sort(() => Math.random() - 0.5);
-
-    const area = document.getElementById("options-area");
-
-    if (area) {
-        area.innerHTML = "";
-
-        semuaPilihan.forEach(item => {
-            area.innerHTML += `
-                <div class="answer-card" onclick="cekJawaban('${item.answer}')">
-                    <div class="card-content">
-                        <div class="img-box">
-                            <img src="${item.image}">
-                        </div>
-                        <div class="text-box">
-                            ${item.answer.toUpperCase()}
-                        </div>
-                    </div>
-                </div>`;
-        });
-    }
-
-    updateProgressLatihan();
-
-    const hintLabel = document.getElementById("hint-count");
-    if (hintLabel) hintLabel.innerText = "Hint : " + hintsUser;
+    pilihan.forEach(item=>{
+        area.innerHTML+=`
+            <div class="answer-card"
+            onclick="cekJawaban('${item.answer}')">
+                <img src="${item.image}">
+                <p>${item.answer.toUpperCase()}</p>
+            </div>`;
+    });
 }
 
-function updateProgressLatihan() {
-
-    let persen = (indexSekarang / soalAktif.length) * 100;
-
-    const bar = document.getElementById("latihan-progress");
-    const kupu = document.getElementById("butterfly-box");
-    const txt = document.getElementById("percent-val");
-
-    if (bar) bar.style.width = persen + "%";
-    if (kupu) kupu.style.left = persen + "%";
-    if (txt) txt.innerText = Math.floor(persen) + "%";
+function showResultPopup(){
+    const popup=document.getElementById("result-popup");
+    popup.style.display="flex";
 }
 
-function playCurrentAudio() {
+function restartTema(){
+    document.getElementById("result-popup").style.display="none";
+    initLatihan(currentTheme);
+}
 
-    if (currentAudioObj) {
-        currentAudioObj.pause();
-        currentAudioObj.currentTime = 0;
-    }
+function nextTema(){
+    let index=DAFTAR_TEMA.indexOf(currentTheme);
 
-    if (soalAktif[indexSekarang]) {
-        currentAudioObj = new Audio(soalAktif[indexSekarang].audio);
-        let savedVol = localStorage.getItem('funvo_vol') || 50;
-        currentAudioObj.volume = savedVol / 100;
-        currentAudioObj.play().catch(e => console.log("Audio error:", e));
+    if(index<DAFTAR_TEMA.length-1){
+        document.getElementById("result-popup").style.display="none";
+        mulaiTema(DAFTAR_TEMA[index+1]);
+    }else{
+        loadPage("home");
     }
 }
