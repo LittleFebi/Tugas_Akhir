@@ -84,7 +84,7 @@
 }
 
 .acv-name {
-    font-family: 'ADLaM Display', sans-serif;
+    font-family: 'ADLaM Display';
     font-size: 16px;
     color: #333;
     margin: 0;
@@ -109,7 +109,7 @@
 
 /* Angka 0/1, 1/5, dsb */
 .acv-count {
-    font-family: 'Arial', sans-serif;
+    font-family: 'ADLaM Display', sans-serif;
     font-size: 13px;
     font-weight: bold;
     color: #5D3A23;
@@ -129,7 +129,7 @@
     border: 2px solid #B8860B;
     border-radius: 10px;
     color: #5D3A23;
-    font-family: 'ADLaM Display', sans-serif;
+    font-family: 'ADLaM Display';
     font-size: 10px;
     padding: 4px 8px;
     cursor: pointer;

@@ -1,52 +1,109 @@
-.caramain-container {
-    display: flex; /* Kunci membagi dua halaman */
+/* CSS/caramain.css */
+
+/* Layout Utama: Membagi 2 Halaman */
+.caramain-layout {
+    display: flex;
     width: 100%;
     height: 100%;
-    padding: 30px 45px;
-    gap: 40px; /* Jarak antara halaman kiri dan kanan */
+    padding: 20px 40px;
+    gap: 30px; /* Jarak antar halaman */
     box-sizing: border-box;
 }
 
-.halaman-buku-sisi {
-    flex: 1; /* Memberikan porsi yang sama rata kiri-kanan */
+.page-side {
+    flex: 1; /* Lebar sama rata */
     display: flex;
     flex-direction: column;
     gap: 15px;
     position: relative;
 }
 
-/* Header Avatar */
-.header-halo-teman { display: flex; align-items: center; gap: 15px; margin-bottom: 5px; }
-.avatar-info { width: 75px; }
-.bubble-info {
-    background: white;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-family: 'ADLaM Display', cursive;
-    border: 3px solid #f8e4bc;
+/* Header Karakter */
+.header-guide {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
 }
-
-/* PEMBUNGKUS PUTIH COKELAT */
-.bingkai-putih-caramain {
-    background: white;
-    border: 4.5px solid #c9b185; /* Border cokelat sesuai Figma */
+.char-img { width: 70px; }
+.bubble-text {
+    background: #FFF;
+    border: 3px solid #8B4513;
     border-radius: 20px;
-    padding: 20px;
-    position: relative;
-    font-size: 14px;
-    line-height: 1.5;
+    padding: 8px 15px;
     color: #333;
+    font-size: 20px;
 }
-.bingkai-putih-caramain.besar { height: 100%; }
 
-/* Dekorasi Nempel di Garis */
-.dekorasi-pojok { position: absolute; width: 32px; z-index: 5; }
-.top-left { top: -14px; left: -14px; }
-.top-right { top: -14px; right: -14px; }
-.bottom-right { bottom: -14px; right: -14px; }
-.bottom-left { bottom: -14px; left: -14px; }
-.mid-right { top: 40%; right: -18px; }
+/* Kotak Kertas Putih (Scrapbook Style) */
+.paper-box {
+    background: #FFF;
+    border: 4px solid #D2691E; /* Warna Cokelat */
+    border-radius: 15px;
+    padding: 15px 20px;
+    position: relative; /* Wajib ada biar stiker bisa diatur posisinya */
+    box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+    padding: 30px 40px 60px 90px;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+}
 
-/* Hiasan Jamur & Kubik */
-.hiasan-bawah-kiri { position: absolute; bottom: 0; right: 0; width: 40px; }
-.hiasan-bawah-kanan { position: absolute; bottom: -5px; left: -12px; width: 40px; }
+/* Update sedikit CSS ini agar muat 7 kotak */
+.paper-box {
+    padding: 10px 10px; /* Kurangi padding biar lebih hemat tempat */
+    margin-bottom: 8px; /* Rapatkan jarak antar kotak */
+}
+
+.paper-box h4 {
+    font-size: 18px; /* Kecilkan judul sedikit */
+    margin: 3px 0;
+}
+
+.paper-box li, .paper-box p {
+    font-size: 18px; /* Kecilkan isi teks sedikit */
+    line-height: 1.3;
+}
+
+/* --- LOGIKA STIKER (PENTING) --- */
+.sticker {
+    position: absolute;
+    width: 35px; /* Ukuran stiker */
+    z-index: 2;
+    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));
+}
+
+/* Posisi Stiker */
+.top-left { top: -15px; left: -15px; transform: rotate(-10deg); }
+.top-right { top: -15px; right: -15px; transform: rotate(10deg); }
+.bottom-left { bottom: -15px; left: -15px; transform: rotate(5deg); }
+.bottom-right { bottom: -15px; right: -15px; transform: rotate(-5deg); }
+.mid-right { top: 50%; right: -18px; transform: rotate(15deg); }
+
+/* Hiasan Melayang */
+.decor-floating-left {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 45px;
+}
+
+/* --- ANIMASI AGAR MAKIN HIDUP --- */
+.bingkai-putih-caramain, .paper-box {
+    animation: munculKeatas 0.8s ease-out forwards;
+    opacity: 0; 
+    transform: translateY(20px); 
+}
+
+.sticker, .decor-floating-left {
+    animation: efekStiker 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    opacity: 0;
+    transform: scale(0);
+    animation-delay: 0.5s; /* Muncul belakangan */
+}
+
+@keyframes munculKeatas {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes efekStiker {
+    to { opacity: 1; transform: scale(1) rotate(var(--rotasi, 0deg)); }
+}
