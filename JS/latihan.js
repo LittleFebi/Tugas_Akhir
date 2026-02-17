@@ -96,10 +96,6 @@ function renderSoal() {
         });
     }
 
-    // Update Gambar Target di tengah (Opsional jika desain kamu pakai ini)
-    const targetImg = document.getElementById("target-photo");
-    if (targetImg) targetImg.src = data.image;
-
     updateProgressLatihan();
     
     // Update label hint
@@ -157,6 +153,22 @@ function useHint() {
 }
 
 // --- NAVIGASI POPUP HASIL ---
+
+function showResultPopup(stars) {
+    const popup = document.getElementById('result-popup');
+    const btnNext = document.getElementById('btn-next-res');
+    
+    // Logic Next Button (Hilang kalau tema terakhir)
+    let currentIndex = DAFTAR_TEMA.indexOf(currentTheme);
+    if (currentIndex === DAFTAR_TEMA.length - 1) {
+        if(btnNext) btnNext.style.display = 'none'; 
+    } else {
+        if(btnNext) btnNext.style.display = 'block'; 
+    }
+
+    // Tampilkan Popup
+    if(popup) popup.style.display = 'flex';
+}
 
 function restartTema() {
     document.getElementById('result-popup').style.display = 'none';
