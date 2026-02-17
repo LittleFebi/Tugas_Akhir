@@ -1,7 +1,5 @@
 // JS/latihan.js
 
-// 1. Definisikan daftar tema di SATU TEMPAT agar konsisten
-// Pastikan tulisan ini SAMA PERSIS dengan kunci di data_soal.js
 const DAFTAR_TEMA = ['kota', 'rumah', 'kebun', 'zoo', 'taman', 'sea'];
 
 let soalAktif = [];
@@ -10,36 +8,64 @@ let hintsUser = 3;
 let currentAudioObj = null;
 
 function initLatihan(tema) {
-    // Cek apakah tema ada di database untuk mencegah error
+    // Cek apakah tema ada di database
     if (!databaseSoal[tema]) {
         console.error("Tema tidak ditemukan:", tema);
         return;
     }
 
+    // Acak soal dan ambil 10
     soalAktif = [...databaseSoal[tema]].sort(() => Math.random() - 0.5).slice(0, 10);
+    
+    // Reset status game
     indexSekarang = 0;
     hintsUser = 3;
+    
     renderSoal();
 }
 
 function cekJawaban(jawabanUser) {
     if (jawabanUser === soalAktif[indexSekarang].answer) {
-        updateAchievementProgress('vocab', 1);
+        // PERBAIKAN DI SINI: Gunakan nama fungsi yang sesuai dengan main.js
+        if (typeof updateAchievement === "function") {
+            updateAchievement('vocab', 1); 
+        }
+
         indexSekarang++;
         updateProgressLatihan();
 
         if (indexSekarang < 10) {
             renderSoal();
         } else {
-            updateAchievementProgress('themes', 1);
-            
-            setTimeout(() => {
-                showResultPopup(); 
-            }, 500);
+            // Game Selesai
+            finishGame();
         }
     } else {
-        showPopup("Ups!", "Coba dengarkan lagi ya 😊", 2000);
+        showPopup("Ups!", "Coba dengarkan lagi ya 😊", 1500);
     }
+}
+
+function finishGame() {
+    // 1. Hitung Bintang (Sisa hint 3 = 3 Bintang, dst)
+    let starsEarned = (hintsUser === 3) ? 3 : (hintsUser === 2 ? 2 : 1);
+
+    // 2. Simpan Data ke Main.js
+    if (typeof updateAchievement === "function") {
+        updateAchievement('themes', 1, currentTheme); // Simpan tema
+        updateAchievement('stars', starsEarned, { theme: currentTheme }); // Simpan bintang
+        
+        if (hintsUser === 3) {
+            updateAchievement('nohint', 1, currentTheme); // Achievement tanpa hint
+        }
+        
+        // Asumsi: jika sampai sini berarti tidak keluar (No Exit)
+        updateAchievement('noexit', 1);
+    }
+
+    // 3. Tampilkan Popup Hasil
+    setTimeout(() => {
+        showResultPopup(starsEarned); 
+    }, 500);
 }
 
 function renderSoal() {
@@ -47,7 +73,7 @@ function renderSoal() {
     const data = soalAktif[indexSekarang];
     const temaAktif = currentTheme;
 
-    // Ambil pilihan jawaban
+    // Ambil pilihan jawaban (1 benar + 3 salah)
     let pilihanSalah = databaseSoal[temaAktif]
         .filter(s => s.answer !== data.answer)
         .sort(() => Math.random() - 0.5)
@@ -55,7 +81,7 @@ function renderSoal() {
 
     let semuaPilihan = [data, ...pilihanSalah].sort(() => Math.random() - 0.5);
     
-    // Render Grid Jawaban
+    // Render ke HTML
     const area = document.getElementById("options-area");
     if (area) {
         area.innerHTML = "";
@@ -70,19 +96,48 @@ function renderSoal() {
         });
     }
 
+    // Update Gambar Target di tengah (Opsional jika desain kamu pakai ini)
+    const targetImg = document.getElementById("target-photo");
+    if (targetImg) targetImg.src = data.image;
+
     updateProgressLatihan();
+    
+    // Update label hint
+    const hintLabel = document.getElementById("hint-count");
+    if (hintLabel) hintLabel.innerText = "Hint : " + hintsUser;
 }
 
 function updateProgressLatihan() {
     let persen = (indexSekarang / 10) * 100;
-    document.getElementById("latihan-progress").style.width = persen + "%";
-    document.getElementById("butterfly-box").style.left = persen + "%";
-    document.getElementById("percent-val").innerText = persen + "%";
+    const bar = document.getElementById("latihan-progress");
+    const kupu = document.getElementById("butterfly-box");
+    const txt = document.getElementById("percent-val");
+
+    if (bar) bar.style.width = persen + "%";
+    if (kupu) kupu.style.left = persen + "%";
+    if (txt) txt.innerText = persen + "%";
 }
 
 function playCurrentAudio() {
+    // 1. Cek Settingan Suara (ON/OFF) dari LocalStorage
+    let settings = JSON.parse(localStorage.getItem('funvo_switches')) || { suara: true };
+    if (!settings.suara) return; // Kalau OFF, langsung berhenti
+
+    // 2. Stop audio lama
+    if (currentAudioObj) {
+        currentAudioObj.pause();
+        currentAudioObj.currentTime = 0;
+    }
+
     if (soalAktif[indexSekarang]) {
-        new Audio(soalAktif[indexSekarang].audio).play();
+        currentAudioObj = new Audio(soalAktif[indexSekarang].audio);
+        
+        // 3. Atur Volume
+        let savedVol = localStorage.getItem('funvo_vol');
+        if (savedVol === null) savedVol = 50; 
+        currentAudioObj.volume = savedVol / 100;
+
+        currentAudioObj.play().catch(e => console.log("Gagal memutar audio:", e));
     }
 }
 
@@ -95,29 +150,28 @@ function useHint() {
         const jawabanBenar = soalAktif[indexSekarang].answer; 
         const hurufPertama = jawabanBenar.charAt(0).toUpperCase();
         
-        showPopup("Petunjuk!", `Kata ini dimulai dengan huruf: "${hurufPertama}"`, 3000);
+        showPopup("Petunjuk!", `Kata dimulai huruf: "${hurufPertama}"`, 2000);
     } else {
-        showPopup("Habis!", "Maaf, petunjuk kamu sudah habis. Ayo coba sendiri! 💪", 3000);
+        showPopup("Habis!", "Maaf, petunjuk kamu sudah habis. Ayo coba sendiri! 💪", 2000);
     }
 }
 
-// --- FUNGSI POPUP & NAVIGASI YANG DIPERBAIKI ---
+// --- NAVIGASI POPUP HASIL ---
 
-function showResultPopup() {
+function showResultPopup(stars) {
     const popup = document.getElementById('result-popup');
     const btnNext = document.getElementById('btn-next-res');
     
-    // Gunakan DAFTAR_TEMA yang konsisten
+    // Logic Next Button (Hilang kalau tema terakhir)
     let currentIndex = DAFTAR_TEMA.indexOf(currentTheme);
-
-    // Jika tema terakhir, hilangkan tombol Next
     if (currentIndex === DAFTAR_TEMA.length - 1) {
-        btnNext.style.display = 'none'; 
+        if(btnNext) btnNext.style.display = 'none'; 
     } else {
-        btnNext.style.display = 'block'; 
+        if(btnNext) btnNext.style.display = 'block'; 
     }
 
-    popup.style.display = 'flex';
+    // Tampilkan Popup
+    if(popup) popup.style.display = 'flex';
 }
 
 function restartTema() {
@@ -127,39 +181,23 @@ function restartTema() {
 
 function nextTema() {
     let currentIndex = DAFTAR_TEMA.indexOf(currentTheme);
-    
-    // Cek apakah masih ada tema selanjutnya
     if (currentIndex >= 0 && currentIndex < DAFTAR_TEMA.length - 1) {
         document.getElementById('result-popup').style.display = 'none';
-        
-        // Pindah ke tema berikutnya
         let nextThemeName = DAFTAR_TEMA[currentIndex + 1];
         mulaiTema(nextThemeName); 
     }
 }
 
-function playCurrentAudio() {
-    // 1. Hentikan audio sebelumnya jika masih bunyi (biar tidak tabrakan)
-    if (currentAudioObj) {
-        currentAudioObj.pause();
-        currentAudioObj.currentTime = 0;
-    }
+// Fungsi ShowPopup Helper (untuk latihan.html yang mungkin belum meload main.js secara penuh saat transisi)
+function showPopup(title, message, duration = 3000) {
+    const popup = document.getElementById('popup-notif');
+    const titleEl = document.getElementById('popup-title');
+    const messageEl = document.getElementById('popup-message');
 
-    if (soalAktif[indexSekarang]) {
-        // 2. Buat objek audio baru
-        currentAudioObj = new Audio(soalAktif[indexSekarang].audio);
-        
-        // 3. AMBIL SETTINGAN VOLUME DARI LOCALSTORAGE
-        let savedVol = localStorage.getItem('funvo_vol');
-        
-        // Jika belum ada settingan, default 50
-        if (savedVol === null) savedVol = 50; 
-
-        // 4. KONVERSI (0-100 menjadi 0.0-1.0)
-        // Contoh: Slider 80 -> Audio 0.8
-        currentAudioObj.volume = savedVol / 100;
-
-        // 5. Mainkan
-        currentAudioObj.play().catch(e => console.log("Gagal memutar audio:", e));
+    if (popup && titleEl && messageEl) {
+        titleEl.innerText = title;
+        messageEl.innerText = message;
+        popup.style.display = 'flex';
+        setTimeout(() => { popup.style.display = 'none'; }, duration);
     }
 }
