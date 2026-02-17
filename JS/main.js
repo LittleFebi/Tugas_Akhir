@@ -1,315 +1,192 @@
-// JS/main.js
+// ================= GLOBAL =================
 
-const appContainer = document.getElementById('app-container');
+const appContainer = document.getElementById("app-container");
 
-// --- 1. DATA GLOBAL & PENYIMPANAN ---
-let lastPage = 'home'; 
-let currentTheme = ''; // Variabel untuk menyimpan tema aktif agar tidak error saat kembali dari menu
+let lastPage = "home";
+let currentTheme = "";
+let sessionThemesCompleted = 0;
 
-let currentSettings = JSON.parse(localStorage.getItem('funvo_switches')) || {
-    notif: true,
-    suara: true,
-    musik: true,
-    support: true
+const MAX_TARGET = {
+    tutorial: 1,
+    themes: 6,
+    vocab: 60,
+    stars: 18,
+    daily: 20,
+    nohint: 6,
+    onerun: 6,
+    noexit: 1,
+    return: 20
 };
 
-const achTargets = {
-    tutorial: 1, themes: 6, vocab: 60, stars: 18, daily: 20, 
-    nohint: 6, onerun: 6, noexit: 1, return: 20
+const MILESTONE = {
+    vocab: [10,20,40,60],
+    daily: [1,3,5,7,10,20],
+    return: [2,3,5,7,10,20],
+    onerun: [1,3,5,6]
 };
 
-// --- 2. NAVIGASI UTAMA (VERSI GABUNGAN TERLENGKAP) ---
-async function loadPage(pageName, targetMenu = 'Credit') {
-    try {
-        const response = await fetch(`Pages/${pageName}.html`);
-        if (!response.ok) throw new Error('Halaman tidak ditemukan');
-        const html = await response.text();
-        
-        appContainer.innerHTML = html;
+// ================= LOCAL STORAGE =================
 
-        // Simpan status halaman terakhir (Hanya jika Home atau Latihan)
-        if (pageName === 'home' || pageName === 'latihan') {
-            lastPage = pageName;
-        }
+function getProgress(){
+    return JSON.parse(localStorage.getItem("funvo_progress")) || {
+        tutorial:0,
+        themes:[],
+        vocab:0,
+        stars:{},
+        daily:0,
+        lastLogin:null,
+        nohint:[],
+        noexit:0,
+        return:0
+    };
+}
 
-        // Jalankan inisialisasi berdasarkan nama halaman
-        if (pageName === 'logo') initLogo();
-        else if (pageName === 'home') initHome();
-        else if (pageName === 'template') initTemplate(targetMenu);
-        
-        // Perbaikan: Jika kembali ke latihan dari menu (Credit/Settings), muat ulang temanya
-        else if (pageName === 'latihan' && currentTheme !== '') {
-            if (typeof initLatihan === "function") {
-                initLatihan(currentTheme);
-            }
-        }
-        
-    } catch (err) { 
-        console.error("Gagal memuat halaman:", err); 
+function saveProgress(data){
+    localStorage.setItem("funvo_progress", JSON.stringify(data));
+}
+
+// ================= NAVIGASI =================
+
+async function loadPage(page){
+    const res = await fetch(`Pages/${page}.html`);
+    appContainer.innerHTML = await res.text();
+
+    if(page === "home" || page === "latihan") lastPage = page;
+
+    if(page === "logo") initLogo();
+    if(page === "home") initHome();
+    if(page === "latihan" && currentTheme !== "") initLatihan(currentTheme);
+}
+
+function mulaiTema(tema){
+    currentTheme = tema;
+    loadPage("latihan");
+}
+
+function backToLastPage(){
+    loadPage(lastPage);
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+    loadPage("logo");
+    checkDailyLogin();
+});
+
+// ================= DAILY CHECK =================
+
+function checkDailyLogin(){
+    let data = getProgress();
+    const today = new Date().toDateString();
+
+    if(data.lastLogin !== today){
+        data.daily += 1;
+        if(data.daily > 1) data.return += 1;
+        data.lastLogin = today;
+        saveProgress(data);
     }
 }
 
-function backToLastPage() {
-    // Jika halaman saat ini adalah latihan, paksa kembali ke home
-    if (lastPage === 'latihan') {
-        loadPage('home');
-    } else {
-        // Jika dari menu (Settings/Credit), kembali ke halaman sebelumnya
-        loadPage(lastPage);
+// ================= ACHIEVEMENT UPDATE =================
+
+function updateAchievement(type, value=1, extra=null){
+
+    let data = getProgress();
+
+    if(type === "vocab"){
+        data.vocab += value;
+        checkMilestone("vocab", data.vocab);
     }
-}
 
-// Fungsi untuk mulai tema dari Home
-function mulaiTema(namaTema) {
-    currentTheme = namaTema; // Simpan tema yang dipilih user ke memori
-    loadPage('latihan');
-}
-
-document.addEventListener("DOMContentLoaded", () => loadPage('logo'));
-
-// --- 3. LOGIKA HALAMAN SPESIFIK ---
-function initLogo() {
-    const container = document.getElementById('logo-container');
-    const logoImg = document.getElementById('main-logo');
-    if (container && logoImg) {
-        container.onclick = () => {
-            logoImg.src = 'assets/images/logo-eyes.png';
-            setTimeout(() => loadPage('home'), 800);
-        };
-    }
-}
-
-function initHome() {
-    const greetingText = document.getElementById("greetings");
-    if (greetingText) {
-        const jam = new Date().getHours();
-        let ucapan = jam < 12 ? "Pagi" : (jam < 15 ? "Siang" : (jam < 18 ? "Sore" : "Malam"));
-        greetingText.innerText = `Halo, Selamat ${ucapan}!`;
-    }
-}
-
-async function loadDynamicContent(fileName) {
-    const dynamicArea = document.getElementById('dynamic-content');
-    if (dynamicArea) {
-        try {
-            const resp = await fetch(`Pages/${fileName}.html`);
-            const content = await resp.text();
-            dynamicArea.innerHTML = content;
-            
-            if (fileName === 'pengaturan') initPengaturanUI();
-            else if (fileName === 'pencapaian') initAchievementUI();
-            else if (fileName === 'caramain') console.log("Cara Main Loaded");
-            
-        } catch (err) {
-            console.error("Gagal muat konten dinamis:", err);
+    if(type === "themes"){
+        if(!data.themes.includes(extra)){
+            data.themes.push(extra);
         }
     }
+
+    if(type === "stars"){
+        const current = data.stars[extra] || 0;
+        if(value > current){
+            data.stars[extra] = value;
+        }
+    }
+
+    if(type === "nohint"){
+        if(!data.nohint.includes(extra)){
+            data.nohint.push(extra);
+        }
+    }
+
+    if(type === "noexit"){
+        if(data.noexit === 0){
+            data.noexit = 1;
+        }
+    }
+
+    saveProgress(data);
 }
 
-async function initTemplate(targetMenu = 'Credit') {
-    const dynamicArea = document.getElementById('dynamic-content');
-    if (dynamicArea) {
-        let fileName = 'credit'; 
-        if (targetMenu === 'Cara Main') fileName = 'caramain';
-        else if (targetMenu === 'Pengaturan') fileName = 'pengaturan';
-        else if (targetMenu === 'Pencapaian') fileName = 'pencapaian';
+// ================= MILESTONE CHECK =================
 
-        await loadDynamicContent(fileName);
-
-        const menuItems = document.querySelectorAll('.menu-item');
-        menuItems.forEach(item => {
-            const onClickAttr = item.getAttribute('onclick') || "";
-            item.classList.toggle('active', onClickAttr.includes(targetMenu));
-        });
+function checkMilestone(type, currentValue){
+    if(MILESTONE[type] && MILESTONE[type].includes(currentValue)){
+        showGlobalPopup("Achievement!", 
+            `Kamu mencapai ${type} level ${currentValue}! 🎉`);
     }
 }
 
-function changeContent(menuName, element) {
-    const menuItems = document.querySelectorAll('.menu-item');
-    menuItems.forEach(item => item.classList.remove('active'));
-    element.classList.add('active');
-    
-    if (menuName === 'Cara Main') {
-        loadDynamicContent('caramain');
-    } else if (menuName === 'Pencapaian') {
-        loadDynamicContent('pencapaian');
-    } else {
-        const fileName = menuName.toLowerCase().replace(/\s/g, '');
-        loadDynamicContent(fileName);
-    }
-}
+// ================= ACHIEVEMENT UI =================
 
-// --- 4. SISTEM ACHIEVEMENT & CLAIM ---
-function initAchievementUI() {
-    const progres = JSON.parse(localStorage.getItem('funvo_ach_progres')) || {};
-    const claimed = JSON.parse(localStorage.getItem('funvo_claimed')) || {};
+function initAchievementUI(){
+    let data = getProgress();
+    const totalStars = Object.values(data.stars)
+        .reduce((a,b)=>a+b,0);
 
-    Object.keys(achTargets).forEach(key => {
+    const currentValue = {
+        tutorial:data.tutorial,
+        themes:data.themes.length,
+        vocab:data.vocab,
+        stars:totalStars,
+        daily:data.daily,
+        nohint:data.nohint.length,
+        onerun:sessionThemesCompleted,
+        noexit:data.noexit,
+        return:data.return
+    };
+
+    Object.keys(MAX_TARGET).forEach(key=>{
         const bar = document.getElementById(`bar-${key}`);
         const text = document.getElementById(`txt-${key}`);
-        const btn = document.getElementById(`btn-${key}`);
 
-        if (bar && text && btn) {
-            let current = progres[key] || 0;
-            let target = achTargets[key];
-            let percent = (current / target) * 100;
-
-            bar.style.width = `${Math.min(percent, 100)}%`;
-            text.innerText = `${current}/${target}`;
-
-            if (claimed[key]) {
-                btn.innerText = "CLAIMED";
-                btn.classList.add('claimed');
-                btn.style.display = "block";
-                btn.disabled = true;
-            } else if (current >= target) {
-                btn.classList.add('ready'); 
-                btn.style.display = "block";
-            } else {
-                btn.style.display = "none";
-            }
+        if(bar && text){
+            let percent = (currentValue[key]/MAX_TARGET[key])*100;
+            bar.style.width = `${Math.min(percent,100)}%`;
+            text.innerText = `${currentValue[key]}/${MAX_TARGET[key]}`;
         }
     });
 }
 
-function claimReward(id) {
-    let claimed = JSON.parse(localStorage.getItem('funvo_claimed')) || {};
-    if (!claimed[id]) {
-        claimed[id] = true;
-        localStorage.setItem('funvo_claimed', JSON.stringify(claimed));
-        alert("Selamat! Pencapaian berhasil diklaim! 🌟");
-        initAchievementUI();
+// ================= POPUP =================
+
+function showGlobalPopup(title,msg){
+    alert(title+"\n"+msg);
+}
+
+// ================= INIT =================
+
+function initLogo() {
+    const container = document.getElementById('logo-container');
+    const logoImg = document.getElementById('main-logo');
+
+    if (container && logoImg) {
+        container.onclick = () => {
+            // Ganti gambar jadi ada mata
+            logoImg.src = "assets/images/logo-eyes.png";
+
+            // Tunggu 700ms baru pindah ke home
+            setTimeout(() => {
+                loadPage('home');
+            }, 700);
+        };
     }
 }
 
-// --- 5. LOGIKA PENGATURAN ---
-function initPengaturanUI() {
-    const volSlider = document.getElementById('vol-slider');
-    const musicSlider = document.getElementById('music-slider');
-
-    if(volSlider) volSlider.value = localStorage.getItem('funvo_vol') || 80;
-    if(musicSlider) musicSlider.value = localStorage.getItem('funvo_music') || 60;
-    
-    for (let key in currentSettings) {
-        const img = document.getElementById(`${key}-img`);
-        if (img) {
-            img.src = currentSettings[key] ? "assets/Pengaturan/On.png" : "assets/Pengaturan/off.png";
-        }
-    }
-}
-
-function toggleSwitch(type) {
-    currentSettings[type] = !currentSettings[type];
-    const imgElement = document.getElementById(`${type}-img`);
-    if (imgElement) {
-        imgElement.src = currentSettings[type] ? "assets/Pengaturan/On.png" : "assets/Pengaturan/off.png";
-    }
-}
-
-// JS/main.js
-
-function saveSettings() {
-    // 1. Simpan data ke localStorage (Kodingan lama kamu)
-    const vol = document.getElementById('vol-slider');
-    const music = document.getElementById('music-slider');
-    
-    if (vol) localStorage.setItem('funvo_vol', vol.value);
-    if (music) localStorage.setItem('funvo_music', music.value);
-    
-    localStorage.setItem('funvo_switches', JSON.stringify(currentSettings));
-
-    // 2. TAMPILKAN POP-UP LOKAL (Yang ada di pengaturan.html)
-    const popup = document.getElementById('popup-settings');
-    const title = document.getElementById('settings-title');
-    const desc = document.getElementById('settings-desc');
-
-    if (popup) {
-        // Bisa custom pesan juga kalau mau
-        if(title) title.innerText = "Berhasil!";
-        if(desc) desc.innerText = "Pengaturan telah disimpan.";
-
-        popup.style.display = 'flex'; // Munculkan!
-
-        // 3. Tunggu 1.5 detik, baru pindah halaman
-        setTimeout(() => {
-            popup.style.display = 'none';
-            backToLastPage(); // Atau loadPage(lastPage);
-        }, 1500);
-        
-    } else {
-        // Fallback kalau pop-up tidak ketemu (Jaga-jaga)
-        alert("Pengaturan Berhasil Disimpan!");
-        loadPage(lastPage);
-    }
-}
-
-function resetGame() {
-    if (confirm("Apakah kamu yakin ingin menghapus semua data permainan?")) {
-        localStorage.clear(); 
-        alert("Data telah di-reset!");
-        loadPage('logo'); 
-    }
-}
-
-// JS/main.js
-
-function updateAchievementProgress(key, amount = 1) {
-    let progres = JSON.parse(localStorage.getItem('funvo_ach_progres')) || {};
-    progres[key] = (progres[key] || 0) + amount;
-    localStorage.setItem('funvo_ach_progres', JSON.stringify(progres));
-
-    // Cek apakah baru saja mencapai target untuk memunculkan pop-up
-    // achTargets harus sudah didefinisikan di atas
-    if (progres[key] === achTargets[key]) {
-        showPopup("Pencapaian Baru!", "Hore! Kamu baru saja membuka medali baru! 🌟", 3000);
-    }
-}
-
-// JS/main.js
-
-function showPopup(title, message, duration = 3000) {
-    const popup = document.getElementById('popup-notif');
-    const titleEl = document.getElementById('popup-title');
-    const messageEl = document.getElementById('popup-message');
-
-    if (popup && titleEl && messageEl) {
-        titleEl.innerText = title;
-        messageEl.innerText = message;
-        popup.style.display = 'flex'; // Tampilkan
-
-        // Otomatis hilang
-        setTimeout(() => {
-            popup.style.display = 'none';
-        }, duration);
-    }
-}
-
-// JS/main.js
-
-// Fungsi ini dipanggil saat slider digeser (Real-time)
-function aturVolume(tipe, nilai) {
-    if (tipe === 'suara') {
-        localStorage.setItem('funvo_vol', nilai); // Simpan nilai 0-100
-    } else if (tipe === 'musik') {
-        localStorage.setItem('funvo_music', nilai);
-        // Jika kamu punya background music, update volumenya di sini juga
-        // contoh: bgmAudio.volume = nilai / 100;
-    }
-}
-
-// Update fungsi initPengaturanUI agar slider membaca nilai terakhir
-function initPengaturanUI() {
-    const volSlider = document.getElementById('vol-slider');
-    const musicSlider = document.getElementById('music-slider');
-
-    // Ambil nilai yang tersimpan, kalau tidak ada default-nya 50
-    if (volSlider) {
-        volSlider.value = localStorage.getItem('funvo_vol') || 50;
-    }
-    
-    if (musicSlider) {
-        musicSlider.value = localStorage.getItem('funvo_music') || 50;
-    }
-    
-    // ... kode switch on/off lainnya ...
-}
