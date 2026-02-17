@@ -3,7 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url('../assets/images/bg-logo.jpg') no-repeat center center;
+    background: url('assets/images/bg-logo.jpg') no-repeat center center;
     background-size: cover;
     cursor: pointer;
 }

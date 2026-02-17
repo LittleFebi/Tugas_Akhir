@@ -3,7 +3,7 @@ const logoImg = document.getElementById('main-logo');
 
 container.addEventListener('click', () => {
     // Jalur gambar relatif terhadap index.html yang memanggil script ini
-    logoImg.src = '../assets/images/logo-eyes.png';
+    logoImg.src = 'assets/images/logo-eyes.png';
 
     // Jeda sebentar agar efek mata terlihat, lalu pindah ke home.html
     setTimeout(() => {
