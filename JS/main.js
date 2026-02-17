@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Fungsi Navigasi Halaman
 async function loadPage(pageName, targetMenu = 'Credit') {
     try {
-        const response = await fetch(`Pages/${pageName}.html`);
+        const response = await fetch(`./Pages/${pageName}.html`);
         if (!response.ok) throw new Error('Halaman tidak ditemukan');
         const html = await response.text();
         
