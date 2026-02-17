@@ -64,5 +64,9 @@
     width: 65px;
     filter: brightness(1.1);
     z-index: 10;
-    transform: translateX(5px);
+    transform: scale(1.2);
+}
+
+.menu-item:hover {
+    transform: scale(1.1);
 }

@@ -132,7 +132,6 @@ async function initTemplate(targetMenu = 'Credit') {
 
         dynamicArea.innerHTML = await response.text();
 
-        // Inisialisasi tambahan jika perlu
         if (fileName === 'pengaturan') initPengaturanUI();
         if (fileName === 'pencapaian') initAchievementUI();
 
@@ -140,8 +139,18 @@ async function initTemplate(targetMenu = 'Credit') {
         dynamicArea.innerHTML = `<div style="padding:20px;">Halaman tidak tersedia</div>`;
         console.error(error);
     }
-}
 
+    // 🔥 INI BAGIAN YANG KAMU BUTUH
+    const menuItems = document.querySelectorAll('.menu-item');
+    menuItems.forEach(item => {
+        item.classList.remove('active');
+
+        const onclickAttr = item.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes(targetMenu)) {
+            item.classList.add('active');
+        }
+    });
+}
 
 function changeContent(menuName, element) {
     const menuItems = document.querySelectorAll('.menu-item');
