@@ -1,165 +1,102 @@
-// JS/latihan.js
+const DAFTAR_TEMA = ['kota','rumah','kebun','zoo','taman','sea'];
 
-// 1. Definisikan daftar tema di SATU TEMPAT agar konsisten
-// Pastikan tulisan ini SAMA PERSIS dengan kunci di data_soal.js
-const DAFTAR_TEMA = ['kota', 'rumah', 'kebun', 'zoo', 'taman', 'sea'];
+let soalAktif=[];
+let indexSekarang=0;
+let hintsUser=3;
+let correctAnswers=0;
 
-let soalAktif = [];
-let indexSekarang = 0;
-let hintsUser = 3;
-let currentAudioObj = null;
+function initLatihan(tema){
+    soalAktif=[...databaseSoal[tema]]
+        .sort(()=>Math.random()-0.5)
+        .slice(0,10);
 
-function initLatihan(tema) {
-    // Cek apakah tema ada di database untuk mencegah error
-    if (!databaseSoal[tema]) {
-        console.error("Tema tidak ditemukan:", tema);
-        return;
-    }
+    indexSekarang=0;
+    hintsUser=3;
+    correctAnswers=0;
 
-    soalAktif = [...databaseSoal[tema]].sort(() => Math.random() - 0.5).slice(0, 10);
-    indexSekarang = 0;
-    hintsUser = 3;
     renderSoal();
 }
 
-function cekJawaban(jawabanUser) {
-    if (jawabanUser === soalAktif[indexSekarang].answer) {
-        updateAchievementProgress('vocab', 1);
+function cekJawaban(jawabanUser){
+    if(jawabanUser===soalAktif[indexSekarang].answer){
+
+        correctAnswers++;
+        updateAchievement("vocab",1);
+
         indexSekarang++;
-        updateProgressLatihan();
 
-        if (indexSekarang < 10) {
+        if(indexSekarang<10){
             renderSoal();
-        } else {
-            updateAchievementProgress('themes', 1);
-            
-            setTimeout(() => {
-                showResultPopup(); 
-            }, 500);
+        }else{
+            finishGame();
         }
-    } else {
-        showPopup("Ups!", "Coba dengarkan lagi ya 😊", 2000);
+
+    }else{
+        alert("Jawaban salah, coba lagi!");
     }
 }
 
-function renderSoal() {
-    playCurrentAudio();
-    const data = soalAktif[indexSekarang];
-    const temaAktif = currentTheme;
+function finishGame(){
 
-    // Ambil pilihan jawaban
-    let pilihanSalah = databaseSoal[temaAktif]
-        .filter(s => s.answer !== data.answer)
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 3);
+    let starsEarned =
+        hintsUser===3?3:
+        hintsUser===2?2:1;
 
-    let semuaPilihan = [data, ...pilihanSalah].sort(() => Math.random() - 0.5);
-    
-    // Render Grid Jawaban
-    const area = document.getElementById("options-area");
-    if (area) {
-        area.innerHTML = "";
-        semuaPilihan.forEach(item => {
-            area.innerHTML += `
-                <div class="answer-card" onclick="cekJawaban('${item.answer}')">
-                    <div class="card-content">
-                        <div class="img-box"><img src="${item.image}"></div>
-                        <div class="text-box">${item.answer.toUpperCase()}</div>
-                    </div>
-                </div>`;
-        });
+    updateAchievement("stars",starsEarned,currentTheme);
+    updateAchievement("themes",1,currentTheme);
+
+    if(hintsUser===3){
+        updateAchievement("nohint",1,currentTheme);
     }
 
-    updateProgressLatihan();
+    updateAchievement("noexit",1);
+
+    sessionThemesCompleted++;
+
+    showResultPopup();
 }
 
-function updateProgressLatihan() {
-    let persen = (indexSekarang / 10) * 100;
-    document.getElementById("latihan-progress").style.width = persen + "%";
-    document.getElementById("butterfly-box").style.left = persen + "%";
-    document.getElementById("percent-val").innerText = persen + "%";
+function renderSoal(){
+    const data=soalAktif[indexSekarang];
+
+    let salah=databaseSoal[currentTheme]
+        .filter(s=>s.answer!==data.answer)
+        .sort(()=>Math.random()-0.5)
+        .slice(0,3);
+
+    let pilihan=[data,...salah]
+        .sort(()=>Math.random()-0.5);
+
+    const area=document.getElementById("options-area");
+    area.innerHTML="";
+
+    pilihan.forEach(item=>{
+        area.innerHTML+=`
+            <div class="answer-card"
+            onclick="cekJawaban('${item.answer}')">
+                <img src="${item.image}">
+                <p>${item.answer.toUpperCase()}</p>
+            </div>`;
+    });
 }
 
-function playCurrentAudio() {
-    if (soalAktif[indexSekarang]) {
-        new Audio(soalAktif[indexSekarang].audio).play();
-    }
+function showResultPopup(){
+    const popup=document.getElementById("result-popup");
+    popup.style.display="flex";
 }
 
-function useHint() {
-    if (hintsUser > 0) {
-        hintsUser--;
-        const hintLabel = document.getElementById("hint-count");
-        if (hintLabel) hintLabel.innerText = "Hint : " + hintsUser;
-        
-        const jawabanBenar = soalAktif[indexSekarang].answer; 
-        const hurufPertama = jawabanBenar.charAt(0).toUpperCase();
-        
-        showPopup("Petunjuk!", `Kata ini dimulai dengan huruf: "${hurufPertama}"`, 3000);
-    } else {
-        showPopup("Habis!", "Maaf, petunjuk kamu sudah habis. Ayo coba sendiri! 💪", 3000);
-    }
+function restartTema(){
+    document.getElementById("result-popup").style.display="none";
+    initLatihan(currentTheme);
 }
 
-// --- FUNGSI POPUP & NAVIGASI YANG DIPERBAIKI ---
+function nextTema(){
+    let index=DAFTAR_TEMA.indexOf(currentTheme);
 
-function showResultPopup() {
-    const popup = document.getElementById('result-popup');
-    const btnNext = document.getElementById('btn-next-res');
-    
-    // Gunakan DAFTAR_TEMA yang konsisten
-    let currentIndex = DAFTAR_TEMA.indexOf(currentTheme);
-
-    // Jika tema terakhir, hilangkan tombol Next
-    if (currentIndex === DAFTAR_TEMA.length - 1) {
-        btnNext.style.display = 'none'; 
-    } else {
-        btnNext.style.display = 'block'; 
-    }
-
-    popup.style.display = 'flex';
-}
-
-function restartTema() {
-    document.getElementById('result-popup').style.display = 'none';
-    initLatihan(currentTheme); 
-}
-
-function nextTema() {
-    let currentIndex = DAFTAR_TEMA.indexOf(currentTheme);
-    
-    // Cek apakah masih ada tema selanjutnya
-    if (currentIndex >= 0 && currentIndex < DAFTAR_TEMA.length - 1) {
-        document.getElementById('result-popup').style.display = 'none';
-        
-        // Pindah ke tema berikutnya
-        let nextThemeName = DAFTAR_TEMA[currentIndex + 1];
-        mulaiTema(nextThemeName); 
-    }
-}
-
-function playCurrentAudio() {
-    // 1. Hentikan audio sebelumnya jika masih bunyi (biar tidak tabrakan)
-    if (currentAudioObj) {
-        currentAudioObj.pause();
-        currentAudioObj.currentTime = 0;
-    }
-
-    if (soalAktif[indexSekarang]) {
-        // 2. Buat objek audio baru
-        currentAudioObj = new Audio(soalAktif[indexSekarang].audio);
-        
-        // 3. AMBIL SETTINGAN VOLUME DARI LOCALSTORAGE
-        let savedVol = localStorage.getItem('funvo_vol');
-        
-        // Jika belum ada settingan, default 50
-        if (savedVol === null) savedVol = 50; 
-
-        // 4. KONVERSI (0-100 menjadi 0.0-1.0)
-        // Contoh: Slider 80 -> Audio 0.8
-        currentAudioObj.volume = savedVol / 100;
-
-        // 5. Mainkan
-        currentAudioObj.play().catch(e => console.log("Gagal memutar audio:", e));
+    if(index<DAFTAR_TEMA.length-1){
+        document.getElementById("result-popup").style.display="none";
+        mulaiTema(DAFTAR_TEMA[index+1]);
+    }else{
+        loadPage("home");
     }
 }
