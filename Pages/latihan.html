@@ -1,28 +1,28 @@
 <div class="latihan-page">
     <div class="latihan-wrapper">
         <div class="nav-left-top">
-            <img src="assets/Icons/back.png" class="icon-nav icon-back" onclick="loadPage('home')">
-            <img src="assets/Icons/Home.png" class="icon-nav icon-home" onclick="loadPage('home')">
+            <img src="../assets/Icons/back.png" class="icon-nav icon-back" onclick="loadPage('home')">
+            <img src="../assets/Icons/Home.png" class="icon-nav icon-home" onclick="loadPage('home')">
         </div>
 
         <div class="nav-right-top">
-            <img src="assets/Icons/Achievement.png" class="icon-nav icon-achieve" onclick="loadPage('template', 'Pencapaian')">
-            <img src="assets/Icons/Daily.png" class="icon-nav icon-daily">
-            <img src="assets/Icons/Credit.png" class="icon-nav icon-credit" onclick="loadPage('template', 'Credit')">
+            <img src="../assets/Icons/Achievement.png" class="icon-nav icon-achieve" onclick="loadPage('template', 'Pencapaian')">
+            <img src="../assets/Icons/Daily.png" class="icon-nav icon-daily">
+            <img src="../assets/Icons/Credit.png" class="icon-nav icon-credit" onclick="loadPage('template', 'Credit')">
         </div>
 
         <div class="progress-section">
             <div class="progress-container">
                 <div class="progress-fill" id="latihan-progress"></div>
                 <div class="butterfly-indicator" id="butterfly-box">
-                    <img src="assets/Icons/Kupu_Kupu.png" class="butterfly-img">
+                    <img src="../assets/Icons/Kupu_Kupu.png" class="butterfly-img">
                     <div class="percent-label"><span id="percent-val">0%</span></div>
                 </div>
             </div>
         </div>
 
         <div class="hint-section" onclick="useHint()">
-            <img src="assets/Icons/hint.png" class="hint-icon">
+            <img src="../assets/Icons/hint.png" class="hint-icon">
             <span id="hint-count" class="hint-label">Hint : 3</span>
         </div>
 
@@ -35,23 +35,23 @@
         <div id="options-area" class="answer-grid"></div>
 
         <div class="latihan-footer">
-            <img src="assets/Icons/info.png" class="footer-icon left-btn" onclick="loadPage('template', 'Cara Main')">
+            <img src="../assets/Icons/info.png" class="footer-icon left-btn" onclick="loadPage('template', 'Cara Main')">
             <button class="spell-btn" onclick="playCurrentAudio()">Spell The Word</button>
-            <img src="assets/Icons/Pengaturan.png" class="footer-icon right-btn" onclick="loadPage('template', 'Pengaturan')">
+            <img src="../assets/Icons/Pengaturan.png" class="footer-icon right-btn" onclick="loadPage('template', 'Pengaturan')">
         </div>
 
         <div id="result-popup" class="result-overlay" style="display: none;">
-            <div class="result-box" style="background-image: url('assets/data/pop_up.png');">
+            <div class="result-box" style="background-image: url('../assets/data/pop_up.png');">
                 <h2 class="result-title">HEBAT!</h2>
                 <div class="star-row">
-                    <img src="assets/data/bintang.png" class="star-img">
-                    <img src="assets/data/bintang.png" class="star-img">
-                    <img src="assets/data/bintang.png" class="star-img">
+                    <img src="../assets/data/bintang.png" class="star-img">
+                    <img src="../assets/data/bintang.png" class="star-img">
+                    <img src="../assets/data/bintang.png" class="star-img">
                 </div>
                 <div class="result-nav">
-                    <img src="assets/data/homee.png" class="btn-res" onclick="loadPage('home')">
-                    <img src="assets/data/ulang.png" class="btn-res" onclick="restartTema()">
-                    <img src="assets/data/nexttema.png" id="btn-next-res" class="btn-res" onclick="nextTema()">
+                    <img src="../assets/data/homee.png" class="btn-res" onclick="loadPage('home')">
+                    <img src="../assets/data/ulang.png" class="btn-res" onclick="restartTema()">
+                    <img src="../assets/data/nexttema.png" id="btn-next-res" class="btn-res" onclick="nextTema()">
                 </div>
             </div>
         </div>
