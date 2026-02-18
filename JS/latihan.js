@@ -41,6 +41,11 @@ function cekJawaban(jawabanUser) {
             finishGame();
         }
     } else {
+        // --- MODIFIKASI: Suara Jawaban Salah (bgm2.mp3) ---
+        let audioSalah = new Audio('../assets/audio/bgm2.mp3');
+        audioSalah.volume = 0.5; // Sesuaikan volume (0.0 - 1.0)
+        audioSalah.play().catch(e => console.log("Gagal play audio salah:", e));
+
         showPopup("Ups!", "Coba dengarkan lagi ya 😊", 1500);
     }
 }
@@ -155,6 +160,11 @@ function useHint() {
 // --- NAVIGASI POPUP HASIL ---
 
 function showResultPopup(stars) {
+    // --- MODIFIKASI: Suara Popup Selesai (bgm3.mp3) ---
+    let audioSelesai = new Audio('../assets/audio/bgm3.mp3');
+    audioSelesai.volume = 0.5; // Sesuaikan volume
+    audioSelesai.play().catch(e => console.log("Gagal play audio selesai:", e));
+
     const popup = document.getElementById('result-popup');
     const btnNext = document.getElementById('btn-next-res');
     
