@@ -352,3 +352,114 @@ function resetGame() {
         loadPage('logo');
     }
 }
+
+// --- LOGIKA DAILY CHECK-IN (30 HARI) ---
+
+// Ini target hari yang dapet achievement
+const dailyMilestones = [1, 2, 3, 4, 5, 6, 7, 10, 20, 30]; 
+
+function showDailyPopup() {
+    // 1. Cek apakah elemen daily-overlay sudah ada di body
+    let overlay = document.getElementById('daily-overlay');
+    
+    // Jika belum ada, kita fetch dan masukkan ke index.html
+    if (!overlay) {
+        fetch('Pages/daily.html')
+            .then(res => res.text())
+            .then(html => {
+                document.body.insertAdjacentHTML('beforeend', html);
+                renderDailyGrid();
+                document.getElementById('daily-overlay').style.display = 'flex';
+            });
+    } else {
+        renderDailyGrid();
+        overlay.style.display = 'flex';
+    }
+}
+
+function closeDailyPopup() {
+    document.getElementById('daily-overlay').style.display = 'none';
+}
+
+function renderDailyGrid() {
+    const grid = document.getElementById('daily-grid');
+    const btnClaim = document.getElementById('btn-claim-daily');
+    grid.innerHTML = ''; // Bersihkan dulu
+
+    // Ambil data user
+    let data = getUserProgress();
+    let hariIni = new Date().toDateString();
+    let currentDay = data.daily; // Berapa hari dia udah login
+    
+    // Apakah hari ini SUDAH KLAIM?
+    let sudahKlaimHariIni = (data.lastLoginDate === hariIni);
+    
+    // Tentukan hari aktif yang sedang berjalan
+    let activeDay = sudahKlaimHariIni ? currentDay : currentDay + 1;
+    
+    // Render 30 Kotak
+    for (let i = 1; i <= 30; i++) {
+        let card = document.createElement('div');
+        card.className = 'day-card';
+        
+        let isMilestone = dailyMilestones.includes(i);
+        if (isMilestone) card.classList.add('milestone');
+
+        // --- GANTI ICON BERDASARKAN MILESTONE ---
+        // Jika hari pencapaian (peti/kado), jika biasa (bintang)
+        let iconSrc = isMilestone ? 'assets/Caramain/peti.png' : 'assets/Icons/Achievement.png';
+        
+        card.innerHTML = `
+            <span>Hari ${i}</span>
+            <img src="${iconSrc}">
+        `;
+
+        // Tentukan Status Kotak
+        if (i < activeDay) {
+            card.classList.add('claimed');
+        } else if (i === activeDay) {
+            if (sudahKlaimHariIni) {
+                card.classList.add('claimed');
+            } else {
+                card.classList.add('active'); // Warna kuning menyala
+            }
+        }
+
+        grid.appendChild(card);
+    }
+
+    // Atur Tombol Bawah
+    if (sudahKlaimHariIni) {
+        btnClaim.innerText = "Sudah Diambil Hari Ini";
+        btnClaim.disabled = true;
+    } else {
+        btnClaim.innerText = "Ambil Hadiah Hari " + activeDay;
+        btnClaim.disabled = false;
+    }
+}
+
+function claimDailyReward() {
+    let data = getUserProgress();
+    const today = new Date().toDateString();
+    
+    if (data.lastLoginDate === today) {
+        alert("Kamu sudah mengambil hadiah hari ini!");
+        return;
+    }
+
+    // Tambah hari
+    data.daily += 1;
+    data.lastLoginDate = today;
+    saveUserProgress(data);
+
+    // Cek apakah hari ini masuk milestone achievement?
+    if (dailyMilestones.includes(data.daily)) {
+        showGlobalPopup("Wow Hebat! 🌟", `Kamu mencapai Daily Login Hari ke-${data.daily}!`);
+        // Note: Progress bar di halaman pencapaian akan otomatis terupdate jika pakai UI achievement kamu
+    } else {
+        alert(`Berhasil mengambil hadiah Hari ke-${data.daily}!`);
+    }
+
+    // Refresh Tampilan
+    renderDailyGrid();
+}

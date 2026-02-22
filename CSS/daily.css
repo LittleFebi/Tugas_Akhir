@@ -1,0 +1,65 @@
+/* CSS/daily.css */
+.daily-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(46, 45, 45, 0.7);
+    display: none; /* Default sembunyi */
+    justify-content: center; align-items: center;
+    z-index: 10000;
+}
+
+.daily-box {
+    background: #FFF8DC; border: 5px solid #D2691E;
+    border-radius: 20px; width: 600px; height: 500px;
+    padding: 20px; position: relative;
+    display: flex; flex-direction: column; align-items: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.close-daily {
+    position: absolute; top: -15px; right: -15px;
+    background: #ff4757; color: white; border: 3px solid white;
+    border-radius: 50%; width: 40px; height: 40px;
+    font-size: 20px; font-weight: bold; cursor: pointer;
+}
+
+.daily-title { color: #8B4513; margin: 0; font-size: 32px; font-family: 'ADLaM Display', cursive;}
+.daily-subtitle { color: #555; font-weight: bold; margin-bottom: 15px; }
+
+/* Area Grid yang bisa di-scroll */
+.daily-scroll-area {
+    width: 100%; flex: 1; overflow-y: auto;
+    background: white; border-radius: 10px; padding: 10px;
+    border: 2px solid #DEB887;
+}
+
+.daily-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); /* 5 kolom */
+    gap: 10px;
+}
+
+/* Kotak per Hari */
+.day-card {
+    background: #f1f2f6; border: 2px solid #ccc;
+    border-radius: 10px; padding: 10px; text-align: center;
+    position: relative; opacity: 0.8;
+}
+
+.day-card img { width: 40px; height: 40px; object-fit: contain; }
+.day-card span { display: block; font-weight: bold; font-size: 14px; margin-bottom: 5px; color:#333; }
+
+/* Status: Aktif Hari Ini */
+.day-card.active { border-color: #ffa502; background: #fff200; opacity: 1; transform: scale(1.05); }
+/* Status: Milestone (1,2,3...10,20,30) */
+.day-card.milestone { background: #ffeaa7; border-color: #ff9f43; }
+/* Status: Sudah Diklaim */
+.day-card.claimed { background: #7bed9f; border-color: #2ed573; opacity: 0.6; }
+.day-card.claimed::after { content: "✔"; position: absolute; font-size: 30px; color: white; top: 20px; left: 25px; text-shadow: 1px 1px 2px black;}
+
+/* Tombol Ambil Bawah */
+.btn-claim-daily {
+    margin-top: 15px; padding: 12px 30px; border-radius: 30px;
+    background: #ff4757; color: white; font-weight: bold; font-size: 18px;
+    border: none; cursor: pointer; box-shadow: 0 4px 0 #c0392b;
+}
+.btn-claim-daily:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
+.btn-claim-daily:active:not(:disabled) { transform: translateY(4px); box-shadow: none; }
