@@ -452,6 +452,17 @@ function claimDailyReward() {
     data.lastLoginDate = today;
     saveUserProgress(data);
 
+    // ==========================================
+    // TAMBAHAN: MAINKAN EFEK SUARA DAILY CHECK-IN
+    // ==========================================
+    if (currentSettings.suara) { // Cek apakah settingan suara menyala
+        let dailyAudio = new Audio('assets/audio/bgdaily.mp3');
+        let vol = localStorage.getItem('funvo_vol') || 50; // Ambil dari slider volume suara
+        dailyAudio.volume = vol / 100;
+        dailyAudio.play().catch(e => console.log("Audio effect terblokir:", e));
+    }
+    // ==========================================
+
     // Cek apakah hari ini masuk milestone achievement?
     if (dailyMilestones.includes(data.daily)) {
         showGlobalPopup("Wow Hebat! 🌟", `Kamu mencapai Daily Login Hari ke-${data.daily}!`);
@@ -460,6 +471,6 @@ function claimDailyReward() {
         alert(`Berhasil mengambil hadiah Hari ke-${data.daily}!`);
     }
 
-    // Refresh Tampilan
+    // Refresh Tampilan Grid
     renderDailyGrid();
 }
