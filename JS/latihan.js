@@ -24,13 +24,29 @@ function initLatihan(tema) {
     renderSoal();
 }
 
+// JS/latihan.js
+
 function cekJawaban(jawabanUser) {
+    // 1. Ambil settingan suara dari penyimpanan
+    let settings = JSON.parse(localStorage.getItem('funvo_switches')) || { suara: true };
+    let savedVol = localStorage.getItem('funvo_vol') || 50;
+
     if (jawabanUser === soalAktif[indexSekarang].answer) {
-        // PERBAIKAN DI SINI: Gunakan nama fungsi yang sesuai dengan main.js
+        // --- JAWABAN BENAR ---
+        
+        // Mainkan suara benar (bgm4.mp3) jika settingan suara ON
+        if (settings.suara) {
+            let audioBenar = new Audio('../assets/audio/bgm4.mp3');
+            audioBenar.volume = savedVol / 100;
+            audioBenar.play().catch(e => console.log("Gagal play audio benar:", e));
+        }
+
+        // Update pencapaian
         if (typeof updateAchievement === "function") {
             updateAchievement('vocab', 1); 
         }
 
+        // Lanjut ke soal berikutnya
         indexSekarang++;
         updateProgressLatihan();
 
@@ -41,12 +57,16 @@ function cekJawaban(jawabanUser) {
             finishGame();
         }
     } else {
-        // --- MODIFIKASI: Suara Jawaban Salah (bgm2.mp3) ---
-        let audioSalah = new Audio('../assets/audio/bgm2.mp3');
-        audioSalah.volume = 0.5; // Sesuaikan volume (0.0 - 1.0)
-        audioSalah.play().catch(e => console.log("Gagal play audio salah:", e));
+        // --- JAWABAN SALAH ---
 
-        showPopup("Ups!", "Coba dengarkan lagi ya 😊", 1500);
+        // Mainkan suara salah (bgm2.mp3) jika settingan suara ON
+        if (settings.suara) {
+            let audioSalah = new Audio('../assets/audio/bgm2.mp3');
+            audioSalah.volume = savedVol / 100; 
+            audioSalah.play().catch(e => console.log("Gagal play audio salah:", e));
+        }
+
+        showPopup("Ups!", "What Out for what you heard!😊", 1500);
     }
 }
 
@@ -151,9 +171,9 @@ function useHint() {
         const jawabanBenar = soalAktif[indexSekarang].answer; 
         const hurufPertama = jawabanBenar.charAt(0).toUpperCase();
         
-        showPopup("Petunjuk!", `Kata dimulai huruf: "${hurufPertama}"`, 2000);
+        showPopup("Hint!", `The First Word Start With: "${hurufPertama}"`, 2000);
     } else {
-        showPopup("Habis!", "Maaf, petunjuk kamu sudah habis. Ayo coba sendiri! 💪", 2000);
+        showPopup("Run out!", "Sorry, Your hints are up. Come on, try it yourself! 💪", 2000);
     }
 }
 
