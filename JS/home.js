@@ -5,10 +5,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const jam = sekarang.getHours();
     
     let ucapan = "";
-    if (jam >= 0 && jam < 12) ucapan = "Halo, Selamat Pagi!";
-    else if (jam >= 12 && jam < 15.5) ucapan = "Halo, Selamat Siang!";
-    else if (jam >= 15.5 && jam < 18) ucapan = "Halo, Selamat Sore!";
-    else ucapan = "Halo, Selamat Malam!";
+    if (jam >= 0 && jam < 12) ucapan = "Hello, Good Morning!";
+    else if (jam >= 12 && jam < 15.5) ucapan = "Hello, Good Afternoon!";
+    else if (jam >= 15.5 && jam < 18) ucapan = "Hello, Good Evening!";
+    else ucapan = "Hello, Good Night!";
 
     if (greetingText) greetingText.innerText = ucapan;
 
