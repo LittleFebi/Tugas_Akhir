@@ -318,8 +318,8 @@ function initHome() {
     const greetingText = document.getElementById("greetings");
     if (greetingText) {
         const jam = new Date().getHours();
-        let ucapan = jam < 12 ? "Pagi" : (jam < 15 ? "Siang" : (jam < 18 ? "Sore" : "Malam"));
-        greetingText.innerText = `Halo, Selamat ${ucapan}!`;
+        let ucapan = jam < 12 ? "Morning" : (jam < 15 ? "Afternoon" : (jam < 18 ? "Evening" : "Night"));
+        greetingText.innerText = `Hello, Good ${ucapan}!`;
     }
 }
 
