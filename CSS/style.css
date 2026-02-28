@@ -34,3 +34,35 @@ body {
     border: 4px solid #F4C95D; /* Warna kuning khas Funvo */
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
+
+/* Pengaturan untuk Laptop/Desktop (Layar Besar) */
+@media screen and (min-width: 1024px) {
+    .popup-box {
+        width: 400px; /* Ukuran kotak popup di laptop */
+    }
+}
+
+/* Pengaturan untuk iPad/Tablet (Layar Sedang) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .popup-box {
+        width: 60%; /* Kotak lebih lebar di tablet */
+        padding: 20px;
+    }
+}
+
+/* Pengaturan untuk HP (Layar Kecil) */
+@media screen and (max-width: 767px) {
+    body {
+        overflow-y: auto; /* Izinkan scroll jika konten kepanjangan di HP */
+    }
+    
+    .popup-box {
+        width: 85%; /* Kotak hampir memenuhi lebar layar HP */
+        padding: 15px;
+        border-width: 2px; /* Border lebih tipis agar rapi */
+    }
+
+    #popup-title {
+        font-size: 1.2rem; /* Kecilkan ukuran teks judul di HP */
+    }
+}
