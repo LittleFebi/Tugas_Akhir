@@ -1,52 +1,143 @@
+/* CSS/credit.css - Clean Rewrite */
+
+/* Tidak override position/top/left dari template.css
+   Hanya atur display dan scroll */
 .content-layer {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    /* Padding disesuaikan agar konten pas di area 'kertas' buku */
-    padding: 110px 100px 80px 120px; 
-    box-sizing: border-box;
-    z-index: 10;
+  display: flex;
+  flex-direction: row;
+  padding: 5% 2% 5% 2%;
+  box-sizing: border-box;
+  z-index: 10;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .profile-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .credit-title {
-    font-size: 48px; /* Diperbesar */
-    color: #004b8d;
-    margin-bottom: 25px;
-    font-weight: bold;
+  font-size: 48px;
+  color: #004b8d;
+  margin-bottom: 25px;
+  font-weight: bold;
 }
 
 .profile-frame img {
-    width: 330px; /* Foto diperbesar */
-    border-radius: 30px;
-    border: 6px solid white;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  width: 330px;
+  border-radius: 30px;
+  border: 6px solid white;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
-/* Update di CSS/credit.css */
+
 .text-description {
-    flex: 1.5;
-    padding-left: 50px;
-    color: #333;
-    line-height: 1.6;
-    font-size: 20px; /* Sesuaikan ukuran font agar pas */
-    max-height: 550px; /* Batasi tinggi area teks */
-    overflow-y: auto;  /* Tambahkan scrollbar jika teks melebihi batas */
+  flex: 1.5;
+  padding-left: 50px;
+  color: #333;
+  line-height: 1.6;
+  font-size: 20px;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .text-description::-webkit-scrollbar {
-    width: 10px;
+  width: 10px;
 }
 
 .text-description p {
-    margin-bottom: 15px; /* Jarak antar paragraf */
-    text-align: justify; /* Membuat paragraf rata kanan-kiri */
+  margin-bottom: 15px;
+  text-align: justify;
+}
+
+/* ========================
+   TABLET (1024px)
+======================== */
+@media screen and (max-width: 1024px) {
+  .content-layer {
+    padding: 9% 8% 6% 9%;
+  }
+  .credit-title {
+    font-size: 36px;
+    margin-bottom: 15px;
+  }
+  .profile-frame img {
+    width: 220px;
+    border-radius: 20px;
+    border-width: 4px;
+  }
+  .text-description {
+    font-size: 15px;
+    padding-left: 30px;
+  }
+}
+
+/* ========================
+   MOBILE (768px)
+======================== */
+@media screen and (max-width: 768px) {
+  .content-layer {
+    flex-direction: column;
+    padding: 5% 8% 6% 8%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .profile-section {
+    /* flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+    flex: none; */
+  }
+
+  .credit-title {
+    font-size: 22px;
+    padding-bottom: 10px;
+    margin-bottom: 0;
+  }
+
+  .profile-frame img {
+    width: 80px;
+    border-radius: 12px;
+    border-width: 3px;
+  }
+
+  .text-description {
+    flex: none;
+    padding-left: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-y: visible;
+  }
+
+  .text-description p {
+    margin-bottom: 8px;
+  }
+}
+
+/* ========================
+   MOBILE KECIL (480px)
+======================== */
+@media screen and (max-width: 480px) {
+  .content-layer {
+    padding: 5% 7% 5% 7%;
+  }
+  .credit-title {
+    font-size: 18px;
+  }
+  .profile-frame img {
+    width: 60px;
+    border-radius: 10px;
+  }
+  .text-description {
+    font-size: 10px;
+    line-height: 1.4;
+  }
+  .text-description p {
+    margin-bottom: 6px;
+  }
 }
