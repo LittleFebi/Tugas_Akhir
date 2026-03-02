@@ -1,155 +1,330 @@
-/* Container Utama */
+/* CSS/pencapaian.css - Clean Rewrite */
+
+/* ========================
+   ACHIEVEMENT PAGE
+   Mengisi penuh content-layer
+======================== */
 .achievement-page {
-    position: relative; /* Wajib agar elemen di dalamnya bisa diatur pakai top/left */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    box-sizing: border-box;
-    overflow: show; /* Mencegah konten keluar dari bingkai buku */
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 }
 
-/* 1. Header Pita ACHIEVEMENT */
+/* ========================
+   HEADER PITA
+   Keluar ke atas pakai transform
+======================== */
 .acv-header {
-    position: absolute;
-    top: -85px;           /* JARAK DARI ATAS: Ubah angka ini untuk naik/turun */
-    z-index: 20;        /* Agar pita selalu di depan kotak cokelat */
-    width: auto;
-    display: flex;
-    justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  transform: translateY(-42%);
 }
 
-.acv-header img { 
-    width: 480px;       /* UKURAN PITA: Ubah angka ini untuk besar/kecil pita */
-    height: auto;
+.acv-header img {
+  width: 480px;
+  height: auto;
 }
 
-/* 2. Kotak Panel Cokelat Utama */
+/* ========================
+   PANEL COKELAT
+   Mengisi dari bawah header sampai bawah
+======================== */
 .acv-main-container {
-    position: absolute;
-    top: 30px; 
-    left: -20px;         /* TAMBAHKAN INI: Angka minus (-) akan menggeser kotak ke kiri */
-    width: 100%; 
-    height: 590px;
-    background-color: #8B5E3C; 
-    border: 5px solid #5D3A23; 
-    border-radius: 20px;
-    padding: 10px 10px 15px 10px;
-    box-sizing: border-box;
-    z-index: 10;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #8b5e3c;
+  border: 5px solid #5d3a23;
+  border-radius: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+  z-index: 10;
+  overflow: hidden;
 }
 
-/* Area Daftar (Scrollable) */
+/* ========================
+   LIST SCROLLABLE
+======================== */
 .acv-list {
-    height: 100%;
-    overflow-y: auto;   /* Munculkan scroll jika item lebih dari 9 */
-    display: flex;
-    flex-direction: column;
-    gap: 12px;          /* Jarak antar baris putih */
-    padding-right: 5px;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 5px;
 }
 
-/* Custom Scrollbar agar lebih cantik */
-.acv-list::-webkit-scrollbar { width: 8px; }
-.acv-list::-webkit-scrollbar-thumb { background: #5D3A23; border-radius: 10px; }
+.acv-list::-webkit-scrollbar {
+  width: 8px;
+}
+.acv-list::-webkit-scrollbar-thumb {
+  background: #5d3a23;
+  border-radius: 10px;
+}
 
-/* 3. Baris Putih (Kapsul Achievement) */
+/* ========================
+   ITEM ACHIEVEMENT
+======================== */
 .acv-item {
-    background: white;
-    border-radius: 50px;
-    display: flex;
-    align-items: center;
-    padding: 8px 20px;  /* Tebal tipisnya bar putih */
-    gap: 15px;
-    border: 2px solid #5D3A23;
-    transition: transform 0.2s;
+  background: white;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  padding: 8px 20px;
+  gap: 15px;
+  border: 2px solid #5d3a23;
+  transition: box-shadow 0.2s;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
-.acv-item:hover { transform: scale(1.02); }
+/* Pakai box-shadow bukan scale — scale bikin scroll horizontal */
+.acv-item:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
 
-/* Ikon Kecil di Kiri */
-.acv-icon { 
-    width: 50px;        /* BESAR IKON: Ubah ukuran gambar 1-9 di sini */
-    height: 50px;
-    object-fit: contain;
+.acv-icon {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .acv-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
 }
 
 .acv-name {
-    font-family: 'ADLaM Display';
-    font-size: 16px;
-    color: #333;
-    margin: 0;
+  font-family: "ADLaM Display";
+  font-size: 16px;
+  color: #333;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* 4. Progress Bar Hijau */
 .acv-progress-bar {
-    width: 90%;         /* Panjang garis abu-abu */
-    height: 8px;        /* Tebal garis */
-    background: #e0e0e0;
-    border-radius: 0px;
-    overflow: hidden;
-    position: relative;
+  width: 90%;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .acv-progress-bar .fill {
-    height: 100%;
-    background: #4CAF50; /* WARNA HIJAU: Bisa ganti kode warna di sini */
-    width: 0%;           /* Diatur otomatis oleh JavaScript nanti */
-    transition: width 0.8s ease-in-out;
+  height: 100%;
+  background: #4caf50;
+  width: 0%;
+  transition: width 0.8s ease-in-out;
 }
 
-/* Angka 0/1, 1/5, dsb */
 .acv-count {
-    font-family: 'ADLaM Display', sans-serif;
-    font-size: 13px;
-    font-weight: bold;
-    color: #5D3A23;
-    min-width: 40px;
-    text-align: right;
+  font-family: "ADLaM Display", sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  color: #5d3a23;
+  min-width: 40px;
+  text-align: right;
+  flex-shrink: 0;
 }
 
 .acv-action {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
 }
 
+/* ========================
+   TOMBOL CLAIM
+======================== */
 .btn-claim {
-    background: #FFD700; /* Warna Emas */
-    border: 2px solid #B8860B;
-    border-radius: 10px;
-    color: #5D3A23;
-    font-family: 'ADLaM Display';
-    font-size: 10px;
-    padding: 4px 8px;
-    cursor: pointer;
-    box-shadow: 0 2px 0 #B8860B;
-    display: none; /* Sembunyikan secara default */
+  background: #ffd700;
+  border: 2px solid #b8860b;
+  border-radius: 10px;
+  color: #5d3a23;
+  font-family: "ADLaM Display";
+  font-size: 10px;
+  padding: 4px 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 0 #b8860b;
+  display: none;
 }
 
 .btn-claim.active {
-    display: block; /* Munculkan hanya saat syarat terpenuhi */
-    animation: pulse 1s infinite;
+  display: block;
+  animation: pulse 1s infinite;
 }
 
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
 
 .btn-claimed {
-    background: #ccc !important;
-    cursor: default;
-    box-shadow: none;
+  background: #ccc !important;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* ========================
+   TABLET (1024px)
+======================== */
+@media screen and (max-width: 1024px) {
+  .acv-header {
+    transform: translateY(-38%);
+  }
+  .acv-header img {
+    width: 360px;
+  }
+  .acv-main-container {
+    top: 40px;
+  }
+  .acv-icon {
+    width: 38px;
+    height: 38px;
+  }
+  .acv-name {
+    font-size: 14px;
+  }
+  .acv-count {
+    font-size: 11px;
+    min-width: 32px;
+  }
+  .acv-item {
+    padding: 6px 14px;
+    gap: 10px;
+  }
+}
+
+/* ========================
+   MOBILE (768px)
+   Konsep sama dengan desktop:
+   panel cokelat fixed, list scroll di dalamnya
+======================== */
+@media screen and (max-width: 768px) {
+  /* achievement-page mengisi penuh content-layer */
+  .achievement-page {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Header pita: static, di atas panel */
+  .acv-header {
+    position: absolute;
+    top: -25px;
+    left: 0;
+    right: 0;
+    transform: none;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 150px;
+    z-index: 20;
+  }
+
+  .acv-header img {
+    width: 240px;
+  }
+
+  /* Panel: mengisi sisa ruang di bawah header */
+  .acv-main-container {
+    position: absolute;
+    top: 30px; /* tinggi header ~55px */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px;
+    padding: 8px;
+    overflow: hidden; /* Clip, scroll di acv-list */
+  }
+
+  /* List scroll di dalam panel — sama seperti desktop */
+  .acv-list {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    gap: 8px;
+  }
+
+  .acv-item {
+    padding: 6px 10px;
+    gap: 8px;
+    border-radius: 30px;
+  }
+  .acv-icon {
+    width: 30px;
+    height: 30px;
+  }
+  .acv-name {
+    font-size: 11px;
+    white-space: normal;
+  }
+  .acv-progress-bar {
+    height: 6px;
+    width: 95%;
+  }
+  .acv-count {
+    font-size: 10px;
+    min-width: 28px;
+  }
+  .btn-claim {
+    font-size: 8px;
+    padding: 3px 5px;
+  }
+}
+
+/* ========================
+   MOBILE KECIL (480px)
+======================== */
+@media screen and (max-width: 480px) {
+  .acv-main-container {
+    padding: 6px;
+    border-width: 3px;
+    border-radius: 10px;
+  }
+  .acv-item {
+    padding: 5px 8px;
+    gap: 6px;
+    border-radius: 20px;
+  }
+  .acv-icon {
+    width: 25px;
+    height: 25px;
+  }
+  .acv-name {
+    font-size: 10px;
+  }
+  .acv-count {
+    font-size: 9px;
+    min-width: 24px;
+  }
+  .acv-progress-bar {
+    height: 5px;
+  }
+  .btn-claim {
+    font-size: 7px;
+    padding: 2px 4px;
+  }
 }

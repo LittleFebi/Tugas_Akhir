@@ -1,177 +1,368 @@
-/* CSS/latihan.css - Versi Luas & Gambar Besar */
+/* CSS/latihan.css */
 
-.latihan-page { width: 100%; height: 100vh; background: #FFF9F0; overflow: hidden; }
-.latihan-wrapper { position: relative; width: 100%; height: 100%; }
+/* ========================
+   PAGE WRAPPER
+======================== */
+.latihan-page {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height — handles mobile browser chrome */
+  background: #fff9f0;
+  overflow: hidden;
+}
 
-/* --- NAVIGASI --- */
-.nav-left-top { position: absolute; top: 30px; left: 40px; display: flex; gap: 15px; align-items: center; }
-.nav-right-top { position: absolute; top: 30px; right: 40px; display: flex; gap: 15px; align-items: center; }
+.latihan-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
-.icon-nav { cursor: pointer; transition: transform 0.2s; }
-.icon-back { width: 65px; }    
-.icon-home { width: 70px; }    
-.icon-achieve { width: 75px; } 
-.icon-daily { width: 60px; }   
-.icon-credit { width: 70px; }
+/* ========================
+   NAV BAR
+======================== */
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 40px 8px;
+  flex-shrink: 0;
+}
+
+.nav-left-top,
+.nav-right-top {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.icon-nav {
+  cursor: pointer;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.icon-back    { width: 50px; }
+.icon-home    { width: 55px; }
+.icon-achieve { width: 55px; }
+.icon-daily   { width: 46px; }
+.icon-credit  { width: 55px; }
 .icon-nav:hover { transform: scale(1.1); }
 
-/* --- PROGRESS & KUPU-KUPU --- */
-.progress-section { position: absolute; top: 160px; left: 50%; transform: translateX(-50%); width: 85%; }
-.progress-container { width: 100%; height: 40px; background: white; border: 3px solid #8B4513; border-radius: 20px; position: relative; }
-.progress-fill { height: 100%; background: #8B4513; border-radius: 20px; width: 0%; transition: width 0.5s; }
+/* ========================
+   PROGRESS + HINT ROW
+======================== */
+.progress-hint-row {
+  display: flex;
+  align-items: flex-end; /* hint sejajar bawah progress bar */
+  gap: 14px;
+  padding: 0 8% 12px;
+  flex-shrink: 0;
+}
+
+.progress-section {
+  flex: 1;
+  min-width: 0;
+  padding-top: 60px; /* ruang agar butterfly tidak terpotong di atas */
+}
+
+.progress-container {
+  width: 100%;
+  height: 32px;
+  background: white;
+  border: 3px solid #8b4513;
+  border-radius: 20px;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #8b4513;
+  border-radius: 20px;
+  width: 0%;
+  transition: width 0.5s;
+}
 
 .butterfly-indicator {
-    position: absolute; top: -55px; left: 0%; transform: translateX(-50%);
-    transition: left 0.5s ease-in-out; display: flex; flex-direction: column; align-items: center;
+  position: absolute;
+  top: -52px;
+  left: 0%;
+  transform: translateX(-50%);
+  transition: left 0.5s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.butterfly-img { width: 90px; }
-.percent-label { background: #FF69B4; color: white; padding: 2px 20px; border-radius: 10px; font-size: 14px; font-weight: bold; }
 
-/* --- HINT --- */
-.hint-section { position: absolute; top: 130px; right: 60px; text-align: center; cursor: pointer; }
-.hint-icon { width: 55px; }
-.hint-label { display: block; font-size: 12px; font-weight: bold; color: #5D3A23; }
+.butterfly-img { width: 70px; }
 
-/* --- GRID JAWABAN (Dibuat Lebih Luas) --- */
+.percent-label {
+  background: #ff69b4;
+  color: white;
+  padding: 2px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.hint-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.hint-icon { width: 46px; }
+
+.hint-label {
+  display: block;
+  font-size: 11px;
+  font-weight: bold;
+  color: #5d3a23;
+  margin-top: 2px;
+}
+
+/* ========================
+   ANSWER GRID
+======================== */
 .answer-grid {
-    position: absolute;
-    top: 320px; /* Dinaikkan sedikit agar lebih lega */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%; /* Diperlebar agar jarak antar kartu luas */
-    display: grid;
-    grid-template-columns: 1fr 1fr; 
-    gap: 40px; /* Jarak antar jawaban diperbesar agar luas */
+  width: 85%;
+  margin: 0 auto;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 14px;
+  padding: 8px 0;
+  min-height: 0; /* wajib agar flex+overflow berfungsi */
 }
 
 .answer-card {
-    background: white;
-    border-radius: 20px;
-    padding: 15px;
-    cursor: pointer;
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-    height: 180px; /* Tinggi kartu dinaikkan agar muat gambar 160px */
-    transition: transform 0.2s;
+  background: white;
+  border-radius: 18px;
+  padding: 12px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
 }
+.answer-card:hover { transform: scale(1.03); }
 
-.answer-card:hover { transform: scale(1.05); }
-
-/* Kontainer utama di dalam kartu */
 .card-content {
-    display: flex; 
-    width: 100%;
-    height: 100%;
-    align-items: center;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
 }
 
-/* Kolom Gambar (Kiri) - Dominan */
 .img-box {
-    flex: 2.5; /* Gambar jauh lebih lebar */
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-right: 2px solid #f5f5f5;
+  flex: 2.5;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 2px solid #f5f5f5;
+  overflow: hidden;
 }
 
-/* Ukuran Gambar 160px */
 .img-box img {
-    max-width: 98%; 
-    max-height: 160px; /* Request: 160px */
-    object-fit: contain;
+  max-width: 95%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
-/* Kolom Teks (Kanan) */
 .text-box {
-    flex: 1; 
-    text-align: center;
-    font-size: 22px; 
-    font-weight: bold;
-    color: #333;
-    padding-left: 10px;
-    text-transform: uppercase;
+  flex: 1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  padding-left: 10px;
+  text-transform: uppercase;
+  word-break: break-word;
 }
 
+/* ========================
+   FOOTER
+======================== */
+.latihan-footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 45px 14px;
+  flex-shrink: 0;
+  background: #fff9f0;
+  position: relative;
+}
 
-
-/* --- FOOTER --- */
-.latihan-footer { position: absolute; bottom: 30px; width: 100%; display: flex; justify-content: center; align-items: center; }
-.spell-btn { background: #FFE599; border: none; padding: 30px 120px; border-radius: 12px; font-size: 40px; color: rgb(124, 14, 6); font-weight: bold; cursor: pointer; }
+.spell-btn {
+  background: #ffe599;
+  border: none;
+  padding: 14px 0;
+  width: 50%;
+  max-width: 400px;
+  border-radius: 12px;
+  font-size: 22px;
+  color: rgb(124, 14, 6);
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.spell-btn:hover { transform: scale(1.03); }
 
 .footer-icon { position: absolute; cursor: pointer; }
-.footer-icon.left-btn { width: 28px; left: 60px; } 
-.footer-icon.right-btn { width: 70px; right: 60px; }
+.footer-icon.left-btn  { width: 22px; left: 40px; }
+.footer-icon.right-btn { width: 42px; right: 40px; }
 
-/* Pastikan overlay menutupi SELURUH layar dan di atas segalanya */
+/* ========================
+   RESULT POPUP
+======================== */
 .result-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw; /* Pakai viewport width */
-    height: 100vh; /* Pakai viewport height */
-    background: rgba(0, 0, 0, 0.8); /* Gelapkan background lebih pekat */
-    display: none; /* Default sembunyi */
-    justify-content: center;
-    align-items: center;
-    z-index: 9999; /* Angka z-index harus sangat tinggi! */
-    backdrop-filter: blur(5px); /* Efek blur keren di belakang pop-up */
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px);
 }
 
 .result-box {
-    width: 600px;
-    height: 450px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    animation: popUpAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Animasi muncul */
+  /* Muat di layar kecil: batasi lebar DAN tinggi */
+  width: min(600px, 88vw, calc(88vh * 4 / 3));
+  aspect-ratio: 4 / 3;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: popUpAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Animasi agar pop-up muncul membal */
 @keyframes popUpAnim {
-    0% { transform: scale(0.5); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
 }
 
-/* Judul HEBAT! */
 .result-title {
-    margin-top: 0%; /* Jarak dari atas box */
-    color: #fff;
-    font-size: 60px;
-    font-weight: 900;
+  margin-top: 8%;
+  color: #fff;
+  font-size: clamp(28px, 8vw, 60px);
+  font-weight: 900;
 }
 
-/* Baris Bintang */
 .star-row {
-    display: 400px;
-    gap: 200px;
-    margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  gap: clamp(10px, 3vw, 20px);
+  margin-top: 5%;
 }
 
 .star-img {
-    width: 120px;
-    height: 120px;
-    filter: drop-shadow(0 4px 2px rgba(0,0,0,0.2)); /* Bayangan bintang */
+  width: clamp(50px, 11vw, 120px);
+  height: clamp(50px, 11vw, 120px);
+  filter: drop-shadow(0 4px 2px rgba(0, 0, 0, 0.2));
 }
 
-/* Tombol Navigasi Bawah */
 .result-nav {
-    position: absolute;
-    bottom: 15%; /* Jarak dari bawah box */
-    display: flex;
-    gap: 25px;
-    align-items: center;
+  position: absolute;
+  bottom: 12%;
+  display: flex;
+  gap: clamp(15px, 3vw, 25px);
+  align-items: center;
 }
 
 .btn-res {
-    width: 85px; /* Ukuran tombol */
-    cursor: pointer;
-    transition: transform 0.2s;
+  width: clamp(50px, 8vw, 85px);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.btn-res:hover { transform: scale(1.1) rotate(5deg); }
+
+/* ========================
+   RESPONSIVE — MOBILE (≤ 540px)
+======================== */
+@media screen and (max-width: 540px) {
+  .nav-bar {
+    padding: 14px 22px 6px;
+  }
+  .nav-left-top,
+  .nav-right-top { gap: 8px; }
+  .icon-back, .icon-home      { width: 34px; }
+  .icon-achieve, .icon-credit { width: 34px; }
+  .icon-daily                 { width: 28px; }
+
+  .progress-hint-row {
+    padding: 0 6% 8px;
+    gap: 8px;
+  }
+  .progress-section   { padding-top: 42px; }
+  .progress-container { height: 24px; border-width: 2px; }
+  .butterfly-indicator { top: -36px; }
+  .butterfly-img      { width: 44px; }
+  .percent-label      { font-size: 9px; padding: 1px 7px; }
+
+  .hint-icon  { width: 32px; }
+  .hint-label { font-size: 9px; }
+
+  .answer-grid { width: 90%; gap: 8px; padding: 4px 0; }
+  .answer-card { border-radius: 12px; padding: 8px; }
+  .text-box    { font-size: 13px; padding-left: 6px; }
+
+  .latihan-footer { padding: 8px 22px 12px; }
+  .spell-btn {
+    width: 62%;
+    font-size: 16px;
+    padding: 11px 0;
+  }
+  .footer-icon.left-btn  { width: 16px; left: 22px; }
+  .footer-icon.right-btn { width: 32px; right: 22px; }
 }
 
-.btn-res:hover {
-    transform: scale(1.1) rotate(5deg); /* Efek goyang dikit pas di-hover */
+/* ========================
+   LANDSCAPE — MOBILE (tinggi ≤ 520px)
+   Layout tetap vertikal, semua section dikompres
+======================== */
+@media screen and (orientation: landscape) and (max-height: 520px) {
+
+  .nav-bar {
+    padding: 6px 24px 4px;
+  }
+  .nav-left-top,
+  .nav-right-top { gap: 8px; }
+  .icon-back, .icon-home      { width: 26px; }
+  .icon-achieve, .icon-credit { width: 26px; }
+  .icon-daily                 { width: 22px; }
+
+  .progress-hint-row {
+    padding: 0 8% 6px;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .progress-section   { padding-top: 34px; }
+  .progress-container { height: 20px; border-width: 2px; }
+  .butterfly-indicator { top: -28px; }
+  .butterfly-img      { width: 34px; }
+  .percent-label      { font-size: 8px; padding: 1px 6px; }
+  .hint-icon          { width: 26px; }
+  .hint-label         { font-size: 9px; }
+
+  .answer-grid { width: 88%; gap: 8px; padding: 4px 0; }
+  .answer-card { border-radius: 10px; padding: 6px; }
+  .text-box    { font-size: 13px; }
+
+  .latihan-footer { padding: 4px 24px 6px; }
+  .spell-btn {
+    font-size: 14px;
+    padding: 8px 0;
+    width: 45%;
+  }
+  .footer-icon.left-btn  { width: 14px; left: 24px; }
+  .footer-icon.right-btn { width: 24px; right: 24px; }
 }
