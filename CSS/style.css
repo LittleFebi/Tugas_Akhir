@@ -1,68 +1,103 @@
+/* CSS/style.css */
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'aDLaM Display', sans-serif;
-    background-color: #fff;
-    overflow: hidden;
+  font-family: "aDLaM Display", sans-serif;
+  background-color: #fff;
+  /* overflow diatur per halaman */
 }
 
 #app-container {
-    width: 100%;
-    height: 100vh;
+  width: 100%;
+  height: 100vh;
 }
 
+/* ========================
+   POPUP GLOBAL
+======================== */
 .popup-overlay {
-    position: fixed; /* Tetap di posisi meskipun halaman di-scroll */
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.6); /* Efek gelap transparan di belakang */
-    display: none; /* Sembunyi secara default, akan diubah menjadi 'flex' lewat JS */
-    justify-content: center;
-    align-items: center;
-    z-index: 9999; /* Pastikan berada di paling depan */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
 .popup-box {
-    background: white;
-    padding: 25px;
-    border-radius: 20px;
-    text-align: center;
-    border: 4px solid #F4C95D; /* Warna kuning khas Funvo */
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+  border: 4px solid #f4c95d;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-/* Pengaturan untuk Laptop/Desktop (Layar Besar) */
+/* ========================
+   TEMPLATE OVERLAY - SCROLL FIX
+   Saat template (buku) dibuka, izinkan scroll
+======================== */
+body:has(.credit-overlay) {
+  overflow: auto;
+}
+
+/* Buku harus bisa scroll jika konten melebihi layar */
+.credit-overlay {
+  overflow-y: auto;
+}
+
+.book-body {
+  overflow: visible;
+}
+
+/* ========================
+   RESPONSIVE - DESKTOP (1024px+)
+======================== */
 @media screen and (min-width: 1024px) {
-    .popup-box {
-        width: 400px; /* Ukuran kotak popup di laptop */
-    }
+  .popup-box {
+    width: 400px;
+  }
 }
 
-/* Pengaturan untuk iPad/Tablet (Layar Sedang) */
+/* ========================
+   RESPONSIVE - TABLET (768px - 1023px)
+======================== */
 @media screen and (min-width: 768px) and (max-width: 1023px) {
-    .popup-box {
-        width: 60%; /* Kotak lebih lebar di tablet */
-        padding: 20px;
-    }
+  .popup-box {
+    width: 60%;
+    padding: 20px;
+  }
 }
 
-/* Pengaturan untuk HP (Layar Kecil) */
+/* ========================
+   RESPONSIVE - MOBILE (767px ke bawah)
+======================== */
 @media screen and (max-width: 767px) {
-    body {
-        overflow-y: auto; /* Izinkan scroll jika konten kepanjangan di HP */
-    }
-    
-    .popup-box {
-        width: 85%; /* Kotak hampir memenuhi lebar layar HP */
-        padding: 15px;
-        border-width: 2px; /* Border lebih tipis agar rapi */
-    }
+  body {
+    overflow-y: auto;
+  }
 
-    #popup-title {
-        font-size: 1.2rem; /* Kecilkan ukuran teks judul di HP */
-    }
+  #app-container {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .popup-box {
+    width: 85%;
+    padding: 15px;
+    border-width: 2px;
+  }
+
+  #popup-title {
+    font-size: 1.2rem;
+  }
 }

@@ -1,109 +1,253 @@
-/* CSS/caramain.css */
+/* CSS/caramain.css - Clean Rewrite */
 
-/* Layout Utama: Membagi 2 Halaman */
 .caramain-layout {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    padding: 20px 40px;
-    gap: 30px; /* Jarak antar halaman */
-    box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 20px 40px;
+  gap: 30px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
 }
 
 .page-side {
-    flex: 1; /* Lebar sama rata */
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 0;
 }
 
-/* Header Karakter */
+/* ========================
+   HEADER KARAKTER
+======================== */
 .header-guide {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
 }
-.char-img { width: 70px; }
+
+.char-img {
+  width: 70px;
+  flex-shrink: 0;
+}
+
 .bubble-text {
-    background: #FFF;
-    border: 3px solid #8B4513;
-    border-radius: 20px;
-    padding: 8px 15px;
-    color: #333;
-    font-size: 20px;
+  background: white;
+  border: 3px solid #8b4513;
+  border-radius: 20px;
+  padding: 8px 15px;
+  color: #333;
+  font-size: 20px;
+  min-width: 0;
 }
 
-/* Kotak Kertas Putih (Scrapbook Style) */
+/* ========================
+   KOTAK KERTAS
+======================== */
 .paper-box {
-    background: #FFF;
-    border: 4px solid #D2691E; /* Warna Cokelat */
-    border-radius: 15px;
-    padding: 15px 20px;
-    position: relative; /* Wajib ada biar stiker bisa diatur posisinya */
-    box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
-    padding: 30px 40px 60px 90px;
-    margin-bottom: 8px;
-    box-sizing: border-box;
-}
-
-/* Update sedikit CSS ini agar muat 7 kotak */
-.paper-box {
-    padding: 10px 10px; /* Kurangi padding biar lebih hemat tempat */
-    margin-bottom: 8px; /* Rapatkan jarak antar kotak */
+  background: white;
+  border: 4px solid #d2691e;
+  border-radius: 15px;
+  padding: 10px 12px;
+  position: relative;
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
+  margin-bottom: 8px;
+  box-sizing: border-box;
 }
 
 .paper-box h4 {
-    font-size: 18px; /* Kecilkan judul sedikit */
-    margin: 3px 0;
+  font-size: 18px;
+  margin: 3px 0;
+}
+.paper-box li,
+.paper-box p {
+  font-size: 18px;
+  line-height: 1.3;
 }
 
-.paper-box li, .paper-box p {
-    font-size: 18px; /* Kecilkan isi teks sedikit */
-    line-height: 1.3;
-}
-
-/* --- LOGIKA STIKER (PENTING) --- */
+/* ========================
+   STIKER
+======================== */
 .sticker {
-    position: absolute;
-    width: 35px; /* Ukuran stiker */
-    z-index: 2;
-    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));
+  position: absolute;
+  width: 35px;
+  z-index: 2;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.2));
 }
 
-/* Posisi Stiker */
-.top-left { top: -15px; left: -15px; transform: rotate(-10deg); }
-.top-right { top: -15px; right: -15px; transform: rotate(10deg); }
-.bottom-left { bottom: -15px; left: -15px; transform: rotate(5deg); }
-.bottom-right { bottom: -15px; right: -15px; transform: rotate(-5deg); }
-.mid-right { top: 50%; right: -18px; transform: rotate(15deg); }
+.top-left {
+  top: -15px;
+  left: -15px;
+  transform: rotate(-10deg);
+}
+.top-right {
+  top: -15px;
+  right: -15px;
+  transform: rotate(10deg);
+}
+.bottom-left {
+  bottom: -15px;
+  left: -15px;
+  transform: rotate(5deg);
+}
+.bottom-right {
+  bottom: -15px;
+  right: -15px;
+  transform: rotate(-5deg);
+}
+.mid-right {
+  top: 50%;
+  right: -18px;
+  transform: rotate(15deg);
+}
 
-/* Hiasan Melayang */
 .decor-floating-left {
-    position: absolute;
-    bottom: 0; left: 0;
-    width: 45px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 45px;
 }
 
-/* --- ANIMASI AGAR MAKIN HIDUP --- */
-.bingkai-putih-caramain, .paper-box {
-    animation: munculKeatas 0.8s ease-out forwards;
-    opacity: 0; 
-    transform: translateY(20px); 
+/* ========================
+   ANIMASI
+======================== */
+.paper-box {
+  animation: munculKeatas 0.8s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-.sticker, .decor-floating-left {
-    animation: efekStiker 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    opacity: 0;
-    transform: scale(0);
-    animation-delay: 0.5s; /* Muncul belakangan */
+.sticker,
+.decor-floating-left {
+  animation: efekStiker 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation-delay: 0.5s;
+  opacity: 0;
+  transform: scale(0);
 }
 
 @keyframes munculKeatas {
-    to { opacity: 1; transform: translateY(0); }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes efekStiker {
-    to { opacity: 1; transform: scale(1) rotate(var(--rotasi, 0deg)); }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(var(--rotasi, 0deg));
+  }
+}
+
+/* ========================
+   TABLET (1024px)
+======================== */
+@media screen and (max-width: 1024px) {
+  .caramain-layout {
+    padding: 15px 20px;
+    gap: 20px;
+  }
+  .char-img {
+    width: 55px;
+  }
+  .bubble-text {
+    font-size: 16px;
+    padding: 6px 12px;
+  }
+  .paper-box h4 {
+    font-size: 15px;
+  }
+  .paper-box li,
+  .paper-box p {
+    font-size: 14px;
+  }
+  .sticker {
+    width: 28px;
+  }
+}
+
+/* ========================
+   MOBILE (768px)
+   2 kolom → 1 kolom
+======================== */
+@media screen and (max-width: 768px) {
+  .caramain-layout {
+    flex-direction: column;
+    padding: 10px 12px;
+    gap: 10px;
+    height: 100%; /* Mengisi penuh content-layer */
+    overflow-y: auto; /* Scroll di dalam buku */
+    overflow-x: hidden;
+  }
+
+  .page-side {
+    gap: 10px;
+  }
+  .char-img {
+    width: 45px;
+  }
+  .bubble-text {
+    font-size: 13px;
+    padding: 6px 10px;
+    border-width: 2px;
+    border-radius: 12px;
+  }
+
+  .paper-box {
+    padding: 8px 10px;
+    border-width: 3px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+  }
+  .paper-box h4 {
+    font-size: 13px;
+    margin: 2px 0;
+  }
+  .paper-box li,
+  .paper-box p {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .sticker {
+    display: none;
+  }
+  .decor-floating-left {
+    display: none;
+  }
+}
+
+/* ========================
+   MOBILE KECIL (480px)
+======================== */
+@media screen and (max-width: 480px) {
+  .caramain-layout {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+  .char-img {
+    width: 38px;
+  }
+  .bubble-text {
+    font-size: 11px;
+    padding: 5px 8px;
+  }
+  .paper-box {
+    padding: 6px 8px;
+    border-width: 2px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+  }
+  .paper-box h4 {
+    font-size: 11px;
+  }
+  .paper-box li,
+  .paper-box p {
+    font-size: 10px;
+    line-height: 1.3;
+  }
 }

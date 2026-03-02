@@ -1,65 +1,306 @@
 /* CSS/daily.css */
+
+/* ========================
+   OVERLAY
+======================== */
 .daily-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(46, 45, 45, 0.7);
-    display: none; /* Default sembunyi */
-    justify-content: center; align-items: center;
-    z-index: 10000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(46, 45, 45, 0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  padding: 15px;
+  box-sizing: border-box;
 }
 
+/* ========================
+   BOX UTAMA
+   Fix: width/height fixed → max-width + flexible height
+======================== */
 .daily-box {
-    background: #FFF8DC; border: 5px solid #D2691E;
-    border-radius: 20px; width: 600px; height: 500px;
-    padding: 20px; position: relative;
-    display: flex; flex-direction: column; align-items: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  background: #fff8dc;
+  border: 5px solid #d2691e;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  max-height: 90vh; /* Jangan lebih dari 90% layar */
+  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  overflow: visible;
 }
 
+/* ========================
+   TOMBOL TUTUP
+======================== */
 .close-daily {
-    position: absolute; top: -15px; right: -15px;
-    background: #ff4757; color: white; border: 3px solid white;
-    border-radius: 50%; width: 40px; height: 40px;
-    font-size: 20px; font-weight: bold; cursor: pointer;
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background: #ff4757;
+  color: white;
+  border: 3px solid white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.daily-title { color: #8B4513; margin: 0; font-size: 32px; font-family: 'ADLaM Display', cursive;}
-.daily-subtitle { color: #555; font-weight: bold; margin-bottom: 15px; }
+/* ========================
+   JUDUL
+======================== */
+.daily-title {
+  color: #8b4513;
+  margin: 0;
+  font-size: 32px;
+  font-family: "ADLaM Display", cursive;
+}
 
-/* Area Grid yang bisa di-scroll */
+.daily-subtitle {
+  color: #555;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* ========================
+   GRID AREA
+======================== */
 .daily-scroll-area {
-    width: 100%; flex: 1; overflow-y: auto;
-    background: white; border-radius: 10px; padding: 10px;
-    border: 2px solid #DEB887;
+  width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid #deb887;
+  min-height: 0; /* Penting agar flex + overflow-y bekerja */
 }
 
 .daily-grid {
-    display: grid; grid-template-columns: repeat(5, 1fr); /* 5 kolom */
-    gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
 }
 
-/* Kotak per Hari */
+/* ========================
+   KOTAK PER HARI
+======================== */
 .day-card {
-    background: #f1f2f6; border: 2px solid #ccc;
-    border-radius: 10px; padding: 10px; text-align: center;
-    position: relative; opacity: 0.8;
+  background: #f1f2f6;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  position: relative;
+  opacity: 0.8;
 }
 
-.day-card img { width: 40px; height: 40px; object-fit: contain; }
-.day-card span { display: block; font-weight: bold; font-size: 14px; margin-bottom: 5px; color:#333; }
+.day-card img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
 
-/* Status: Aktif Hari Ini */
-.day-card.active { border-color: #ffa502; background: #fff200; opacity: 1; transform: scale(1.05); }
-/* Status: Milestone (1,2,3...10,20,30) */
-.day-card.milestone { background: #ffeaa7; border-color: #ff9f43; }
-/* Status: Sudah Diklaim */
-.day-card.claimed { background: #7bed9f; border-color: #2ed573; opacity: 0.6; }
-.day-card.claimed::after { content: "✔"; position: absolute; font-size: 30px; color: white; top: 20px; left: 25px; text-shadow: 1px 1px 2px black;}
+.day-card span {
+  display: block;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #333;
+}
 
-/* Tombol Ambil Bawah */
+.day-card.active {
+  border-color: #ffa502;
+  background: #fff200;
+  opacity: 1;
+  transform: scale(1.05);
+}
+.day-card.milestone {
+  background: #ffeaa7;
+  border-color: #ff9f43;
+}
+.day-card.claimed {
+  background: #7bed9f;
+  border-color: #2ed573;
+  opacity: 0.6;
+}
+
+.day-card.claimed::after {
+  content: "✔";
+  position: absolute;
+  font-size: 30px;
+  color: white;
+  top: 20px;
+  left: 25px;
+  text-shadow: 1px 1px 2px black;
+}
+
+/* ========================
+   TOMBOL CLAIM
+======================== */
 .btn-claim-daily {
-    margin-top: 15px; padding: 12px 30px; border-radius: 30px;
-    background: #ff4757; color: white; font-weight: bold; font-size: 18px;
-    border: none; cursor: pointer; box-shadow: 0 4px 0 #c0392b;
+  margin-top: 15px;
+  padding: 12px 30px;
+  border-radius: 30px;
+  background: #ff4757;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #c0392b;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 300px;
 }
-.btn-claim-daily:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
-.btn-claim-daily:active:not(:disabled) { transform: translateY(4px); box-shadow: none; }
+
+.btn-claim-daily:disabled {
+  background: #ccc;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.btn-claim-daily:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+
+/* ========================
+   RESPONSIVE - TABLET (768px)
+======================== */
+@media screen and (max-width: 768px) {
+  .daily-overlay {
+    padding: 12px;
+  }
+
+  .daily-box {
+    max-height: 85vh;
+    padding: 15px;
+    border-width: 4px;
+  }
+
+  .daily-title {
+    font-size: 24px;
+  }
+  .daily-subtitle {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .daily-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 7px;
+  }
+
+  .day-card {
+    padding: 7px 5px;
+    border-radius: 8px;
+  }
+  .day-card img {
+    width: 28px;
+    height: 28px;
+  }
+  .day-card span {
+    font-size: 11px;
+    margin-bottom: 3px;
+  }
+
+  .day-card.claimed::after {
+    font-size: 20px;
+    top: 12px;
+    left: 12px;
+  }
+
+  .btn-claim-daily {
+    font-size: 15px;
+    padding: 10px 20px;
+    margin-top: 10px;
+  }
+
+  .close-daily {
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
+  }
+}
+
+/* ========================
+   RESPONSIVE - MOBILE KECIL (480px)
+======================== */
+@media screen and (max-width: 480px) {
+  .daily-overlay {
+    padding: 8px;
+  }
+
+  .daily-box {
+    max-height: 88vh;
+    padding: 12px;
+    border-radius: 14px;
+    border-width: 3px;
+  }
+
+  .daily-title {
+    font-size: 20px;
+  }
+  .daily-subtitle {
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+
+  /* Grid 5 kolom tetap dipertahankan tapi lebih compact */
+  .daily-grid {
+    gap: 5px;
+  }
+
+  .day-card {
+    padding: 5px 3px;
+    border-radius: 6px;
+    border-width: 1px;
+  }
+
+  .day-card img {
+    width: 22px;
+    height: 22px;
+  }
+  .day-card span {
+    font-size: 9px;
+    margin-bottom: 2px;
+  }
+
+  .day-card.claimed::after {
+    font-size: 16px;
+    top: 10px;
+    left: 8px;
+  }
+
+  .btn-claim-daily {
+    font-size: 13px;
+    padding: 8px 15px;
+    margin-top: 8px;
+    border-radius: 20px;
+  }
+
+  .close-daily {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    top: -12px;
+    right: -12px;
+  }
+}
