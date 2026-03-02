@@ -85,14 +85,14 @@
     overflow-x: hidden;
   }
 
-  .profile-section {
+  /* .profile-section { */
     /* flex-direction: row;
     align-items: center;
     gap: 15px;
     margin-bottom: 10px;
     flex-shrink: 0;
     flex: none; */
-  }
+  /* } */
 
   .credit-title {
     font-size: 22px;

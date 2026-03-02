@@ -31,8 +31,7 @@ let currentSettings = JSON.parse(localStorage.getItem('funvo_switches')) || {
 // --- 2. LOGIKA UTAMA & MUSIK ---
 document.addEventListener("DOMContentLoaded", () => {
     loadPage('logo');
-    checkDailyLogin();
-    
+
     // Set volume awal
     updateBgmVolume();
 });
@@ -449,6 +448,7 @@ function claimDailyReward() {
 
     // Tambah hari
     data.daily += 1;
+    if (data.daily > 1) data.return += 1;
     data.lastLoginDate = today;
     saveUserProgress(data);
 
