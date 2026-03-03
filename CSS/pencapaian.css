@@ -328,3 +328,19 @@
     padding: 2px 4px;
   }
 }
+
+/* ========================
+   LANDSCAPE — MOBILE (tinggi ≤ 520px)
+======================== */
+@media screen and (orientation: landscape) and (max-height: 520px) {
+  .acv-header { transform: translateY(-35%); }
+  .acv-header img { width: 240px; }
+  .acv-main-container { top: 35px; }
+  .acv-list { gap: 6px; }
+  .acv-item { padding: 4px 10px; gap: 6px; border-radius: 20px; }
+  .acv-icon { width: 24px; height: 24px; }
+  .acv-name { font-size: 10px; }
+  .acv-count { font-size: 9px; min-width: 24px; }
+  .acv-progress-bar { height: 5px; }
+  .btn-claim { font-size: 7px; padding: 2px 4px; }
+}
