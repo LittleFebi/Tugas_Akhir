@@ -34,6 +34,12 @@ function cekJawaban(jawabanUser) {
     if (jawabanUser === soalAktif[indexSekarang].answer) {
         // --- JAWABAN BENAR ---
         
+        // Hentikan audio soal sebelum memutar SFX benar
+        if (currentAudioObj) {
+            currentAudioObj.pause();
+            currentAudioObj.currentTime = 0;
+        }
+        
         // Mainkan suara benar (bgm4.mp3) jika settingan suara ON
         if (settings.suara) {
             let audioBenar = new Audio('../assets/audio/bgm4.mp3');
@@ -46,18 +52,27 @@ function cekJawaban(jawabanUser) {
             updateAchievement('vocab', 1); 
         }
 
-        // Lanjut ke soal berikutnya
+        // Lanjut ke soal berikutnya dengan delay agar SFX benar selesai
         indexSekarang++;
         updateProgressLatihan();
 
         if (indexSekarang < 10) {
-            renderSoal();
+            // Delay 1 detik sebelum render soal berikutnya
+            setTimeout(() => {
+                renderSoal();
+            }, 1000);
         } else {
             // Game Selesai
             finishGame();
         }
     } else {
         // --- JAWABAN SALAH ---
+
+        // Hentikan audio soal sebelum memutar SFX salah
+        if (currentAudioObj) {
+            currentAudioObj.pause();
+            currentAudioObj.currentTime = 0;
+        }
 
         // Mainkan suara salah (bgm2.mp3) jika settingan suara ON
         if (settings.suara) {
