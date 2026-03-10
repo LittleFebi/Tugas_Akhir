@@ -121,11 +121,11 @@
 ======================== */
 .footer-btns {
   display: flex;
-  gap: 40px;
+  gap: 27px;
 }
 
 .footer-btns img {
-  height: 60px;
+  height: 55px;
   cursor: pointer;
   transition: transform 0.2s;
 }
