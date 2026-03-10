@@ -141,3 +141,41 @@
     margin-bottom: 6px;
   }
 }
+
+/* ========================
+   LANDSCAPE — TABLET (tinggi ≤ 768px)
+======================== */
+@media screen and (orientation: landscape) and (max-height: 768px) {
+  .content-layer {
+    flex-direction: row;
+    padding: 3% 4%;
+    gap: 12px;
+  }
+  .credit-title { font-size: 22px; margin-bottom: 10px; }
+  .profile-frame img { width: 130px; border-radius: 15px; border-width: 3px; }
+  .text-description {
+    font-size: 12px;
+    padding-left: 20px;
+    line-height: 1.4;
+  }
+  .text-description p { margin-bottom: 6px; }
+}
+
+/* ========================
+   LANDSCAPE — MOBILE (tinggi ≤ 520px)
+======================== */
+@media screen and (orientation: landscape) and (max-height: 520px) {
+  .content-layer {
+    flex-direction: row;
+    padding: 3% 4%;
+    gap: 12px;
+  }
+  .credit-title { font-size: 18px; margin-bottom: 8px; }
+  .profile-frame img { width: 80px; border-radius: 12px; border-width: 2px; }
+  .text-description {
+    font-size: 10px;
+    padding-left: 15px;
+    line-height: 1.35;
+  }
+  .text-description p { margin-bottom: 5px; }
+}

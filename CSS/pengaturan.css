@@ -319,3 +319,30 @@
     font-size: 12px;
   }
 }
+
+/* ========================
+   LANDSCAPE — MOBILE (tinggi ≤ 520px)
+======================== */
+@media screen and (orientation: landscape) and (max-height: 520px) {
+  .settings-title {
+    font-size: 20px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+  }
+  .pembungkus-vol-mus {
+    padding: 10px 15px;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .icon-v { width: 20px; height: 20px; }
+  .pink-slider { height: 9px; border-width: 2px; }
+  .pink-slider::-webkit-slider-thumb { width: 16px; height: 16px; }
+
+  .bottom-menu-row { gap: 8px; margin-bottom: 10px; }
+  .pembungkus-onoff { max-width: 70px; height: 22px; }
+  .label-under { margin-top: 14px; }
+  .label-under img { max-width: 60px; }
+
+  .footer-btns { gap: 12px; }
+  .footer-btns img { height: 22px; }
+}
