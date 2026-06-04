@@ -37,8 +37,31 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Fungsi Navigasi Halaman
+// Fungsi Navigasi Halaman
 async function loadPage(pageName, targetMenu = 'Credit') {
     try {
+        // =========================================================================
+        // TAMBAHAN AMAN: BERSIHKAN AUDIO KUIS & TIMEOUT LAMA SAAT BERPINDAH HALAMAN
+        // =========================================================================
+        // 1. Matikan audio soal kuis yang sedang aktif bersuara
+        if (typeof currentAudioObj !== 'undefined' && currentAudioObj) {
+            currentAudioObj.pause();
+            currentAudioObj.currentTime = 0;
+            currentAudioObj = null; 
+        }
+
+        // 2. Batalkan seluruh jadwal sisa antrean (jeda audio / ganti soal kuis)
+        if (typeof nextAudioTimeout !== 'undefined' && nextAudioTimeout) {
+            clearTimeout(nextAudioTimeout);
+        }
+        if (typeof nextQuestionTimeout !== 'undefined' && nextQuestionTimeout) {
+            clearTimeout(nextQuestionTimeout);
+        }
+        if (typeof popupAutoCloseTimeout !== 'undefined' && popupAutoCloseTimeout) {
+            clearTimeout(popupAutoCloseTimeout);
+        }
+        // =========================================================================
+
         const response = await fetch(`Pages/${pageName}.html`);
         if (!response.ok) throw new Error('Halaman tidak ditemukan');
         appContainer.innerHTML = await response.text();
