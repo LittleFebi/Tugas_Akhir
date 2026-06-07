@@ -234,7 +234,6 @@ function cekJawaban(jawabanUser) {
 
   if (jawabanUser === soalAktif[indexSekarang].answer) {
     // --- JAWABAN BENAR ---
-
     if (currentAudioObj) {
       currentAudioObj.pause();
       currentAudioObj.currentTime = 0;
@@ -253,33 +252,47 @@ function cekJawaban(jawabanUser) {
     indexSekarang++;
     updateProgressLatihan();
 
-    // TAMPILKAN POPUP "Good Job" (Default auto-close 3 detik jika didiamkan)
     showPopup("Good Job! 🎉", "Jawaban kamu benar!", 3000);
 
-    // Hapus sisa-sisa schedule timeout sebelumnya agar tidak menumpuk
     if (nextQuestionTimeout) clearTimeout(nextQuestionTimeout);
     if (nextAudioTimeout) clearTimeout(nextAudioTimeout);
 
-    // Jalankan transisi otomatis jika user TIDAK melakukan klik sama sekali dalam 3 detik
     nextQuestionTimeout = setTimeout(() => {
       eksekusiSoalBerikutnya();
     }, 3000);
-  } else {
+
+  } else { // <--- SEBELUMNYA KURUNG KURAWAL TUTUP DI SINI HILANG
     // --- JAWABAN SALAH ---
     if (currentAudioObj) {
       currentAudioObj.pause();
       currentAudioObj.currentTime = 0;
     }
 
+    // Tampilkan popup salah selama 1.5 detik (1500ms)
+    showPopup("Ups!", "What Out for what you heard!😊", 1500);
+
+    // Hapus dulu antrean timeout audio lama agar aman tidak tumpang tindih
+    if (nextAudioTimeout) clearTimeout(nextAudioTimeout);
+
     if (settings.suara) {
       let audioSalah = new Audio("../assets/audio/bgm2.mp3");
       audioSalah.volume = savedVol / 100;
       audioSalah.play().catch((e) => console.log("Gagal play audio salah:", e));
-    }
 
-    showPopup("Ups!", "What Out for what you heard!😊", 1500);
+      // LOGIKA JEDA: TUNGGU AUDIO SALAH SELESAI, BARU BERI JEDA 2 DETIK
+      audioSalah.onended = () => {
+        nextAudioTimeout = setTimeout(() => {
+          playCurrentAudio();
+        }, 500); // Jeda hening 2 detik setelah efek suara salah berhenti total
+      };
+    } else {
+      // Jika user mematikan fitur suara di pengaturan, langsung beri jeda 2 detik dari sekarang
+      nextAudioTimeout = setTimeout(() => {
+        playCurrentAudio();
+      }, 500);
+    }
   }
-}
+} // <--- Pembatas akhir fungsi cekJawaban yang benar
 
 // Fungsi internal untuk memproses pemindahan soal dan penundaan audio kuis berikutnya
 function eksekusiSoalBerikutnya() {

@@ -235,11 +235,11 @@ function updateAchievement(type, value, extraData = null) {
 function checkDailyLogin() {
     let data = getUserProgress();
     const today = new Date().toDateString();
+    
+    // JIKA belum login hari ini, langsung munculkan popup check-in harian
+    // KITA TIDAK MENAMBAH data.daily DI SINI AGAR TIDAK NAIK DULUAN
     if (data.lastLoginDate !== today) {
-        data.daily += 1;
-        if (data.daily > 1) data.return += 1;
-        data.lastLoginDate = today;
-        saveUserProgress(data);
+        showDailyPopup(); 
     }
 }
 
@@ -258,13 +258,72 @@ function initAchievementUI() {
         const btn = document.getElementById(`btn-${key}`);
 
         if (bar && text && btn) {
-            let current = currentValues[key] || 0;
-            let percent = (current / MAX_TARGETS[key]) * 100;
+            let currentVal = currentValues[key] || 0;
+            let claimedList = data.claimed[key] || [];
+            
+            // --- LOGIKA BARU: HITUNG ANGKA YANG DITAMPILKAN BERDASARKAN STATUS KLAIM ---
+            let displayedVal = 0;
+
+            if (MILESTONES[key]) {
+                // Untuk yang punya banyak milestone (vocab, daily, dll)
+                // Angka yang tampil adalah target tertinggi yang sudah berhasil diklaim
+                let sdhDiklaim = MILESTONES[key].filter(t => claimedList.includes(t));
+                displayedVal = sdhDiklaim.length > 0 ? Math.max(...sdhDiklaim) : 0;
+                
+                // Tapi jika user punya progress baru tapi BELUM klik klaim, 
+                // kita tahan tampilannya di batas milestone yang sudah diklaim saja.
+                let nextTarget = MILESTONES[key].find(t => !claimedList.includes(t)) || 9999;
+                if (currentVal >= nextTarget) {
+                    // Tahan angka tampilan agar tidak melewati target sebelum di-klik klaim
+                    displayedVal = MILESTONES[key][MILESTONES[key].indexOf(nextTarget) - 1] || 0;
+                } else {
+                    displayedVal = currentVal;
+                }
+            } else {
+                // Untuk yang targetnya cuma 1 (seperti tutorial 0/1, noexit 0/1)
+                // Jika sudah diklaim, tampilkan target maksimal (1). Jika belum klaim, tampilkan 0.
+                displayedVal = claimedList.includes(MAX_TARGETS[key]) ? MAX_TARGETS[key] : 0;
+            }
+
+            // Update Tampilan Bar dan Teks berdasarkan data 'displayedVal' (Bukan currentVal langsung)
+            let percent = (displayedVal / MAX_TARGETS[key]) * 100;
             bar.style.width = `${Math.min(percent, 100)}%`;
-            text.innerText = `${current}/${MAX_TARGETS[key]}`;
-            handleClaimButton(key, btn, current);
+            text.innerText = `${displayedVal}/${MAX_TARGETS[key]}`;
+            
+            // Atur tombol klaimnya (Tetap memantau currentVal asli untuk tahu kapan tombol harus muncul)
+            handleClaimButton(key, btn, currentVal);
         }
     });
+}
+
+function handleClaimButton(key, btn, currentVal) {
+    let data = getUserProgress();
+    let claimedList = data.claimed[key] || [];
+    let nextTarget = 0;
+    
+    if (MILESTONES[key]) {
+        nextTarget = MILESTONES[key].find(t => !claimedList.includes(t)) || 9999;
+    } else {
+        nextTarget = MAX_TARGETS[key];
+        if (claimedList.includes(nextTarget)) nextTarget = 9999;
+    }
+
+    if (nextTarget === 9999) {
+        btn.innerText = "CLAIMED";
+        btn.className = "claimed disabled-btn"; // Tambahkan class css kamu sendiri jika ada
+        btn.style.display = "block";
+        btn.disabled = true;
+    } else if (currentVal >= nextTarget) {
+        // Tombol CLAIM muncul menyala, tapi angka di atasnya (UI) tetap 0/1 sampai tombol ini ditekan!
+        btn.innerText = "CLAIM";
+        btn.classList.remove('claimed');
+        btn.classList.add('ready');
+        btn.style.display = "block";
+        btn.disabled = false;
+        btn.onclick = () => claimReward(key, nextTarget);
+    } else {
+        btn.style.display = "none";
+    }
 }
 
 function handleClaimButton(key, btn, currentVal) {
@@ -301,8 +360,83 @@ function claimReward(key, targetLevel) {
     if (!data.claimed[key]) data.claimed[key] = [];
     data.claimed[key].push(targetLevel);
     saveUserProgress(data);
-    alert(`Selamat! Kamu mencapai target ${targetLevel}! 🌟`);
+    
+    // --- 🌟 POPUP DENGAN CSS INLINE (PASTI MUNCUL) ---
+    
+    // 1. Membuat Overlay Latar Belakang Gelap
+    const overlay = document.createElement('div');
+    overlay.id = 'custom-alert-overlay';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.6)'; // Gelap transparan
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.zIndex = '999999'; // Menjamin di atas segala elemen game
+    overlay.style.transition = 'opacity 0.7s ease';
+    
+    // 2. Membuat Kotak Pesan (Alert Box)
+    const alertBox = document.createElement('div');
+    alertBox.style.backgroundColor = '#fff9e6'; // Warna krem estetik game
+    alertBox.style.border = '4px solid #f59e0b'; // Border orange/kuning
+    alertBox.style.borderRadius = '24px';
+    alertBox.style.padding = '30px';
+    alertBox.style.width = '90%';
+    alertBox.style.maxWidth = '360px';
+    alertBox.style.textAlign = 'center';
+    alertBox.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.3)';
+    
+    // Isi konten di dalam kotak pesan
+    alertBox.innerHTML = `
+        <div style="font-size: 50px; margin-bottom: 10px;">🏆</div>
+        <h3 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 900; color: #78350f; font-family: sans-serif;">
+            KLAIM BERHASIL!
+        </h3>
+        <p style="margin: 0; font-size: 16px; font-weight: 600; color: #92400e; font-family: sans-serif; line-height: 1.5;">
+            Selamat! Kamu mencapai target <span style="color: #d97706; font-weight: 800;">${targetLevel}</span>! 🌟
+        </p>
+        <div style="margin-top: 20px; font-size: 12px; color: rgba(146, 64, 14, 0.6); font-style: italic; font-weight: bold; font-family: sans-serif;">
+            Klik di mana saja untuk menutup
+        </div>
+    `;
+    
+    // Gabungkan elemen ke dalam body
+    overlay.appendChild(alertBox);
+    document.body.appendChild(overlay);
+
+    // 3. Logika Otomatis Tutup Setelah 3 Detik (3000 ms)
+    const autoCloseTimeout = setTimeout(() => {
+        tutupPopupCustom(overlay);
+    }, 3000);
+
+    // 4. Logika Tutup Manual (Klik di mana saja pada layar langsung hilang)
+    overlay.onclick = () => {
+        clearTimeout(autoCloseTimeout); // Batalkan timer otomatis kalau di-klik duluan
+        tutupPopupCustom(overlay);
+    };
+
+    // Mencegah popup menutup kalau yang diklik cuma kotak bagian dalam saja
+    alertBox.onclick = (e) => {
+        e.stopPropagation(); 
+    };
+
+    // Refresh tampilan data halaman pencapaian
     initAchievementUI();
+}
+
+// Fungsi animasi keluar/hapus element popup
+function tutupPopupCustom(elemenPopup) {
+    if (elemenPopup) {
+        elemenPopup.style.opacity = '0';
+        setTimeout(() => {
+            if (elemenPopup.parentNode) {
+                elemenPopup.remove();
+            }
+        }, 300);
+    }
 }
 
 function checkMilestoneNotification(key, data) {
@@ -425,20 +559,20 @@ function closeDailyPopup() {
 function renderDailyGrid() {
     const grid = document.getElementById('daily-grid');
     const btnClaim = document.getElementById('btn-claim-daily');
-    grid.innerHTML = ''; // Bersihkan dulu
+    grid.innerHTML = ''; // Bersihkan dulu Grid sebelum di-render ulang
 
-    // Ambil data user
+    // Ambil data progress user
     let data = getUserProgress();
     let hariIni = new Date().toDateString();
-    let currentDay = data.daily; // Berapa hari dia udah login
+    let currentDay = data.daily; // Total hari login yang sudah diklaim
     
     // Apakah hari ini SUDAH KLAIM?
     let sudahKlaimHariIni = (data.lastLoginDate === hariIni);
     
-    // Tentukan hari aktif yang sedang berjalan
+    // Tentukan hari aktif yang sedang berjalan saat ini
     let activeDay = sudahKlaimHariIni ? currentDay : currentDay + 1;
     
-    // Render 30 Kotak
+    // Render 30 Kotak Kalender
     for (let i = 1; i <= 30; i++) {
         let card = document.createElement('div');
         card.className = 'day-card';
@@ -446,30 +580,32 @@ function renderDailyGrid() {
         let isMilestone = dailyMilestones.includes(i);
         if (isMilestone) card.classList.add('milestone');
 
-        // --- GANTI ICON BERDASARKAN MILESTONE ---
-        // Jika hari pencapaian (peti/kado), jika biasa (bintang)
-        let iconSrc = isMilestone ? 'assets/Caramain/peti.png' : 'assets/Icons/Achievement.png';
+        // ---------------------------------------------------------------------
+        // 🌟 HANYA PAKAI 1 GAMBAR UNTUK SEMUA KOTAK
+        // ---------------------------------------------------------------------
+        let iconSrc = 'assets/data/claimdaily.png'; 
+        // ---------------------------------------------------------------------
         
         card.innerHTML = `
             <span>Hari ${i}</span>
             <img src="${iconSrc}">
         `;
 
-        // Tentukan Status Kotak
+        // Tentukan Status Warna Kotak (Sudah Diklaim, Aktif, atau Terkunci)
         if (i < activeDay) {
             card.classList.add('claimed');
         } else if (i === activeDay) {
             if (sudahKlaimHariIni) {
                 card.classList.add('claimed');
             } else {
-                card.classList.add('active'); // Warna kuning menyala
+                card.classList.add('active'); // Warna menyala menandakan siap diambil
             }
         }
 
         grid.appendChild(card);
     }
 
-    // Atur Tombol Bawah
+    // Atur Status Tombol Klaim di Bagian Bawah
     if (sudahKlaimHariIni) {
         btnClaim.innerText = "Sudah Diambil Hari Ini";
         btnClaim.disabled = true;
@@ -488,18 +624,26 @@ function claimDailyReward() {
         return;
     }
 
-    // Tambah hari
+    // 1. Angka baru bertambah +1 di sini setelah tombol benar-benar diklik
     data.daily += 1;
     if (data.daily > 1) data.return += 1;
     data.lastLoginDate = today;
+    
+    // 2. Simpan progress terbaru ke LocalStorage
     saveUserProgress(data);
 
+    // 3. Pemicu Update Pencapaian (Menghubungkan ke UI Achievement)
+    if (currentSettings.notif) {
+        checkMilestoneNotification('daily', data);
+        if (data.daily > 1) checkMilestoneNotification('return', data);
+    }
+
     // ==========================================
-    // TAMBAHAN: MAINKAN EFEK SUARA DAILY CHECK-IN
+    // MAINKAN EFEK SUARA DAILY CHECK-IN
     // ==========================================
-    if (currentSettings.suara) { // Cek apakah settingan suara menyala
+    if (currentSettings.suara) { 
         let dailyAudio = new Audio('assets/audio/bgdaily.mp3');
-        let vol = localStorage.getItem('funvo_vol') || 50; // Ambil dari slider volume suara
+        let vol = localStorage.getItem('funvo_vol') || 50; 
         dailyAudio.volume = vol / 100;
         dailyAudio.play().catch(e => console.log("Audio effect terblokir:", e));
     }
@@ -508,11 +652,16 @@ function claimDailyReward() {
     // Cek apakah hari ini masuk milestone achievement?
     if (dailyMilestones.includes(data.daily)) {
         showGlobalPopup("Wow Hebat! 🌟", `Kamu mencapai Daily Login Hari ke-${data.daily}!`);
-        // Note: Progress bar di halaman pencapaian akan otomatis terupdate jika pakai UI achievement kamu
     } else {
         alert(`Berhasil mengambil hadiah Hari ke-${data.daily}!`);
     }
 
-    // Refresh Tampilan Grid
+    // Refresh Tampilan Grid dan halaman jika sedang dibuka
     renderDailyGrid();
+    if (document.getElementById('dynamic-content')) {
+        const activeMenu = document.querySelector('.menu-item.active');
+        if (activeMenu && activeMenu.innerText.includes('Pencapaian')) {
+            initAchievementUI();
+        }
+    }
 }

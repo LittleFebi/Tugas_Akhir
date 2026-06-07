@@ -110,9 +110,28 @@
   align-items: center;
   cursor: pointer;
   flex-shrink: 0;
+
+  /* 🌟 TAMBAHAN: Kasih padding biar area sensitif kursor lebih luas */
+  padding: 10px; 
+  margin: -10px; /* Menetralkan margin agar padding tidak merusak tata letak row */
+
+  /* Ukuran awal pas diam (agak dikecilkan sedikit) */
+  transform: scale(0.9); 
+  
+  /* Transisi animasi super cepat dan responsif saat disentuh kursor */
+  transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
 }
 
-.hint-icon { width: 46px; }
+/* 🌟 BARU NGARAHIN KURSOR (HOVER) -> LANGSUNG MANDI EFEK GEDE */
+.hint-section:hover {
+  transform: scale(1.12); /* Kita buat sedikit lebih gede biar efeknya langsung kelihatan mantap */
+}
+
+/* KETIKA DI-KLIK / DIPENCET */
+.hint-section:active {
+  transform: scale(0.95); /* Efek membal mendalam pas ditekan */
+}
+.hint-icon { width: 35px; }
 
 .hint-label {
   display: block;
@@ -213,9 +232,35 @@
 }
 .spell-btn:hover { transform: scale(1.03); }
 
-.footer-icon { position: absolute; cursor: pointer; }
-.footer-icon.left-btn  { width: 22px; left: 40px; }
-.footer-icon.right-btn { width: 42px; right: 40px; }
+/* 🌟 KODE BARU: LOGO INFO & PENGATURAN KETIKA DEKAT LANGSUNG HOVER */
+.footer-icon { 
+  position: absolute; 
+  cursor: pointer; 
+  
+  /* Menambah area sensitif kursor di sekeliling ikon */
+  padding: 12px; 
+
+  /* Efek skala awal (normal) */
+  transform: scale(1);
+  
+  /* Transisi animasi halus saat kursor mendekat atau menjauh */
+  transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 🌟 BARU NGARAHIN KURSOR (HOVER) -> LANGSUNG MEMBESAR INTERAKTIF */
+.footer-icon:hover {
+  transform: scale(1.18); /* Ukuran membesar proporsional agar terlihat hidup */
+}
+
+/* KETIKA TOMBOL DIPENCET / DI-KLIK */
+.footer-icon:active {
+  transform: scale(0.95); /* Efek membal memantul ke dalam saat ditekan */
+}
+
+/* Atur posisi agar padding tambahan tidak menggeser letak ikon asli */
+.footer-icon.left-btn  { width: 46px; left: 28px; }  
+.footer-icon.right-btn { width: 66px; right: 28px; } 
+
 
 /* ========================
    RESULT POPUP
@@ -232,7 +277,6 @@
 }
 
 .result-box {
-  /* Muat di layar kecil: batasi lebar DAN tinggi */
   width: min(600px, 88vw, calc(88vh * 4 / 3));
   aspect-ratio: 4 / 3;
   background-size: contain;
@@ -242,6 +286,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start; 
   animation: popUpAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -251,17 +296,18 @@
 }
 
 .result-title {
-  margin-top: 8%;
+  margin-top: 0%; 
   color: #fff;
   font-size: clamp(28px, 8vw, 60px);
   font-weight: 900;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
 }
 
 .star-row {
   display: flex;
   justify-content: center;
   gap: clamp(10px, 3vw, 20px);
-  margin-top: 5%;
+  margin-top: 8%; 
 }
 
 .star-img {
@@ -272,7 +318,7 @@
 
 .result-nav {
   position: absolute;
-  bottom: 12%;
+  bottom: 16%; 
   display: flex;
   gap: clamp(15px, 3vw, 25px);
   align-items: center;
@@ -285,6 +331,7 @@
 }
 .btn-res:hover { transform: scale(1.1) rotate(5deg); }
 
+
 /* ========================
    TUTORIAL SPOTLIGHT
 ======================== */
@@ -292,7 +339,7 @@
   position: fixed;
   inset: 0;
   z-index: 10000;
-  pointer-events: all; /* blokir klik ke game di belakang */
+  pointer-events: all; 
 }
 
 .tutorial-tooltip {
@@ -311,7 +358,6 @@
   to   { opacity: 1; transform: translateY(0);   }
 }
 
-/* Panah segitiga (kotak diputar 45°) */
 .tut-arrow {
   position: absolute;
   width: 14px;
@@ -319,13 +365,11 @@
   background: #fff9f0;
   border: 3px solid #8b4513;
 }
-/* Panah menunjuk ke bawah: tooltip di atas elemen */
 .tut-arrow.down {
   bottom: -9px;
   border-top-color:  transparent;
   border-left-color: transparent;
 }
-/* Panah menunjuk ke atas: tooltip di bawah elemen */
 .tut-arrow.up {
   top: -9px;
   border-bottom-color: transparent;
@@ -408,6 +452,7 @@
 }
 .tut-btn-next:hover { transform: scale(1.05); background: #a0522d; }
 
+
 /* ========================
    RESPONSIVE — MOBILE (≤ 540px)
 ======================== */
@@ -450,16 +495,18 @@
     font-size: 16px;
     padding: 11px 0;
   }
-  .footer-icon.left-btn  { width: 16px; left: 22px; }
-  .footer-icon.right-btn { width: 32px; right: 22px; }
+  
+  /* 🌟 UPDATE RESPONSIVE ICON DI HP */
+  .footer-icon { padding: 8px; } 
+  .footer-icon.left-btn  { width: 32px; left: 14px; }
+  .footer-icon.right-btn { width: 48px; right: 14px; }
 }
+
 
 /* ========================
    LANDSCAPE — MOBILE (tinggi ≤ 520px)
-   Layout tetap vertikal, semua section dikompres
 ======================== */
 @media screen and (orientation: landscape) and (max-height: 520px) {
-
   .nav-bar {
     padding: 6px 24px 4px;
   }
@@ -492,6 +539,9 @@
     padding: 8px 0;
     width: 45%;
   }
-  .footer-icon.left-btn  { width: 14px; left: 24px; }
-  .footer-icon.right-btn { width: 24px; right: 24px; }
+  
+  /* 🌟 UPDATE RESPONSIVE ICON DI HP LANDSCAPE */
+  .footer-icon { padding: 6px; }
+  .footer-icon.left-btn  { width: 26px; left: 18px; }
+  .footer-icon.right-btn { width: 36px; right: 18px; }
 }
