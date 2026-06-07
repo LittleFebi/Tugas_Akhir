@@ -1,0 +1,10 @@
+#logo-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('assets/images/bg-logo.jpg') no-repeat center center;
+    background-size: cover;
+    cursor: pointer;
+}
+#main-logo { width: 60%; max-width: 600px; transition: 0.3s; }
