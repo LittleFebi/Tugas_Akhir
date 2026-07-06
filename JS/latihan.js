@@ -443,7 +443,9 @@ function nextTema() {
   if (currentIndex >= 0 && currentIndex < DAFTAR_TEMA.length - 1) {
     document.getElementById("result-popup").style.display = "none";
     let nextThemeName = DAFTAR_TEMA[currentIndex + 1];
-    mulaiTema(nextThemeName);
+    
+    // Alihkan langsung memicu fungsi mulaiTema() yang sudah kita pasangi halaman Ready di atas
+    mulaiTema(nextThemeName); 
   }
 }
 

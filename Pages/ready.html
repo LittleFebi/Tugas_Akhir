@@ -1,0 +1,45 @@
+<div style="width: 100%; height: 100vh; height: 100dvh; background: linear-gradient(to bottom, #FFFDF0, #FFEFCF); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; overflow: hidden; position: relative; font-family: 'Comic Sans MS', 'Chalkboard SE', 'Ubuntu', sans-serif;">
+    
+    <div style="position: absolute; top: 10%; left: 8%; font-size: 35px; opacity: 0.3;">☁️</div>
+    <div style="position: absolute; bottom: 15%; right: 8%; font-size: 35px; opacity: 0.3;">☁️</div>
+    <div style="position: absolute; top: 25%; right: 10%; font-size: 25px; opacity: 0.4;">⭐</div>
+    <div style="position: absolute; bottom: 30%; left: 10%; font-size: 25px; opacity: 0.4;">⭐</div>
+
+    <div style="position: absolute; top: 24px; right: 24px; z-index: 10;">
+        <button id="ready-lang-btn" onclick="toggleReadyLang()" 
+                style="background-color: #ffffff; border: 3px solid #c8762a; color: #5a2d0c; font-weight: 900; font-size: 14px; padding: 6px 20px; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #c8762a; transition: all 0.1s; outline: none;"
+                onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='0 2px 0 #c8762a';"
+                onmouseup="this.style.transform='translateY(0px)'; this.style.boxShadow='0 4px 0 #c8762a';">
+            🇺🇸 EN
+        </button>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 360px; text-align: center; gap: 24px; position: relative; z-index: 5;">
+        
+        <div style="font-size: 80px; line-height: 1; margin-bottom: -10px; user-select: none;">
+            🐱
+        </div>
+        
+        <div style="background-color: #FFFDF0; border: 4px solid #8b4513; border-radius: 32px; padding: 24px; width: 100%; box-sizing: border-box; box-shadow: 0 8px 0 #8b4513; position: relative;">
+            
+            <div style="position: absolute; top: -16px; left: 50%; transform: translateX(-50%); width: 0; h: 0; border-left: 15px solid transparent; border-r: 15px solid transparent; border-bottom: 16px solid #8b4513;"></div>
+            <div style="position: absolute; top: -11px; left: 50%; transform: translateX(-50%); width: 0; h: 0; border-left: 12px solid transparent; border-r: 12px solid transparent; border-bottom: 13px solid #FFFDF0; z-index: 2;"></div>
+            
+            <h2 id="ready-title" style="margin: 0 0 12px 0; font-size: 32px; font-weight: 900; color: #8b4513; letter-spacing: 1px; text-transform: uppercase;">
+                GET READY!
+            </h2>
+            
+            <p id="ready-text" style="margin: 0; font-size: 15px; font-weight: 700; color: #5d3a23; line-height: 1.5; background-color: #FFF9E6; border: 2px dashed rgba(200, 118, 42, 0.4); border-radius: 16px; padding: 16px; box-sizing: border-box;">
+                Get ready to choose your answer! Listen carefully to the word. 👂✨
+            </p>
+        </div>
+
+        <button id="ready-next-btn" onclick="eksekusiMasukGame()" 
+                style="background-color: #ffaa00; color: #5a2d0c; font-weight: 900; font-size: 22px; padding: 14px 0; width: 85%; border-radius: 24px; border: 3px solid #5a2d0c; cursor: pointer; box-shadow: 0 8px 0 #cc8800; transition: all 0.1s; text-transform: uppercase; letter-spacing: 1px; outline: none;"
+                onmousedown="this.style.transform='translateY(4px)'; this.style.boxShadow='0 4px 0 #cc8800';"
+                onmouseup="this.style.transform='translateY(0px)'; this.style.boxShadow='0 8px 0 #cc8800';"
+                onmouseleave="this.style.transform='translateY(0px)'; this.style.boxShadow='0 8px 0 #cc8800';">
+            Next →
+        </button>
+    </div>
+</div>

@@ -111,27 +111,32 @@
   cursor: pointer;
   flex-shrink: 0;
 
-  /* 🌟 TAMBAHAN: Kasih padding biar area sensitif kursor lebih luas */
+  /* Kasih padding biar area sensitif kursor lebih luas */
   padding: 10px; 
-  margin: -10px; /* Menetralkan margin agar padding tidak merusak tata letak row */
+  margin: -10px; 
 
-  /* Ukuran awal pas diam (agak dikecilkan sedikit) */
-  transform: scale(0.9); 
+  /* 🌟 LOGIKA BARU: Skala awal dinaikkan sedikit agar terlihat lebih besar saat diam */
+  transform: scale(1.05); 
   
-  /* Transisi animasi super cepat dan responsif saat disentuh kursor */
+  /* Transisi gerakan yang halus dan responsif */
   transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
 }
 
-/* 🌟 BARU NGARAHIN KURSOR (HOVER) -> LANGSUNG MANDI EFEK GEDE */
+/* KETIKA KURSOR BARU MENDEKAT (HOVER) -> IKON AKAN MEMBESAR MAKSIMAL */
 .hint-section:hover {
-  transform: scale(1.12); /* Kita buat sedikit lebih gede biar efeknya langsung kelihatan mantap */
+  transform: scale(1.25); /* Skala hover ikut dinaikkan agar efek membesarnya kentara */
 }
 
-/* KETIKA DI-KLIK / DIPENCET */
+/* KETIKA TOMBOL DIPENCET / DI-KLIK */
 .hint-section:active {
-  transform: scale(0.95); /* Efek membal mendalam pas ditekan */
+  transform: scale(0.98); /* Efek membal ke dalam saat ditekan */
 }
-.hint-icon { width: 35px; }
+
+.hint-icon { 
+  /* 🌟 LOGIKA BARU: Ukuran gambar lampu dasar diperbesar sedikit */
+  width: 42px; 
+  height: auto;
+}
 
 .hint-label {
   display: block;
@@ -482,8 +487,15 @@
   .butterfly-img      { width: 44px; }
   .percent-label      { font-size: 9px; padding: 1px 7px; }
 
-  .hint-icon  { width: 32px; }
-  .hint-label { font-size: 9px; }
+.hint-icon { 
+    /* 🌟 Diperbesar untuk layar HP (Sebelumnya kita setel di 26px) */
+    width: 30px; 
+  }
+  
+  .hint-label { 
+    font-size: 9px; /* Teks "Hint : 3" disesuaikan ukurannya agar pas */
+  }
+}
 
   .answer-grid { width: 90%; gap: 8px; padding: 4px 0; }
   .answer-card { border-radius: 12px; padding: 8px; }

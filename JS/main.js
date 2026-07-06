@@ -14,7 +14,7 @@ bgmAudio.loop = true; // Agar musik berulang terus
 
 const MAX_TARGETS = {
     tutorial: 1, themes: 6, vocab: 60, stars: 18, 
-    daily: 20, nohint: 6, onerun: 6, noexit: 1, return: 20
+    daily: 30, nohint: 6, onerun: 6, noexit: 1, return: 20
 };
 
 const MILESTONES = {
@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateBgmVolume();
 });
 
+// Fungsi Navigasi Halaman
 // Fungsi Navigasi Halaman
 // Fungsi Navigasi Halaman
 async function loadPage(pageName, targetMenu = 'Credit') {
@@ -66,6 +67,7 @@ async function loadPage(pageName, targetMenu = 'Credit') {
         if (!response.ok) throw new Error('Halaman tidak ditemukan');
         appContainer.innerHTML = await response.text();
 
+        // 🌟 UPDATE: Halaman 'ready' juga dicatat sebagai lastPage jika diperlukan atau biarkan home/latihan
         if (pageName === 'home' || pageName === 'latihan') {
             lastPage = pageName;
         }
@@ -75,17 +77,16 @@ async function loadPage(pageName, targetMenu = 'Credit') {
             // Kalau masuk game, matikan musik menu
             bgmAudio.pause();
         } else {
-            // Kalau di Home, Pengaturan, Pencapaian, Credit -> Nyalakan Musik
-            // (Kecuali user mematikan musik di pengaturan)
+            // Kalau di Home, Pengaturan, Pencapaian, Credit, atau Ready -> Nyalakan Musik
             if (currentSettings.musik) {
-                // play() butuh interaksi user dulu, jadi kita catch error-nya kalau belum di-klik
                 bgmAudio.play().catch(error => console.log("Menunggu interaksi user untuk memutar musik..."));
             }
         }
 
-        // Inisialisasi Halaman
+        // --- INISIALISASI HALAMAN ---
         if (pageName === 'logo') initLogo();
         else if (pageName === 'home') initHome();
+        else if (pageName === 'ready') initReadyPage(); // 🌟 SUDAH DITAMBAHKAN DI SINI UTK KAMU
         else if (pageName === 'template') initTemplate(targetMenu);
         else if (pageName === 'latihan' && currentTheme !== '') {
             if (typeof initLatihan === "function") initLatihan(currentTheme);
@@ -93,7 +94,6 @@ async function loadPage(pageName, targetMenu = 'Credit') {
         
     } catch (err) { console.error("Gagal memuat halaman:", err); }
 }
-
 function updateBgmVolume() {
     // Ambil nilai volume musik dari localStorage (0-100)
     let vol = localStorage.getItem('funvo_music');
@@ -119,8 +119,11 @@ function backToLastPage() {
 }
 
 function mulaiTema(namaTema) {
-    currentTheme = namaTema;
-    loadPage('latihan');
+    currentTheme = namaTema; // Menyimpan nama tema pilihan user
+    loadPage('ready').then(() => {
+        // Berikan jeda sejenak untuk memastikan DOM HTML ter-render sempurna baru jalankan fungsinya
+        setTimeout(() => { if (typeof initReadyPage === "function") initReadyPage(); }, 50);
+    });
 }
 
 // --- 3. LOGIKA PAGE LOGO (PENTING UNTUK AUTO-PLAY) ---
@@ -664,4 +667,52 @@ function claimDailyReward() {
             initAchievementUI();
         }
     }
+}
+
+// --- LOGIKA HALAMAN GET READY PERMAINAN ---
+let readyLang = 'en'; // Default bahasa Inggris sesuai permintaanmu
+
+const READY_TEXTS = {
+    en: {
+        title: "GET READY!",
+        text: "Get ready to choose your answer! Listen carefully to the word.",
+        button: "Next →"
+    },
+    id: {
+        title: "SIAP-SIAP!",
+        text: "Bersiaplah untuk memilih jawabanmu! Dengarkan pengucapan katanya dengan baik.",
+        button: "Lanjut →"
+    }
+};
+
+// Fungsi inisialisasi awal saat halaman ready.html dimuat
+function initReadyPage() {
+    readyLang = 'en'; // Reset selalu ke EN saat masuk pertama kali
+    updateReadyUI();
+}
+
+// Fungsi ganti bahasa (Translate)
+function toggleReadyLang() {
+    readyLang = readyLang === 'en' ? 'id' : 'en';
+    updateReadyUI();
+}
+
+// Fungsi untuk memperbarui teks di layar HTML
+function updateReadyUI() {
+    const titleEl = document.getElementById('ready-title');
+    const textEl = document.getElementById('ready-text');
+    const btnNext = document.getElementById('ready-next-btn');
+    const btnLang = document.getElementById('ready-lang-btn');
+
+    if (titleEl && textEl && btnNext && btnLang) {
+        titleEl.innerText = READY_TEXTS[readyLang].title;
+        textEl.innerText = READY_TEXTS[readyLang].text;
+        btnNext.innerText = READY_TEXTS[readyLang].button;
+        btnLang.innerText = readyLang === 'en' ? '🇮🇩 ID' : '🇺🇸 EN';
+    }
+}
+
+// Trigger peralihan dari halaman ready langsung meluncur ke kuis latihan asli
+function eksekusiMasukGame() {
+    loadPage('latihan');
 }
